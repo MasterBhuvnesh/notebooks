@@ -6,4 +6,4 @@
 
 | Date | Commit | Change | Author |
 |---|---|---|---|
-| — | — | _No commits recorded yet._ | — |
+| 2026-08-15 | `d48a80e` | feat: notebooks pipeline with RabbitMQ JavaScript as the first document | bhuvii |
