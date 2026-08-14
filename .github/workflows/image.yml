@@ -30,5 +30,5 @@ jobs:
           # lowercase, always -- ghcr rejects uppercase in a repository name,
           # and github.repository_owner keeps the account's original casing.
           tags: ghcr.io/masterbhuvnesh/notebooks-builder:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # No cache-from/to: GHA cache export needs the docker-container driver,
+          # and this job only runs when the Dockerfile itself changes.
