@@ -19,9 +19,16 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ghcr.io/masterbhuvnesh/notebooks-builder:latest
+    container:
+      image: ghcr.io/masterbhuvnesh/notebooks-builder:latest
+      # The package is private by default; a job container does not authenticate
+      # to ghcr on its own.
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
+      packages: read
     steps:
       # Full history: the changelog is generated from git log, and a shallow
       # clone would silently produce a one-line changelog per document.
