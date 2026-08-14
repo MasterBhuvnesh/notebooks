@@ -279,9 +279,11 @@ def update_readme(all_stats: dict[str, dict]) -> None:
         print("  ! README has no INDEX markers, skipping index")
         return
 
+    # :---: centres the cells; the <div align="center"> around the markers in
+    # README.md centres the table itself and is preserved across regeneration.
     rows = [
         "| Book | Created | Updated | PDF |",
-        "| --- | --- | --- | --- |",
+        "| :---: | :---: | :---: | :---: |",
     ]
     for slug in sorted(all_stats):
         s = all_stats[slug]

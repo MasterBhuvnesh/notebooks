@@ -12,13 +12,17 @@ LaTeX for the page, mermaid for the diagrams, one shared style, built by CI.
 
 </div>
 
+<div align="center">
+
 <!-- INDEX:START -->
 
 | Book | Created | Updated | PDF |
-| --- | --- | --- | --- |
+| :---: | :---: | :---: | :---: |
 | RabbitMQ | 2026-08-15 | 2026-08-15 | [pdf](docs/rabbitmq/main.pdf) |
 
 <!-- INDEX:END -->
+
+</div>
 
 <div align="center">
 <sub>Each PDF is built from its <code>main.tex</code> by <code>tools/build.py</code>. The table is generated, not hand written.</sub>
