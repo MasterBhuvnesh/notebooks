@@ -6,4 +6,5 @@
 
 | Date | Commit | Change | Author |
 |---|---|---|---|
-| - | - | _No commits recorded yet._ | - |
+| 2026-08-15 | `bb97d69` | refactor: drop date prefix from book folders, no em dashes in generated text | bhuvii |
+| 2026-08-15 | `d48a80e` | feat: notebooks pipeline with RabbitMQ JavaScript as the first document | bhuvii |

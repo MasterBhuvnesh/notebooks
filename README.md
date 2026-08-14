@@ -4,6 +4,6 @@
 
 | Book | Created | Updated | PDF |
 | --- | --- | --- | --- |
-| RabbitMQ | 2026-08-14 | 2026-08-14 | [pdf](docs/rabbitmq/main.pdf) |
+| RabbitMQ | 2026-08-15 | 2026-08-15 | [pdf](docs/rabbitmq/main.pdf) |
 
 <!-- INDEX:END -->

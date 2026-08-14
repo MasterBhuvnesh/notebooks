@@ -197,7 +197,10 @@ def write_changelog(doc: Path, stats: dict) -> None:
     The build bot's own commits are filtered out, otherwise the changelog
     would fill up with the changelog being regenerated.
     """
-    log = git("log", "--date=short", "--format=%h%x1f%ad%x1f%an%x1f%s", "--", f"docs/{doc.name}")
+    # --follow on main.tex, not the directory: renaming a book's folder must not
+    # throw away its history. --follow only accepts a single path, hence main.tex.
+    log = git("log", "--follow", "--date=short", "--format=%h%x1f%ad%x1f%an%x1f%s",
+              "--", f"docs/{doc.name}/main.tex")
     rows = []
     for line in log.splitlines():
         parts = line.split("\x1f")
@@ -240,7 +243,7 @@ def update_readme(all_stats: dict[str, dict]) -> None:
         s = all_stats[slug]
         # Dates come from git, not the filesystem: a clone has no useful mtimes.
         # Uncommitted document -> fall back to the build date.
-        history = git("log", "--date=short", "--format=%ad", "--",
+        history = git("log", "--follow", "--date=short", "--format=%ad", "--",
                       f"docs/{slug}/main.tex").splitlines()
         created = history[-1] if history else s["built_at"][:10]
         updated = history[0] if history else s["built_at"][:10]
