@@ -7,6 +7,8 @@
 LaTeX for the page, mermaid for the diagrams, one shared style, built by CI.
 
 [![Build](https://github.com/MasterBhuvnesh/notebooks/actions/workflows/build.yml/badge.svg)](https://github.com/MasterBhuvnesh/notebooks/actions/workflows/build.yml)
+[![Books](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FMasterBhuvnesh%2Fnotebooks%2Fmain%2Fdocs%2Findex.json&query=%24.books&label=books&color=1F5FA9)](docs/index.json)
+[![Pages](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FMasterBhuvnesh%2Fnotebooks%2Fmain%2Fdocs%2Findex.json&query=%24.pages&label=pages&color=0E7C66)](docs/index.json)
 
 </div>
 

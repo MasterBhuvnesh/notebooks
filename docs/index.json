@@ -1,0 +1,17 @@
+{
+  "books": 1,
+  "pages": 29,
+  "generated": "2026-08-14",
+  "documents": [
+    {
+      "slug": "rabbitmq",
+      "title": "RabbitMQ",
+      "pages": 29,
+      "bytes": 978152,
+      "diagrams": 9,
+      "created": "2026-08-15",
+      "updated": "2026-08-15",
+      "pdf": "docs/rabbitmq/main.pdf"
+    }
+  ]
+}

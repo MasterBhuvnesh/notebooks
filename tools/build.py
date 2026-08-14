@@ -229,6 +229,46 @@ def write_changelog(doc: Path, stats: dict) -> None:
     )
 
 
+def doc_dates(slug: str, stats: dict) -> tuple[str, str]:
+    """(created, updated) from git, not the filesystem: a clone has no useful
+    mtimes. An uncommitted document falls back to its build date."""
+    history = git("log", "--follow", "--date=short", "--format=%ad", "--",
+                  f"docs/{slug}/main.tex").splitlines()
+    if not history:
+        return stats["built_at"][:10], stats["built_at"][:10]
+    return history[-1], history[0]
+
+
+def write_manifest(all_stats: dict[str, dict]) -> None:
+    """docs/index.json: the whole shelf as data. Feeds the README badges via
+    shields.io, and is the thing to read from anywhere else that wants the list."""
+    books = []
+    for slug in sorted(all_stats):
+        s = all_stats[slug]
+        created, updated = doc_dates(slug, s)
+        books.append({
+            "slug": slug,
+            "title": s["title"],
+            "pages": s["pages"],
+            "bytes": s["bytes"],
+            "diagrams": s["diagram_count"],
+            "created": created,
+            "updated": updated,
+            "pdf": f"docs/{slug}/main.pdf",
+        })
+    # Top-level "books"/"pages" are scalars so a shields.io dynamic badge can
+    # point straight at $.books and $.pages.
+    (DOCS / "index.json").write_text(
+        json.dumps({
+            "books": len(books),
+            "pages": sum(b["pages"] for b in books),
+            "generated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "documents": books,
+        }, indent=2),
+        encoding="utf-8", newline="\n",
+    )
+
+
 def update_readme(all_stats: dict[str, dict]) -> None:
     """Rewrite the table between the INDEX markers. Hand-maintained index
     tables rot; this one cannot."""
@@ -245,12 +285,7 @@ def update_readme(all_stats: dict[str, dict]) -> None:
     ]
     for slug in sorted(all_stats):
         s = all_stats[slug]
-        # Dates come from git, not the filesystem: a clone has no useful mtimes.
-        # Uncommitted document -> fall back to the build date.
-        history = git("log", "--follow", "--date=short", "--format=%ad", "--",
-                      f"docs/{slug}/main.tex").splitlines()
-        created = history[-1] if history else s["built_at"][:10]
-        updated = history[0] if history else s["built_at"][:10]
+        created, updated = doc_dates(slug, s)
         rows.append(
             f"| {s['title']} | {created} | {updated} | "
             f"[pdf](docs/{slug}/main.pdf) |"
@@ -366,12 +401,21 @@ def main() -> int:
                 raise BuildError(f"{d} has no main.tex")
 
         if not docs:
-            print("No documents in docs/. Start one with: python tools/build.py --new 2026-thing")
+            print("No documents in docs/. Start one with: python tools/build.py --new kafka")
             return 0
 
         print(f"Building {len(docs)} document(s)")
         stats = {d.name: build_doc(d, args.force) for d in docs}
-        update_readme(stats)
+
+        # The index and the manifest describe the whole shelf, so building one
+        # book must not drop the others: fill the gaps from their build cache.
+        shelf = dict(stats)
+        for d in sorted(DOCS.iterdir()):
+            cached = d / ".build.json"
+            if d.name not in shelf and cached.exists():
+                shelf[d.name] = json.loads(cached.read_text())
+        write_manifest(shelf)
+        update_readme(shelf)
         print(f"OK - {sum(s['pages'] for s in stats.values())} pages total")
         return 0
     except BuildError as e:

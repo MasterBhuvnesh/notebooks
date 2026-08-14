@@ -47,7 +47,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A 'docs/**/*.pdf' 'docs/**/*.png' 'docs/**/CHANGELOG.md' \
-                     'docs/**/.build.json' README.md
+                     'docs/**/.build.json' docs/index.json README.md
           if git diff --cached --quiet; then
             echo "nothing to commit"
           else
