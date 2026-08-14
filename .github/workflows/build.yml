@@ -3,7 +3,7 @@ name: Build documents
 on:
   push:
     # Only sources. The bot commits .pdf/.png/CHANGELOG.md/.build.json/README.md,
-    # none of which match — so its own commit cannot retrigger this workflow.
+    # none of which match - so its own commit cannot retrigger this workflow.
     paths:
       - 'docs/**/*.tex'
       - 'docs/**/*.mmd'
