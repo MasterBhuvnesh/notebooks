@@ -1,0 +1,14 @@
+# LaTeX byproducts -- regenerated every build
+*.aux
+*.log
+*.toc
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# generated at build time from whatever browser this machine has
+.puppeteer.json
+
+node_modules/
+__pycache__/

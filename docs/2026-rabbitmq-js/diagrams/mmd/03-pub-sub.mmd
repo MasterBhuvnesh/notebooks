@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant Producer
+    participant Exchange as logs (fanout)
+    participant Q1 as queue (consumer1)
+    participant Q2 as queue (consumer2)
+    participant C1 as Consumer1
+    participant C2 as Consumer2
+    Producer->>Exchange: publish "log message"
+    Exchange->>Q1: forward
+    Exchange->>Q2: forward
+    Q1->>C1: deliver
+    Q2->>C2: deliver

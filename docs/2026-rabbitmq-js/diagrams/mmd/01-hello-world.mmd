@@ -1,0 +1,7 @@
+sequenceDiagram
+    participant Producer
+    participant Queue as hello
+    participant Consumer
+    Producer->>Queue: publish "Hello World!"
+    Queue->>Consumer: deliver message
+    Consumer-->>Queue: ack (auto)

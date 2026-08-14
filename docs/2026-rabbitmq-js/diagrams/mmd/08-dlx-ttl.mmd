@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant Producer
+    participant Main as orders (TTL 30s, x-dead-letter-exchange)
+    participant Consumer
+    participant DLX as dlx (direct)
+    participant DLQ as orders.dead
+    participant Inspector as Dead Letter Consumer
+    Producer->>Main: publish order
+    Main->>Consumer: deliver
+    Consumer->>Main: nack (requeue = false)
+    Main->>DLX: dead letter, reason = rejected
+    DLX->>DLQ: routing key = orders
+    DLQ->>Inspector: deliver for retry or inspection
+    Producer->>Main: publish order
+    Main->>DLX: dead letter, reason = expired (TTL)
+    DLX->>DLQ: routing key = orders

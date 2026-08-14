@@ -1,0 +1,151 @@
+% =========================================================================
+% notebooks.sty -- the entire look of every document in this repo.
+%
+% A document never redefines a colour, a heading, or a listing style. It says
+%   \usepackage{notebooks}
+% and everything below applies. Change a colour here and every PDF follows.
+%
+% Found via TEXINPUTS, which tools/build.py points at shared/.
+% =========================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{notebooks}[2026/08/15 Notebooks house style]
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage[margin=2.4cm]{geometry}
+\RequirePackage[table]{xcolor}      % [table] is what gives you \rowcolor
+\RequirePackage{graphicx}
+\RequirePackage{listings}
+\RequirePackage{tabularx}
+\RequirePackage{booktabs}
+\RequirePackage{amssymb}
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+
+% --- colours (MUST come before hyperref, which references them) ----------
+\definecolor{accent}{HTML}{1F5FA9}     % blue: headings, links, rules
+\definecolor{accent2}{HTML}{0E7C66}    % teal: field labels, file headings
+\definecolor{rulecol}{HTML}{9FBBDD}    % pale blue: rule under a section title
+\definecolor{tablehead}{HTML}{E8EFF8}  % table header row fill
+\definecolor{codebg}{HTML}{F6F6F4}
+\definecolor{codeframe}{HTML}{D8D8D2}
+\definecolor{kw}{HTML}{0B5394}
+\definecolor{str}{HTML}{1E7B34}
+\definecolor{cmt}{HTML}{7A7A7A}
+
+\RequirePackage[colorlinks=true,linkcolor=accent,urlcolor=accent,linktoc=all]{hyperref}
+
+% --- document metadata ---------------------------------------------------
+% \notebooktitle is the only required one; the rest are optional and simply
+% vanish from the cover when unset.
+\gdef\nb@title{Untitled}
+\gdef\nb@subtitle{}
+\gdef\nb@tagline{}
+\gdef\nb@author{}
+\gdef\nb@source{}
+\newcommand{\notebooktitle}[1]{\gdef\nb@title{#1}\hypersetup{pdftitle={#1}}}
+\newcommand{\notebooksubtitle}[1]{\gdef\nb@subtitle{#1}}
+\newcommand{\notebooktagline}[1]{\gdef\nb@tagline{#1}}
+\newcommand{\notebookauthor}[1]{\gdef\nb@author{#1}\hypersetup{pdfauthor={#1}}}
+\newcommand{\notebooksource}[1]{\gdef\nb@source{#1}}
+
+% \notebookcover -- title page + table of contents. One line in the document
+% instead of twenty lines of titlepage copy-pasted between files.
+\newcommand{\notebookcover}{%
+  \begin{titlepage}
+  \centering
+  \vspace*{4.5cm}
+  {\fontsize{56}{60}\selectfont\color{accent}\nb@title\par}
+  \vspace{0.6cm}
+  {\color{rulecol}\rule{0.42\linewidth}{1.2pt}\par}
+  \vspace{0.9cm}
+  {\LARGE\color{accent2}\nb@subtitle\par}
+  \vspace{2cm}
+  {\large\nb@tagline\par}
+  \vspace{2.4cm}
+  {\Large\nb@author\par}
+  \vfill
+  {\ttfamily\color{accent}\nb@source\par}
+  \vspace{1cm}
+  \end{titlepage}
+  \tableofcontents
+  \newpage}
+
+% Diagram helper: \mmd{01-thing.png}, or \mmd[0.30]{01-thing.png} to cap it lower.
+% Width-first, but capped in height so a near-square diagram cannot grow tall
+% enough to push the theory onto a second page.
+% Path is diagrams/png/ -- .mmd sources live beside it in diagrams/mmd/.
+\newcommand{\mmd}[2][0.40]{{\par\smallskip\centering%
+  \includegraphics[width=0.96\linewidth,height=#1\textheight,keepaspectratio]{diagrams/png/#2}%
+  \par\smallskip}}
+
+% \field{Use case:}{...} -- labelled paragraph, the workhorse of a theory page.
+\newcommand{\field}[2]{\par\smallskip\noindent\textbf{\color{accent2}#1} #2\par}
+
+% Inline highlights for recurring terms. LaTeX eats the space after a macro
+% name: write "\hlerror\ logs", not "\hlerror logs".
+\newcommand{\hlerror}{\colorbox{red!30}{\texttt{error}}}
+\newcommand{\hlinfo}{\colorbox{cyan!30}{\texttt{info}}}
+\newcommand{\hlwarning}{\colorbox{orange!30}{\texttt{warning}}}
+
+% --- listings ------------------------------------------------------------
+% listings has no built-in JavaScript language; define it or lstset errors.
+\lstdefinelanguage{JavaScript}{
+  keywords={await, async, const, let, var, function, return, if, else, for, of, in,
+            new, class, constructor, this, try, catch, Promise, require, resolve, typeof},
+  ndkeywords={console, Buffer, process, setTimeout, parseInt, module, exports},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  morestring=[b]`,
+}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{kw}\bfseries,
+  ndkeywordstyle=\color{kw},
+  stringstyle=\color{str},
+  commentstyle=\color{cmt}\itshape,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  framesep=6pt,
+  xleftmargin=10pt,
+  xrightmargin=2pt,
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  upquote=true,
+  extendedchars=true,
+  % pdflatex cannot typeset raw UTF-8 inside listings; map each glyph you use.
+  literate={✓}{{$\checkmark$}}1 {✗}{{$\times$}}1,
+}
+
+% Each env takes an optional \lstset override, used to shrink a dense page:
+%   \begin{js}[basicstyle=\ttfamily\scriptsize]
+\lstnewenvironment{py}[1][]{\lstset{language=Python,#1}}{}
+\lstnewenvironment{js}[1][]{\lstset{language=JavaScript,#1}}{}
+\lstnewenvironment{sh}[1][]{\lstset{language=bash,#1}}{}
+
+% --- headings: coloured, larger, NOT bold --------------------------------
+\titleformat{\section}{\huge\color{accent}}{\thesection.}{0.5em}{}
+            [{\color{rulecol}\titlerule[1pt]}]
+\titleformat{\subsection}{\Large\color{accent}}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\large\color{accent2}}{}{0em}{}
+\titlespacing*{\section}{0pt}{6pt}{10pt}
+\titlespacing*{\subsection}{0pt}{14pt}{6pt}
+\titlespacing*{\subsubsection}{0pt}{12pt}{4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\itshape\nb@title}
+\fancyhead[R]{\small\nb@subtitle}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\endinput

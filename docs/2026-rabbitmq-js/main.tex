@@ -1,0 +1,1320 @@
+% Migrated from D:\Latex\RabbitMQ_JS.tex -- preamble now lives in shared/notebooks.sty.
+\documentclass[11pt,a4paper]{article}
+\usepackage{notebooks}
+
+\notebooktitle{RabbitMQ}
+\notebooksubtitle{JavaScript}
+\notebooktagline{Messaging patterns with amqplib}
+\notebookauthor{Bhuvnesh Verma}
+\notebooksource{https://www.rabbitmq.com/tutorials}
+
+\begin{document}
+\notebookcover
+
+\section{Getting Started}
+
+\field{Short description:}{RabbitMQ is a message broker. It accepts, stores, and forwards
+messages between applications. Think of it as a post office: you drop mail into a post
+box, and the postal service delivers it.}
+
+\field{Theory:}{Applications do not talk to each other directly. A producer hands a message
+to the broker, the broker stores it in a queue, and a consumer picks it up when it is
+ready. This decouples the two sides in both time and space.}
+
+\field{How it works:}{A producer publishes to an exchange. The exchange applies its routing
+rules and places the message into one or more queues. A consumer subscribes to a queue and
+receives messages as they arrive.}
+
+\field{Use case example:}{An online store accepts an order and must send a confirmation
+email, update inventory, and notify shipping. Publishing one order event lets three
+independent services react without the store waiting for any of them.}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Producer} sends messages
+  \item \textbf{Queue} stores messages, like a post box
+  \item \textbf{Consumer} receives messages
+  \item \textbf{Exchange} routes messages to queues
+  \item The Node.js client library is \lstinline|amqplib|
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Every example assumes a broker running on \lstinline|localhost| at port 5672
+  \item \lstinline|amqplib| is promise based, so every call happens inside an async function
+  \item A channel, not a connection, is the unit you publish and consume on
+\end{itemize}
+
+\newpage
+\subsection{Installation and connection}
+
+
+\begin{sh}
+npm install amqplib
+\end{sh}
+
+\begin{js}
+const amqp = require('amqplib');
+
+async function main() {
+    // 1. Open a TCP connection to the broker
+    const connection = await amqp.connect('amqp://localhost');
+
+    // 2. Open a channel: all AMQP operations happen here
+    const channel = await connection.createChannel();
+
+    // ... declare queues, publish, consume ...
+
+    // 3. Always close when finished
+    await channel.close();
+    await connection.close();
+}
+
+main().catch(console.error);
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Hello World}
+
+\field{Short description:}{The simplest pattern. One producer sends one message to one
+queue, and one consumer receives it.}
+
+\field{Theory:}{Point to point messaging. Producer $\rightarrow$ Queue $\rightarrow$
+Consumer. No exchange is used, so messages go through the default exchange.}
+
+\field{How it works:}{The producer declares a queue and sends a message to it. The consumer
+declares the same queue and consumes from it. Declaring is idempotent, so whichever side
+starts first creates the queue.}
+
+\field{Use case example:}{A simple notification service where an order placement service
+sends a ``new order'' message to a queue, and an inventory service picks it up to update
+stock.}
+
+\subsection{Architecture diagram}
+\mmd{01-hello-world.png}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item The queue must be declared before sending or receiving
+  \item An empty exchange name (\lstinline|''|) uses the \textbf{default exchange}
+  \item \lstinline|noAck: true| means the broker treats a message as delivered immediately
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Run the producer once; the consumer stays running
+  \item Messages are \textbf{not persistent} by default and are lost if RabbitMQ restarts
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Producer (\texttt{send.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function send() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const queue = 'hello';
+    await channel.assertQueue(queue, { durable: false });
+
+    const msg = 'Hello World!';
+    channel.sendToQueue(queue, Buffer.from(msg));
+    console.log(" [x] Sent '%s'", msg);
+
+    setTimeout(() => { connection.close(); }, 500);
+}
+send();
+\end{js}
+
+\subsubsection*{Consumer (\texttt{receive.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function receive() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const queue = 'hello';
+    await channel.assertQueue(queue, { durable: false });
+
+    console.log(" [*] Waiting for messages. To exit press CTRL+C");
+
+    channel.consume(queue, (msg) => {
+        console.log(" [x] Received '%s'", msg.content.toString());
+    }, { noAck: true });
+}
+receive();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Work Queues}
+
+\field{Short description:}{Distributes time consuming tasks among multiple workers. This is
+the competing consumers pattern.}
+
+\field{Theory:}{Avoid doing resource intensive work inside a request. Schedule it to be done
+later by a pool of workers that share one queue.}
+
+\field{How it works:}{The producer sends tasks to a queue. Multiple workers consume from the
+same queue, and tasks are handed out \textbf{round robin}. Each worker acknowledges a task
+only once it has finished, so nothing is lost if a worker dies mid job.}
+
+\field{Use case example:}{A video processing service receives upload requests. Each video is
+transcoded by a worker. Workers run as multiple instances and tasks are distributed evenly.
+If a worker crashes, its task is re-queued for another worker.}
+
+\subsection{Architecture diagram}
+\mmd{02-work-queues.png}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item \lstinline|durable: true| makes the queue survive a broker restart
+  \item \lstinline|persistent: true| makes the message survive a broker restart
+  \item \lstinline|prefetch(1)| gives fair dispatch, so no worker is handed a backlog
+  \item \textbf{Always acknowledge}, otherwise messages can be lost
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Round robin distribution gives each worker one message at a time
+  \item If a worker dies without acknowledging, the message is re-queued
+  \item Durability and persistence are separate settings, and you usually want both
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Producer (\texttt{new\_task.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function send() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const queue = 'task_queue';
+    await channel.assertQueue(queue, { durable: true });
+
+    const msg = process.argv.slice(2).join(' ') || "Hello World!";
+    channel.sendToQueue(queue, Buffer.from(msg), { persistent: true });
+    console.log(" [x] Sent '%s'", msg);
+
+    setTimeout(() => { connection.close(); }, 500);
+}
+send();
+\end{js}
+
+\subsubsection*{Worker (\texttt{worker.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function receive() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const queue = 'task_queue';
+    await channel.assertQueue(queue, { durable: true });
+
+    channel.prefetch(1);
+    console.log(" [*] Waiting for messages. To exit press CTRL+C");
+
+    channel.consume(queue, (msg) => {
+        const secs = msg.content.toString().split('.').length - 1;
+        console.log(" [x] Received %s", msg.content.toString());
+        setTimeout(() => {
+            console.log(" [x] Done");
+            channel.ack(msg);
+        }, secs * 1000);
+    }, { noAck: false });
+}
+receive();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Publish and Subscribe}
+
+\field{Short description:}{Broadcasts every message to \textbf{multiple consumers} at once.}
+
+\field{Theory:}{The producer sends to a \textbf{fanout exchange}. The exchange forwards each
+message to \textbf{all bound queues}, and every consumer owns its own queue.}
+
+\field{How it works:}{The producer declares a fanout exchange. Each consumer creates a
+temporary, exclusive queue and binds it to that exchange. Every message published to the
+exchange is copied into all bound queues.}
+
+\field{Use case example:}{A logging system where every log line must reach several sinks at
+once: a file logger, a monitoring dashboard, and an alerting service. Each sink runs as a
+separate consumer with its own queue.}
+
+\subsection{Architecture diagram}
+\mmd{03-pub-sub.png}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item A \textbf{fanout exchange} ignores routing keys and broadcasts to everything bound
+  \item Temporary queues declared as \lstinline|''| get a random generated name
+  \item \lstinline|exclusive: true| deletes the queue when its consumer disconnects
+  \item Each consumer receives \textbf{all} messages
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item This differs from Work Queues, where consumers share the messages
+  \item Here each consumer gets its own \textbf{copy} of every message
+  \item Messages published while no queue is bound are simply discarded
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Producer (\texttt{emit\_log.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function send() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const exchange = 'logs';
+    await channel.assertExchange(exchange, 'fanout', { durable: false });
+
+    const msg = process.argv.slice(2).join(' ') || "info: Hello World!";
+    channel.publish(exchange, '', Buffer.from(msg));
+    console.log(" [x] Sent '%s'", msg);
+
+    setTimeout(() => { connection.close(); }, 500);
+}
+send();
+\end{js}
+
+\subsubsection*{Consumer (\texttt{receive\_logs.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function receive() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const exchange = 'logs';
+    await channel.assertExchange(exchange, 'fanout', { durable: false });
+
+    const q = await channel.assertQueue('', { exclusive: true });
+    await channel.bindQueue(q.queue, exchange, '');
+
+    console.log(" [*] Waiting for logs. To exit press CTRL+C");
+
+    channel.consume(q.queue, (msg) => {
+        console.log(" [x] %s", msg.content.toString());
+    }, { noAck: true });
+}
+receive();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Routing}
+
+\field{Short description:}{Selectively receives messages based on \textbf{routing keys},
+matched exactly.}
+
+\field{Theory:}{Uses a \textbf{direct exchange}. A message is routed to every queue whose
+\textbf{binding key exactly matches} the message routing key.}
+
+\field{How it works:}{The producer publishes with a routing key such as ``error'' or
+``info''. Consumers bind their queues to the exchange with the specific keys they care
+about, and the exchange delivers only to the queues that match.}
+
+\field{Use case example:}{A log aggregator where services emit logs at different severity
+levels. Only ``error'' logs reach the on call pager, while ``info'' and ``warning'' go to
+database storage. Each consumer binds to the severities it wants.}
+
+\subsection{Architecture diagram}
+\mmd{04-routing.png}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item A \textbf{direct exchange} routes by exact match
+  \item Several queues may bind with different routing keys
+  \item One queue may bind with \textbf{multiple} routing keys
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Run several consumers with different severity arguments to see the split
+  \item Example: \lstinline|node receive_logs_direct.js error warning|
+  \item A message whose key matches nothing is dropped unless you publish with
+        \lstinline|mandatory|
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Producer (\texttt{emit\_log\_direct.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function send() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const exchange = 'direct_logs';
+    await channel.assertExchange(exchange, 'direct', { durable: false });
+
+    const severity = process.argv[2] || 'info';
+    const msg = process.argv.slice(3).join(' ') || "Hello World!";
+    channel.publish(exchange, severity, Buffer.from(msg));
+    console.log(" [x] Sent %s: '%s'", severity, msg);
+
+    setTimeout(() => { connection.close(); }, 500);
+}
+send();
+\end{js}
+
+\subsubsection*{Consumer (\texttt{receive\_logs\_direct.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function receive() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const exchange = 'direct_logs';
+    await channel.assertExchange(exchange, 'direct', { durable: false });
+
+    const q = await channel.assertQueue('', { exclusive: true });
+
+    const severities = process.argv.slice(2) || ['info'];
+    for (const severity of severities) {
+        await channel.bindQueue(q.queue, exchange, severity);
+    }
+
+    console.log(" [*] Waiting for %s. To exit press CTRL+C", severities);
+
+    channel.consume(q.queue, (msg) => {
+        console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
+    }, { noAck: true });
+}
+receive();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Topics}
+
+\field{Short description:}{Receives messages by \textbf{pattern matching} on routing keys,
+using wildcards.}
+
+\field{Theory:}{Uses a \textbf{topic exchange}. Routing keys are dot separated words, and
+consumers bind with patterns built from two wildcards: \lstinline|*| matches exactly one
+word, \lstinline|#| matches zero or more words.}
+
+\field{How it works:}{The producer publishes with a routing key such as
+\lstinline|stock.usd.nyse|. A consumer binds a pattern such as \lstinline|*.usd.#| and
+receives every message whose key fits that shape.}
+
+\field{Use case example:}{A stock price feed. One client wants everything from the NYSE
+(\lstinline|*.nyse.*|), another wants only USD denominated stocks from any exchange
+(\lstinline|*.usd.*|), and a third wants the whole energy sector (\lstinline|energy.#|).}
+
+\subsection{Architecture diagram}
+\mmd{05-topics.png}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item \lstinline|*| matches one word: \lstinline|*.stock.*| matches \lstinline|usd.stock.nyse|
+  \item \lstinline|#| matches zero or more: \lstinline|#.error| matches \lstinline|app.service.error|
+  \item Binding \lstinline|*.orange.*| matches \lstinline|quick.orange.rabbit|
+  \item Binding \lstinline|lazy.#| matches both \lstinline|lazy.orange.rabbit| and \lstinline|lazy|
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item A topic exchange bound with \lstinline|#| behaves exactly like a fanout exchange
+  \item Bound with a key containing no wildcard, it behaves like a direct exchange
+  \item Very flexible, and the usual choice for complex event filtering
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Producer (\texttt{emit\_log\_topic.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function send() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const exchange = 'topic_logs';
+    await channel.assertExchange(exchange, 'topic', { durable: false });
+
+    const routingKey = process.argv[2] || 'anonymous.info';
+    const msg = process.argv.slice(3).join(' ') || "Hello World!";
+    channel.publish(exchange, routingKey, Buffer.from(msg));
+    console.log(" [x] Sent %s: '%s'", routingKey, msg);
+
+    setTimeout(() => { connection.close(); }, 500);
+}
+send();
+\end{js}
+
+\subsubsection*{Consumer (\texttt{receive\_logs\_topic.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function receive() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const exchange = 'topic_logs';
+    await channel.assertExchange(exchange, 'topic', { durable: false });
+
+    const q = await channel.assertQueue('', { exclusive: true });
+
+    const bindingKeys = process.argv.slice(2) || ['#'];
+    for (const key of bindingKeys) {
+        await channel.bindQueue(q.queue, exchange, key);
+    }
+
+    console.log(" [*] Waiting for %s. To exit press CTRL+C", bindingKeys);
+
+    channel.consume(q.queue, (msg) => {
+        console.log(" [x] %s: '%s'", msg.fields.routingKey, msg.content.toString());
+    }, { noAck: true });
+}
+receive();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Remote Procedure Call}
+
+\field{Short description:}{The client sends a request and waits for a response, much like
+calling a function that happens to live on another machine.}
+
+\field{Theory:}{The client sends a request carrying a \textbf{callback queue} name and a
+\textbf{correlation ID}. The server processes it and publishes the result to that callback
+queue. The client listens on the callback queue and matches replies by correlation ID.}
+
+\field{How it works:}{The client creates a temporary exclusive queue for replies and sets
+\lstinline|replyTo| and \lstinline|correlationId| on the request. The server consumes the
+request, computes, and sends the result to \lstinline|replyTo| with the same correlation ID.
+The client resolves the matching promise.}
+
+\field{Use case example:}{A web frontend needs a Fibonacci number that is expensive to
+compute, so the work is offloaded to an RPC server. The frontend sends the input and waits
+for the result to come back.}
+
+\subsection{Architecture diagram}
+\mmd{06-rpc.png}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item The \textbf{callback queue} is where the server sends the response
+  \item The \textbf{correlation ID} matches a response to its request and prevents mixups
+  \item The client suspends until the reply arrives
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item RPC is synchronous from the caller's point of view, so it adds latency
+  \item Good when you genuinely need a result back, otherwise prefer a plain queue
+  \item Always set a timeout, since a dead server means a promise that never resolves
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{RPC Server (\texttt{rpc\_server.js})}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+
+async function fib(n) {
+    return n < 2 ? n : await fib(n - 1) + await fib(n - 2);
+}
+
+async function startServer() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    const queue = 'rpc_queue';
+    await channel.assertQueue(queue, { durable: false });
+    channel.prefetch(1);
+    console.log(' [x] Awaiting RPC requests');
+
+    channel.consume(queue, async (msg) => {
+        const n = parseInt(msg.content.toString());
+        console.log(` [.] fib(${n})`);
+        const result = await fib(n);
+        channel.sendToQueue(msg.properties.replyTo, Buffer.from(result.toString()), {
+            correlationId: msg.properties.correlationId
+        });
+        channel.ack(msg);
+    });
+}
+startServer();
+\end{js}
+
+\subsubsection*{RPC Client (\texttt{rpc\_client.js})}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+const { v4: uuidv4 } = require('uuid');
+
+class RpcClient {
+    async connect() {
+        this.connection = await amqp.connect('amqp://localhost');
+        this.channel = await this.connection.createChannel();
+        const q = await this.channel.assertQueue('', { exclusive: true });
+        this.callbackQueue = q.queue;
+    }
+
+    async call(n) {
+        const corrId = uuidv4();
+        return new Promise((resolve) => {
+            this.channel.consume(this.callbackQueue, (msg) => {
+                if (msg.properties.correlationId === corrId) {
+                    resolve(parseInt(msg.content.toString()));
+                }
+            }, { noAck: true });
+
+            this.channel.sendToQueue('rpc_queue', Buffer.from(n.toString()), {
+                correlationId: corrId,
+                replyTo: this.callbackQueue
+            });
+        });
+    }
+}
+
+async function run() {
+    const client = new RpcClient();
+    await client.connect();
+    console.log(" [x] Requesting fib(30)");
+    console.log(" [.] Got %d", await client.call(30));
+}
+run();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Publisher Confirms}
+
+\field{Short description:}{Guarantees that the broker \textbf{actually received} the
+messages you published.}
+
+\field{Theory:}{The channel is put into confirm mode. Every published message is then either
+acknowledged or negatively acknowledged by the broker. For persistent messages the
+confirmation arrives only \textbf{after} the message has been written to disk.}
+
+\field{How it works:}{Create the channel with \lstinline|createConfirmChannel()|. After each
+publish the broker replies with \lstinline|Basic.Ack| or \lstinline|Basic.Nack|. You can
+wait for these synchronously with \lstinline|waitForConfirms()| or handle them
+asynchronously through channel events.}
+
+\field{Use case example:}{An order processing system that cannot lose an order. Each order
+is published with confirms so the service knows the broker has accepted and persisted it
+before moving on. If no confirm arrives within a timeout, the service retries.}
+
+\subsection{Architecture diagram}
+\mmd[0.30]{07-publisher-confirms.png}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item \lstinline|createConfirmChannel()| enables confirms
+  \item \lstinline|Basic.Ack| means the broker took responsibility for the message
+  \item \lstinline|Basic.Nack| means it did not, for example a routing error
+  \item \lstinline|waitForConfirms()| blocks until every outstanding message is confirmed
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Confirms say nothing about consumers, only about the broker
+  \item Pair them with the \lstinline|mandatory| flag to catch unroutable messages
+  \item Synchronous confirms are slow, so use the async form for high throughput
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Synchronous confirms (\texttt{confirm\_publisher.js})}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+
+async function publish() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createConfirmChannel();  // Confirm channel
+
+    const queue = 'confirm_queue';
+    await channel.assertQueue(queue, { durable: true });
+
+    // Publish with a per-message callback
+    channel.sendToQueue(queue, Buffer.from('Critical message'), { persistent: true },
+        (err, ok) => {
+            if (err) {
+                console.log(" [x] Message NOT confirmed");
+            } else {
+                console.log(" [x] Message confirmed");
+            }
+        });
+
+    await channel.waitForConfirms();
+    console.log(" [x] All messages confirmed");
+
+    setTimeout(() => { connection.close(); }, 500);
+}
+publish();
+\end{js}
+
+\subsubsection*{Asynchronous confirms (high throughput)}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+
+async function publish() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createConfirmChannel();
+
+    const queue = 'confirm_queue';
+    await channel.assertQueue(queue, { durable: true });
+
+    // Listen for confirms instead of waiting on each publish
+    channel.on('ack', (msg) => console.log(' [✓] Message acked'));
+    channel.on('nack', (msg) => console.log(' [✗] Message nacked'));
+
+    for (let i = 0; i < 10; i++) {
+        channel.sendToQueue(queue, Buffer.from(`Message ${i}`), { persistent: true });
+        console.log(` [x] Sent message ${i}`);
+    }
+
+    await channel.waitForConfirms();
+    console.log(" [x] All messages confirmed");
+
+    setTimeout(() => { connection.close(); }, 500);
+}
+publish();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Queue Types}
+
+\field{Short description:}{RabbitMQ offers three queue types. The type is fixed at
+declaration time and decides how the queue stores messages and survives a node failure.}
+
+\field{Theory:}{}
+
+\begin{itemize}\itemsep2pt
+  \item A \textbf{classic} queue lives on one node
+  \item A \textbf{quorum} queue replicates its contents across an odd number of nodes using
+        the Raft consensus algorithm
+  \item A \textbf{stream} keeps an append only log that many consumers can read
+        independently, each at its own offset
+\end{itemize}
+
+\field{How it works:}{You pick the type with the \lstinline|x-queue-type| argument when
+declaring the queue. Classic is the default. Quorum trades a little throughput for
+durability. A stream does not remove a message when it is read, so the same message can be
+replayed by a new consumer later.}
+
+\field{Use case example:}{Payment confirmations go to a quorum queue because losing one is
+unacceptable. Thumbnail generation jobs go to a classic queue because they are cheap to
+retry. An event feed that analytics, billing, and audit all read goes to a stream.}
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}
+\textbf{\color{accent}Type} & \textbf{\color{accent}Stores} & \textbf{\color{accent}Pick it when} \\
+\midrule
+Classic & One node, optionally on disk & Throughput matters more than surviving a node loss \\
+Quorum  & Replicated by Raft, always on disk & The message must not be lost \\
+Stream  & Append only log, replayable & Many consumers read the same history \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item The type cannot be changed later, you must delete and redeclare the queue
+  \item Quorum queues need a majority of nodes alive, so use 3 or 5, never an even number
+  \item A stream keeps messages after delivery, bounded by
+        \lstinline|x-max-length-bytes| or \lstinline|x-max-age|
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Quorum queues do not support priorities or the \lstinline|exclusive| flag
+  \item Mirrored classic queues are deprecated, quorum queues replace them
+  \item Redeclaring an existing queue with different arguments raises
+        \lstinline|PRECONDITION_FAILED| and kills the channel
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Declaring each type (\texttt{queue\_types.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function declare() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    // Classic: the default, single node.
+    await channel.assertQueue('jobs.classic', { durable: true });
+
+    // Quorum: replicated across the cluster, always durable.
+    await channel.assertQueue('payments.quorum', {
+        durable: true,
+        arguments: {
+            'x-queue-type': 'quorum',
+            'x-delivery-limit': 5   // give up after 5 redeliveries
+        }
+    });
+
+    // Stream: append only log, capped by size and age.
+    await channel.assertQueue('events.stream', {
+        durable: true,
+        arguments: {
+            'x-queue-type': 'stream',
+            'x-max-length-bytes': 2_000_000_000,
+            'x-max-age': '7D'
+        }
+    });
+
+    console.log(' [x] Declared classic, quorum and stream queues');
+    await connection.close();
+}
+declare();
+\end{js}
+
+\subsubsection*{Reading a stream from an offset (\texttt{stream\_consumer.js})}
+\begin{js}
+const amqp = require('amqplib');
+
+async function consume() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    // Streams require a prefetch, the broker refuses the consumer without one.
+    await channel.prefetch(100);
+
+    await channel.consume('events.stream', (msg) => {
+        console.log(' [x] offset %s: %s',
+            msg.properties.headers['x-stream-offset'],
+            msg.content.toString());
+        channel.ack(msg);
+    }, {
+        noAck: false,
+        arguments: { 'x-stream-offset': 'first' }  // or 'last', 'next', a number
+    });
+}
+consume();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Message Structure and Message Properties}
+
+\field{Short description:}{Every message carries a body of raw bytes plus a set of
+properties and headers that travel with it.}
+
+\field{Theory:}{An AMQP message has three parts.}
+
+\begin{itemize}\itemsep2pt
+  \item The \textbf{body} is an opaque byte array, RabbitMQ never looks inside it
+  \item The \textbf{properties} are a fixed set of fields defined by the protocol, such as
+        \lstinline|contentType| and \lstinline|correlationId|
+  \item The \textbf{headers} are a free form map you fill with anything your application
+        needs
+\end{itemize}
+
+\field{How it works:}{In amqplib the body is always a \lstinline|Buffer|, so objects must
+be serialised before publishing and parsed after receiving. Properties are passed as the
+third argument to \lstinline|publish| and read back on
+\lstinline|msg.properties|. Delivery metadata such as the routing key and the
+delivery tag arrives separately on \lstinline|msg.fields|.}
+
+\field{Use case example:}{A service publishes JSON with
+\lstinline|contentType: 'application/json'|, a \lstinline|messageId| for deduplication, and
+a \lstinline|traceId| header so the request can be followed across every service that
+touches it.}
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}
+\textbf{\color{accent}Property} & \textbf{\color{accent}What it is for} \\
+\midrule
+\lstinline|persistent|     & Write the message to disk so a broker restart keeps it \\
+\lstinline|contentType|    & How the consumer should parse the body \\
+\lstinline|correlationId|  & Ties an RPC reply back to its request \\
+\lstinline|replyTo|        & Queue the reply should be sent to \\
+\lstinline|messageId|      & Unique id, used for deduplication and logging \\
+\lstinline|expiration|     & Per message TTL in milliseconds, as a string \\
+\lstinline|priority|       & Rank inside a priority queue \\
+\lstinline|headers|        & Your own key value map, also used by header exchanges \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item The body is bytes, the broker never parses or validates it
+  \item \lstinline|persistent: true| plus a durable queue is what survives a restart
+  \item \lstinline|expiration| is a string of milliseconds, not a number
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Keep the body small, put routing information in headers instead
+  \item \lstinline|priority| needs \lstinline|x-max-priority| set on the queue
+  \item \lstinline|msg.fields.redelivered| tells you this message was delivered before
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Publishing with properties (\texttt{publish\_properties.js})}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+const crypto = require('crypto');
+
+async function send() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    await channel.assertQueue('orders', { durable: true });
+
+    const payload = { orderId: 42, total: 199.5, currency: 'EUR' };
+
+    channel.sendToQueue('orders', Buffer.from(JSON.stringify(payload)), {
+        persistent: true,                    // survive a broker restart
+        contentType: 'application/json',
+        contentEncoding: 'utf-8',
+        messageId: crypto.randomUUID(),
+        correlationId: 'checkout-42',
+        timestamp: Date.now(),
+        appId: 'checkout-service',
+        type: 'order.created',
+        expiration: '60000',                 // milliseconds, as a string
+        headers: {
+            traceId: 'abc-123',
+            attempt: 1,
+            source: 'web'
+        }
+    });
+
+    console.log(' [x] Sent order with properties');
+    setTimeout(() => connection.close(), 500);
+}
+send();
+\end{js}
+
+\subsubsection*{Reading them back (\texttt{read\_properties.js})}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+
+async function receive() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    await channel.assertQueue('orders', { durable: true });
+    await channel.prefetch(1);
+
+    channel.consume('orders', (msg) => {
+        const { properties: p, fields: f, content } = msg;
+
+        console.log(' [x] routingKey  :', f.routingKey);
+        console.log('     redelivered :', f.redelivered);
+        console.log('     messageId   :', p.messageId);
+        console.log('     type        :', p.type);
+        console.log('     traceId     :', p.headers.traceId);
+
+        const body = p.contentType === 'application/json'
+            ? JSON.parse(content.toString())
+            : content.toString();
+
+        console.log('     body        :', body);
+        channel.ack(msg);
+    }, { noAck: false });
+}
+receive();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Dead Letter Exchange (DLX) and TTL}
+
+\field{Short description:}{Messages that expire, are rejected, or overflow a full queue are
+republished to another exchange instead of being thrown away.}
+
+\field{Theory:}{A queue declared with \lstinline|x-dead-letter-exchange| forwards any
+\textbf{dead lettered} message to that exchange. A message is dead lettered when it is
+nacked with \lstinline|requeue: false|, when its TTL expires, when the queue is full, or
+when the delivery limit is reached.}
+
+\field{How it works:}{TTL is set either on the queue with
+\lstinline|x-message-ttl|, which applies to everything in it, or per message with the
+\lstinline|expiration| property. When the timer runs out the broker removes the message and,
+if a DLX is configured, republishes it there with an
+\lstinline|x-death| header recording why and how many times.}
+
+\field{Use case example:}{A retry pipeline. The main queue dead letters failures into a
+wait queue with a 30 second TTL, whose own DLX points back at the main queue. The message
+comes back automatically half a minute later, and after a few rounds it lands in a parking
+queue a human can inspect.}
+
+\subsection{Architecture diagram}
+\mmd{08-dlx-ttl.png}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item Four causes of dead lettering: rejected, expired, maxlen, delivery limit
+  \item \lstinline|x-dead-letter-routing-key| overrides the original routing key
+  \item Per message \lstinline|expiration| and queue \lstinline|x-message-ttl| both apply,
+        the shorter one wins
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Only the message at the head of a queue expires, so a slow head delays the rest
+  \item The \lstinline|x-death| header carries the retry count, use it to stop a loop
+  \item Never point a queue's DLX back at itself without a counter, that is an infinite loop
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Dead letter setup (\texttt{dlx\_setup.js})}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+
+async function setup() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    // The exchange and queue that collect the failures.
+    await channel.assertExchange('dlx', 'direct', { durable: true });
+    await channel.assertQueue('orders.dead', { durable: true });
+    await channel.bindQueue('orders.dead', 'dlx', 'orders');
+
+    // The working queue: 30s TTL, capped length, the rest falls through to the DLX.
+    await channel.assertQueue('orders', {
+        durable: true,
+        arguments: {
+            'x-message-ttl': 30000,
+            'x-max-length': 10000,
+            'x-dead-letter-exchange': 'dlx',
+            'x-dead-letter-routing-key': 'orders'
+        }
+    });
+
+    await channel.prefetch(1);
+    channel.consume('orders', (msg) => {
+        try {
+            handle(JSON.parse(msg.content.toString()));
+            channel.ack(msg);
+        } catch (err) {
+            // requeue: false dead letters it, requeue: true would loop forever.
+            channel.nack(msg, false, false);
+        }
+    }, { noAck: false });
+}
+setup();
+\end{js}
+
+\subsubsection*{Delayed retry with a wait queue (\texttt{retry.js})}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+const MAX_RETRIES = 3;
+
+async function setup() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    // Wait queue holds the message for 30s, then dead letters it back to the main queue.
+    await channel.assertQueue('orders.wait', {
+        durable: true,
+        arguments: {
+            'x-message-ttl': 30000,
+            'x-dead-letter-exchange': '',
+            'x-dead-letter-routing-key': 'orders'
+        }
+    });
+
+    channel.consume('orders.dead', (msg) => {
+        const deaths = msg.properties.headers['x-death'] || [];
+        const count = deaths.length ? deaths[0].count : 0;
+        if (count >= MAX_RETRIES) {
+            channel.sendToQueue('orders.parked', msg.content, { persistent: true });
+        } else {
+            channel.sendToQueue('orders.wait', msg.content, { persistent: true });
+        }
+        channel.ack(msg);
+    }, { noAck: false });
+}
+setup();
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Mirrored and Replicated Queues}
+
+\field{Short description:}{Keeping copies of a queue on several nodes so the messages
+survive losing one of them.}
+
+\field{Theory:}{Old \textbf{mirrored} classic queues copied a master queue to mirrors using
+a policy, and are deprecated because a network partition could silently lose
+acknowledged messages. \textbf{Quorum} queues replace them. They use Raft, where one
+\textbf{leader} accepts every write and only confirms it once a \textbf{majority} of
+replicas has it on disk.}
+
+\field{How it works:}{Clients always talk to the leader, no matter which node they connect
+to, and the broker forwards the traffic. If the leader dies, the remaining replicas elect a
+new one from those with the most complete log, and clients reconnect to it without losing
+confirmed messages.}
+
+\field{Use case example:}{A three node cluster running payment events. Node one holds the
+leader and is taken down for a kernel upgrade. Node two is elected leader, publishers
+reconnect, and no confirmed payment is lost.}
+
+\subsection{Architecture diagram}
+\mmd{09-replicated-queues.png}
+
+\subsection*{Key Points}
+
+\begin{itemize}\itemsep2pt
+  \item A quorum queue of 3 nodes tolerates 1 failure, 5 nodes tolerate 2
+  \item Use an odd node count, an even one gives no extra safety
+  \item Replication only helps together with publisher confirms and consumer acks
+\end{itemize}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Classic queue mirroring policies (\lstinline|ha-mode|) are removed in RabbitMQ 4
+  \item Set \lstinline|x-quorum-initial-group-size| to control how many replicas start with
+  \item Replicating every queue is wasteful, replicate only what must not be lost
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Declaring a replicated queue (\texttt{quorum\_queue.js})}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+
+async function setup() {
+    // List every node so the client can fail over when one goes down.
+    const connection = await amqp.connect([
+        'amqp://localhost:5672',
+        'amqp://node2:5672',
+        'amqp://node3:5672'
+    ]);
+    const channel = await connection.createConfirmChannel();
+
+    await channel.assertQueue('payments', {
+        durable: true,
+        arguments: {
+            'x-queue-type': 'quorum',
+            'x-quorum-initial-group-size': 3,  // leader plus two followers
+            'x-delivery-limit': 5
+        }
+    });
+
+    // The confirm only arrives once a majority of replicas has the message on disk.
+    channel.sendToQueue('payments', Buffer.from('payment-42'), { persistent: true },
+        (err) => {
+            console.log(err ? ' [!] Rejected' : ' [x] Replicated and confirmed');
+            connection.close();
+        });
+}
+
+setup().catch(console.error);
+\end{js}
+
+\subsubsection*{Cluster and queue inspection}
+\begin{sh}[basicstyle=\ttfamily\scriptsize]
+# Cluster health and which nodes are running
+rabbitmq-diagnostics cluster_status
+rabbitmq-diagnostics check_running
+
+# Queue type, leader node and the current replica set
+rabbitmqctl list_queues name type leader members messages
+
+# Move a leader off a node before taking it down for maintenance
+rabbitmq-queues quorum_status payments
+rabbitmq-upgrade drain
+
+# Grow or shrink the replica set of an existing quorum queue
+rabbitmq-queues add_member payments rabbit@node4
+rabbitmq-queues delete_member payments rabbit@node2
+\end{sh}
+
+\newpage
+% =========================================================================
+\section{Arguments}
+
+\field{Short description:}{Extra options passed when declaring a queue or starting a
+consumer. They change the behaviour of the broker, unlike properties, which travel with a
+single message.}
+
+\field{Theory:}{Arguments come in three places.}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Queue arguments} go in the \lstinline|arguments| map of
+        \lstinline|assertQueue| and are fixed for the life of the queue
+  \item \textbf{Consumer arguments} go in the \lstinline|arguments| map of
+        \lstinline|consume| and affect only that consumer
+  \item \textbf{Options} such as \lstinline|durable| or \lstinline|persistent| are plain
+        fields, not \lstinline|x-| arguments
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+\rowcolor{tablehead}
+\textbf{\color{accent}Argument} & \textbf{\color{accent}Example} & \textbf{\color{accent}What it does} \\
+\midrule
+\lstinline|x-queue-type|              & \lstinline|'quorum'|         & Picks classic, quorum or stream \\
+\lstinline|x-message-ttl|             & \lstinline|30000|            & Every message expires after 30 seconds \\
+\lstinline|x-expires|                 & \lstinline|1800000|          & Delete the queue itself after 30 idle minutes \\
+\lstinline|x-max-length|              & \lstinline|10000|            & Keep at most 10000 messages \\
+\lstinline|x-max-length-bytes|        & \lstinline|1048576|          & Keep at most 1 MB of message bodies \\
+\lstinline|x-overflow|                & \lstinline|'reject-publish'| & What a full queue does: \lstinline|drop-head| (default), \lstinline|reject-publish|, \lstinline|reject-publish-dlx| \\
+\lstinline|x-dead-letter-exchange|    & \lstinline|'dlx'|            & Where rejected or expired messages are republished \\
+\lstinline|x-dead-letter-routing-key| & \lstinline|'orders'|         & Routing key used when dead lettering \\
+\lstinline|x-max-priority|            & \lstinline|10|               & Turns it into a priority queue with 10 levels \\
+\lstinline|x-single-active-consumer|  & \lstinline|true|             & Only one consumer receives at a time, the rest wait \\
+\lstinline|x-delivery-limit|          & \lstinline|5|                & Quorum only: dead letter after 5 redeliveries \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Arguments are fixed at declaration, changing one means deleting the queue or
+        applying a \textbf{policy} instead
+  \item An unknown \lstinline|x-| argument is ignored silently, so a typo simply does nothing
+  \item Values must have the right type, \lstinline|'30000'| as a string is not the same as
+        \lstinline|30000|
+\end{itemize}
+
+\newpage
+\subsection{Code examples}
+
+\subsubsection*{Consumer arguments}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+\rowcolor{tablehead}
+\textbf{\color{accent}Argument} & \textbf{\color{accent}Example} & \textbf{\color{accent}What it does} \\
+\midrule
+\lstinline|x-priority|       & \lstinline|10|      & This consumer is served before lower priority ones \\
+\lstinline|x-stream-offset|  & \lstinline|'first'| & Where to start reading a stream: \lstinline|first|, \lstinline|last|, \lstinline|next|, an offset or a timestamp \\
+\lstinline|x-cancel-on-ha-failover| & \lstinline|true| & Cancel the consumer when the queue moves node \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection*{Arguments in practice (\texttt{arguments.js})}
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+const amqp = require('amqplib');
+
+async function setup() {
+    const connection = await amqp.connect('amqp://localhost');
+    const channel = await connection.createChannel();
+
+    // durable is an option, everything under arguments is a broker behaviour.
+    await channel.assertQueue('orders', {
+        durable: true,
+        arguments: {
+            'x-queue-type': 'quorum',
+            'x-message-ttl': 30000,
+            'x-max-length': 10000,
+            'x-overflow': 'reject-publish',      // fail the publish instead of dropping
+            'x-dead-letter-exchange': 'dlx',
+            'x-delivery-limit': 5
+        }
+    });
+
+    // A backup consumer: it only receives when no higher priority one is connected.
+    await channel.consume('orders', (msg) => {
+        console.log(' [x] backup handled', msg.content.toString());
+        channel.ack(msg);
+    }, { noAck: false, arguments: { 'x-priority': 1 } });
+}
+
+setup().catch(console.error);
+\end{js}
+
+\newpage
+% =========================================================================
+\section{Quick Reference}
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+\rowcolor{tablehead}
+\textbf{\color{accent}Pattern} & \textbf{\color{accent}Exchange} & \textbf{\color{accent}Use it when} \\
+\midrule
+Hello World        & default (\lstinline|''|) & One producer, one consumer, no routing \\
+Work Queues        & default (\lstinline|''|) & Spread heavy tasks over a pool of workers \\
+Publish/Subscribe  & fanout                   & Every consumer needs every message \\
+Routing            & direct                   & Consumers pick messages by exact key \\
+Topics             & topic                    & Consumers pick messages by key pattern \\
+RPC                & default (\lstinline|''|) & You need a reply back from the worker \\
+Publisher Confirms & any                      & Losing a message is unacceptable \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{Common practices}
+
+\begin{itemize}\itemsep2pt
+  \item Reuse one connection per process and open a channel per task
+  \item Always handle \lstinline|connection.on('error')| and \lstinline|'close'|, then reconnect
+  \item Set \lstinline|prefetch| on every consumer, otherwise one worker hoards the queue
+  \item Acknowledge only after the work is genuinely finished
+  \item Make queues durable and messages persistent when the data matters
+  \item Never block the event loop inside a consumer callback
+\end{itemize}
+
+
+\end{document}

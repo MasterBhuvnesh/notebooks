@@ -1,0 +1,7 @@
+sequenceDiagram
+    participant Producer
+    participant Broker
+    Producer->>Broker: publish (with confirm mode)
+    Broker->>Broker: write to disk (if persistent)
+    Broker-->>Producer: Basic.Ack (success)
+    Producer->>Producer: proceed

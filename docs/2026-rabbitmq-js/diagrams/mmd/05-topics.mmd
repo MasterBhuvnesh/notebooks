@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant Producer
+    participant Exchange as topic_logs (topic)
+    participant Q1 as queue (*.nyse.*)
+    participant Q2 as queue (*.usd.*)
+    participant C1 as Consumer (NYSE)
+    participant C2 as Consumer (USD)
+    Producer->>Exchange: routing_key="stock.nyse.usd"
+    Exchange->>Q1: match (*.nyse.*)
+    Exchange->>Q2: match (*.usd.*)
+    Q1->>C1: deliver
+    Q2->>C2: deliver

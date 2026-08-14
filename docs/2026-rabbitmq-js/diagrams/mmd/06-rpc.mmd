@@ -1,0 +1,9 @@
+sequenceDiagram
+    participant Client
+    participant Queue as rpc_queue
+    participant Server
+    Client->>Queue: request (corr_id=abc, reply_to=amq.gen-...)
+    Queue->>Server: deliver
+    Server->>Server: compute
+    Server->>Client: reply (corr_id=abc) via callback queue
+    Client->>Client: match corr_id and return result

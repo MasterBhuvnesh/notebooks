@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant Producer
+    participant Exchange as direct_logs (direct)
+    participant Q_error as queue (error)
+    participant Q_info as queue (info)
+    participant C_error as Error Consumer
+    participant C_info as Info Consumer
+    Producer->>Exchange: publish routing_key="error"
+    Exchange->>Q_error: match
+    Exchange->>Q_info: no match (skip)
+    Q_error->>C_error: deliver
+    Producer->>Exchange: publish routing_key="info"
+    Exchange->>Q_info: match
+    Q_info->>C_info: deliver

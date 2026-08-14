@@ -1,0 +1,13 @@
+flowchart LR
+    P[Producer] --> L
+    subgraph Cluster
+        direction TB
+        L["Node 1: leader replica"]
+        F1["Node 2: follower replica"]
+        F2["Node 3: follower replica"]
+        L -- replicate --> F1
+        L -- replicate --> F2
+        L -. "leader role moves on failure" .-> F1
+    end
+    L --> C[Consumer]
+    style Cluster fill:#FFFFFF,stroke:#9FBBDD

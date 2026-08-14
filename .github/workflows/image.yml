@@ -1,0 +1,34 @@
+name: Builder image
+
+# Only when the image definition changes -- TeX Live is a slow build and the
+# document workflow just pulls the result.
+on:
+  push:
+    branches: [main]
+    paths: ['docker/builder/**', '.github/workflows/image.yml']
+  workflow_dispatch:
+
+jobs:
+  push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: docker/builder
+          push: true
+          # lowercase, always -- ghcr rejects uppercase in a repository name,
+          # and github.repository_owner keeps the account's original casing.
+          tags: ghcr.io/masterbhuvnesh/notebooks-builder:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

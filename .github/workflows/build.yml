@@ -1,0 +1,49 @@
+name: Build documents
+
+on:
+  push:
+    # Only sources. The bot commits .pdf/.png/CHANGELOG.md/.build.json/README.md,
+    # none of which match — so its own commit cannot retrigger this workflow.
+    paths:
+      - 'docs/**/*.tex'
+      - 'docs/**/*.mmd'
+      - 'shared/**'
+      - 'tools/**'
+      - '.github/workflows/build.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ghcr.io/masterbhuvnesh/notebooks-builder:latest
+    permissions:
+      contents: write
+    steps:
+      # Full history: the changelog is generated from git log, and a shallow
+      # clone would silently produce a one-line changelog per document.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Trust the workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Build
+        run: python3 tools/build.py
+
+      - name: Commit artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A 'docs/**/*.pdf' 'docs/**/*.png' 'docs/**/CHANGELOG.md' \
+                     'docs/**/.build.json' README.md
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "chore(build): rebuild artifacts [skip ci]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi

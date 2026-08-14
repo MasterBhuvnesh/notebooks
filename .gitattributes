@@ -1,0 +1,5 @@
+# The build runs in a Linux container; CRLF in a script would break it there
+# while working fine on Windows. Normalise on the way in.
+* text=auto eol=lf
+*.pdf binary
+*.png binary

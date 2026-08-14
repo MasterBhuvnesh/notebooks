@@ -1,0 +1,11 @@
+sequenceDiagram
+    participant Producer
+    participant Queue as task_queue
+    participant Worker1
+    participant Worker2
+    Producer->>Queue: send task1, task2, task3
+    Queue->>Worker1: task1
+    Queue->>Worker2: task2
+    Queue->>Worker1: task3 (round-robin)
+    Worker1-->>Queue: ack
+    Worker2-->>Queue: ack
