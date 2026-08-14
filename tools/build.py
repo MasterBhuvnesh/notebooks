@@ -111,12 +111,16 @@ def render_diagrams(doc: Path, cache: dict, force: bool) -> dict[str, str]:
     sources = sorted(mmd_dir.glob("*.mmd")) if mmd_dir.is_dir() else []
     hashes = {s.name: sha(s) for s in sources}
 
-    if png_dir.is_dir():
-        stems = {s.stem for s in sources}
-        for orphan in png_dir.glob("*.png"):
-            if orphan.stem not in stems:
-                print(f"    - {orphan.name} (source gone, removed)")
-                orphan.unlink()
+    # Delete only PNGs this build made earlier and no longer has a source for.
+    # Anything not in the previous cache was put there by hand -- a screenshot,
+    # a logo -- and is not ours to remove.
+    stems = {s.stem for s in sources}
+    ours = {Path(name).stem for name in cache.get("diagrams", {})}
+    for stale_png in sorted(ours - stems):
+        png = png_dir / f"{stale_png}.png"
+        if png.exists():
+            print(f"    - {png.name} (mermaid source gone, removed)")
+            png.unlink()
 
     stale = [
         s for s in sources

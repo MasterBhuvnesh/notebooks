@@ -170,7 +170,14 @@ Byproducts (`.aux`, `.log`, `.toc`, `.out`) are gitignored and safe to delete.
 
 Write the `.mmd` into `docs/<book-name>/diagrams/mmd/NN-name.mmd` and reference the render as
 `\mmd{NN-name.png}` - the macro already prefixes `diagrams/png/`. The build renders changed
-sources only (sha256 per file) and deletes PNGs whose `.mmd` is gone.
+sources only (sha256 per file) and deletes a PNG when its own `.mmd` disappears.
+
+**A document with no diagrams needs nothing extra**: no `.mmd` files, no `\mmd` calls. The
+render step is skipped entirely.
+
+**An image that is not a diagram** - a screenshot, a logo - goes straight into
+`diagrams/png/` and is used with the same `\mmd{shot.png}`. The build leaves any PNG it did
+not generate alone, so a hand-added image is safe there.
 
 **Source mermaid is often invalid.** Markdown viewers are lenient; mermaid-cli is not.
 `participant Q1 (*.nyse.*)` fails - a label with parens needs an alias:
