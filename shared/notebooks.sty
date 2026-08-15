@@ -146,18 +146,34 @@
 % The optional argument widens the command column for long command names
 % ("terraform state list"); the description column takes what is left.
 \newenvironment{cmdtable}[1][3.2cm]
-  {\small\longtable{@{}>{\ttfamily}p{#1} p{\dimexpr\textwidth-#1-2\tabcolsep\relax}@{}}
+  {\small\frenchspacing\longtable{@{}>{\ttfamily}p{#1} p{\dimexpr\textwidth-#1-2\tabcolsep\relax}@{}}
    \toprule
    \rowcolor{tablehead}\textrm{\bfseries Command} & \bfseries Description \\
    \midrule\endhead}
   {\bottomrule\endlongtable}
 
+% Ends a row AND rules under it, for tables read one line at a time:
+%   pwd & Print the working directory & pwd & pwd \nr
+% Use plain \\ on the last row of a table, so the rule under it is the
+% \bottomrule and not two lines stacked.
+\newcommand{\nr}{\\\midrule}
+
 \newenvironment{cmdtable3}[1][3.0cm]
-  {\small\longtable{@{}>{\ttfamily}p{#1} p{5.0cm}
+  {\small\frenchspacing\longtable{@{}>{\ttfamily}p{#1} p{5.0cm}
       >{\ttfamily}p{\dimexpr\textwidth-#1-5.0cm-4\tabcolsep\relax}@{}}
    \toprule
    \rowcolor{tablehead}\textrm{\bfseries Command} & \bfseries Description
      & \textrm{\bfseries Example} \\
+   \midrule\endhead}
+  {\bottomrule\endlongtable}
+
+% cmdtable4 adds a syntax column between the description and the example.
+\newenvironment{cmdtable4}[1][2.0cm]
+  {\small\frenchspacing\longtable{@{}>{\ttfamily}p{#1} p{4.1cm} >{\ttfamily}p{4.4cm}
+      >{\ttfamily}p{\dimexpr\textwidth-#1-4.1cm-4.4cm-6\tabcolsep\relax}@{}}
+   \toprule
+   \rowcolor{tablehead}\textrm{\bfseries Command} & \bfseries Description
+     & \textrm{\bfseries Syntax} & \textrm{\bfseries Example} \\
    \midrule\endhead}
   {\bottomrule\endlongtable}
 
