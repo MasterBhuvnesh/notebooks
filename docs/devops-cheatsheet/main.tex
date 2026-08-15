@@ -1,0 +1,273 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{notebooks}
+
+\notebooktitle{DevOps Cheat Sheet}
+\notebooksubtitle{Linux, Git, Terraform}
+\notebooktagline{A command reference, grouped by what you are trying to do.}
+\notebookauthor{Bhuvnesh Verma}
+\notebooksource{github.com/MasterBhuvnesh/notebooks}
+
+\begin{document}
+\notebookcover
+
+\section{Basic Linux Commands}
+
+\begin{cmdtable}
+pwd & Print the current working directory \\
+ls & List files and directories \\
+cd & Change directory \\
+touch & Create an empty file \\
+mkdir & Create a new directory \\
+rm & Remove files or directories \\
+rmdir & Remove empty directories \\
+cp & Copy files or directories \\
+mv & Move or rename files and directories \\
+cat & Display the content of a file \\
+echo & Display a line of text \\
+clear & Clear the terminal screen \\
+\end{cmdtable}
+
+\section{Intermediate Linux Commands}
+
+\begin{cmdtable}
+chmod & Change file permissions \\
+chown & Change file ownership \\
+find & Search for files and directories \\
+grep & Search for text in a file \\
+wc & Count lines, words and characters in a file \\
+head & Display the first few lines of a file \\
+tail & Display the last few lines of a file \\
+sort & Sort the contents of a file \\
+uniq & Remove duplicate lines from a file \\
+diff & Compare two files line by line \\
+tar & Archive files into a tarball \\
+zip/unzip & Compress and extract ZIP files \\
+df & Display disk space usage \\
+du & Display directory size \\
+top & Monitor system processes in real time \\
+ps & Display active processes \\
+kill & Terminate a process by its PID \\
+ping & Check network connectivity \\
+wget & Download files from the internet \\
+curl & Transfer data from or to a server \\
+scp & Securely copy files between systems \\
+rsync & Synchronise files and directories \\
+\end{cmdtable}
+
+\section{Advanced Linux Commands}
+
+\begin{cmdtable}
+awk & Text processing and pattern scanning \\
+sed & Stream editor for filtering and transforming text \\
+cut & Remove sections from each line of a file \\
+tr & Translate or delete characters \\
+xargs & Build and execute command lines from standard input \\
+ln & Create symbolic or hard links \\
+df -h & Display disk usage in human-readable format \\
+free & Display memory usage \\
+iostat & Display CPU and I/O statistics \\
+netstat & Network statistics; \texttt{ss} is the modern replacement \\
+ifconfig & Configure network interfaces; \texttt{ip} is the modern replacement \\
+iptables & Configure firewall rules \\
+systemctl & Control the systemd system and service manager \\
+journalctl & View system logs \\
+crontab & Schedule recurring tasks \\
+at & Schedule tasks for a specific time \\
+uptime & Display system uptime \\
+whoami & Display the current user \\
+users & List all users currently logged in \\
+hostname & Display or set the system hostname \\
+env & Display environment variables \\
+export & Set environment variables \\
+\end{cmdtable}
+
+\section{Networking}
+
+\begin{cmdtable}
+ip addr & Display or configure IP addresses \\
+ip route & Show or manipulate routing tables \\
+traceroute & Trace the route packets take to a host \\
+nslookup & Query DNS records \\
+dig & Query DNS servers \\
+ssh & Connect to a remote server via SSH \\
+ftp & Transfer files using the FTP protocol \\
+nmap & Network scanning and discovery \\
+telnet & Communicate with remote hosts \\
+nc & Read and write data over networks (netcat) \\
+\end{cmdtable}
+
+\section{File Management and Search}
+
+\begin{cmdtable}
+locate & Find files quickly using a prebuilt database \\
+stat & Display detailed information about a file \\
+tree & Display directories as a tree \\
+file & Determine a file's type \\
+basename & Extract the filename from a path \\
+dirname & Extract the directory part of a path \\
+\end{cmdtable}
+
+\section{System Monitoring}
+
+\begin{cmdtable}
+vmstat & Display virtual memory statistics \\
+htop & Interactive process viewer, an alternative to \texttt{top} \\
+lsof & List open files \\
+dmesg & Print kernel ring buffer messages \\
+uptime & Show how long the system has been running \\
+iotop & Display real-time disk I/O by process \\
+\end{cmdtable}
+
+\section{Package Management}
+
+\begin{cmdtable}
+apt & Package manager for Debian-based distributions \\
+yum/dnf & Package manager for RHEL-based distributions \\
+snap & Manage snap packages \\
+rpm & Manage RPM packages \\
+\end{cmdtable}
+
+\section{Disk and Filesystem}
+
+\begin{cmdtable}
+mount & Attach a filesystem; \texttt{umount} detaches it \\
+fsck & Check and repair filesystems \\
+mkfs & Create a new filesystem \\
+blkid & Display information about block devices \\
+lsblk & List block devices as a tree \\
+parted & Manage partitions interactively \\
+\end{cmdtable}
+
+\section{Scripting and Automation}
+
+\begin{cmdtable}
+bash & Command interpreter and scripting shell \\
+sh & Legacy shell interpreter \\
+cron & Automate recurring tasks \\
+alias & Create shortcuts for commands \\
+source & Execute commands from a file in the current shell \\
+\end{cmdtable}
+
+\section{Development and Debugging}
+
+\begin{cmdtable}
+gcc & Compile C programs \\
+make & Build and manage projects \\
+strace & Trace system calls and signals \\
+gdb & Debug programs \\
+git & Version control system \\
+vim/nano & Text editors for scripting and editing \\
+\end{cmdtable}
+
+\section{Other Useful Commands}
+
+\begin{cmdtable}
+date & Display or set the system date and time \\
+cal & Display a calendar \\
+man & Display the manual for a command \\
+history & Show previously executed commands \\
+\end{cmdtable}
+
+\newpage
+\section{Basic Git Commands}
+
+\begin{cmdtable3}
+git init & Initialises a new Git repository in the current directory & git init \\
+git clone & Copies a remote repository to the local machine & git clone https://github.com/user/repo.git \\
+git status & Displays the state of the working directory and staging area & git status \\
+git add & Adds changes to the staging area & git add file.txt \\
+git commit & Records staged changes to the repository & git commit -m "Initial commit" \\
+git config & Configures user settings such as name and email & git config -{}-global user.name "Your Name" \\
+git log & Shows the commit history & git log \\
+git show & Displays detailed information about a specific commit & git show \\
+git diff & Shows changes between commits, the working directory and the staging area & git diff \\
+git reset & Unstages changes or resets commits & git reset HEAD file.txt \\
+\end{cmdtable3}
+
+\section{Branching and Merging}
+
+\begin{cmdtable3}
+git branch & Lists branches or creates a new one & git branch feature-branch \\
+git checkout & Switches between branches or restores files & git checkout feature-branch \\
+git switch & Switches branches, the modern alternative to \texttt{checkout} & git switch feature-branch \\
+git merge & Combines changes from one branch into another & git merge feature-branch \\
+git rebase & Moves or combines commits from one branch onto another & git rebase main \\
+git cherry-pick & Applies specific commits from one branch to another & git cherry-pick \textless commit-hash\textgreater \\
+\end{cmdtable3}
+
+\section{Remote Repositories}
+
+\begin{cmdtable3}
+git remote & Manages remote repository connections & git remote add origin https://github.com/user/repo.git \\
+git push & Sends local commits to a remote repository & git push origin main \\
+git pull & Fetches and merges changes from a remote repository & git pull origin main \\
+git fetch & Downloads changes from a remote without merging them & git fetch origin \\
+git remote -v & Lists the URLs of the configured remotes & git remote -v \\
+\end{cmdtable3}
+
+\section{Stashing and Cleaning}
+
+\begin{cmdtable3}
+git stash & Temporarily saves changes that are not yet committed & git stash \\
+git stash pop & Applies stashed changes and drops them from the stash list & git stash pop \\
+git stash list & Lists all stashes & git stash list \\
+git clean & Removes untracked files from the working directory & git clean -f \\
+\end{cmdtable3}
+
+\section{Tagging}
+
+\begin{cmdtable3}
+git tag & Creates a tag for a specific commit & git tag -a v1.0 -m "Version 1.0" \\
+git tag -d & Deletes a tag & git tag -d v1.0 \\
+git push & Pushes tags to a remote repository & git push origin -{}-tags \\
+\end{cmdtable3}
+
+\section{Advanced Git Commands}
+
+\begin{cmdtable3}
+git bisect & Finds the commit that introduced a bug & git bisect start \\
+git blame & Shows which commit and author last modified each line & git blame file.txt \\
+git reflog & Shows a log of where the branch tips have been & git reflog \\
+git submodule & Manages external repositories as submodules & git submodule add https://github.com/user/repo.git \\
+git archive & Creates an archive of the repository files & git archive -{}-format=zip HEAD \textgreater\ archive.zip \\
+git gc & Cleans up unnecessary files and optimises the repository & git gc \\
+\end{cmdtable3}
+
+\section{GitHub CLI}
+
+\begin{cmdtable3}
+gh auth login & Logs into GitHub from the command line & gh auth login \\
+gh repo clone & Clones a GitHub repository & gh repo clone user/repo \\
+gh issue list & Lists issues in a GitHub repository & gh issue list \\
+gh pr create & Opens a pull request & gh pr create -{}-title "New Feature" \\
+gh repo create & Creates a new GitHub repository & gh repo create my-repo \\
+\end{cmdtable3}
+
+\newpage
+\section{Terraform}
+
+\begin{cmdtable}[4.8cm]
+terraform -{}-help & Display general help for the Terraform CLI \\
+terraform init & Initialise the working directory and download the provider plugins the configuration needs \\
+terraform validate & Check the configuration files for syntax errors and internal inconsistencies \\
+terraform plan & Produce an execution plan showing what Terraform will do to reach the desired state \\
+terraform apply & Apply the changes required to reach the desired state, prompting for approval first \\
+terraform show & Display the state, or a saved plan, in human-readable form \\
+terraform output & Display the output values defined in the configuration \\
+terraform destroy & Destroy the infrastructure the configuration manages, prompting for confirmation \\
+terraform refresh & Update the state file from the real infrastructure without applying any change \\
+terraform taint & Mark a resource for recreation on the next apply, even if nothing about it changed \\
+terraform untaint & Remove the tainted status from a resource \\
+terraform state & Manage the state file: move resources between modules, remove them, inspect them \\
+terraform state list & List every resource tracked in the state file \\
+terraform import & Bring existing infrastructure under Terraform management \\
+terraform graph & Generate a graph of the resources and their dependencies \\
+terraform providers & List the providers the current configuration requires \\
+\end{cmdtable}
+
+\field{On the backend:}{The backend is configured in a \texttt{backend} block inside
+\texttt{terraform \{ \}}, not from the command line. It decides where the state file lives:
+locally by default, or remotely in S3, Azure Blob Storage, Terraform Cloud and others.
+\texttt{terraform init} is what reads it and migrates existing state.}
+
+\end{document}

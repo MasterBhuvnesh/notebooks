@@ -19,6 +19,7 @@
 \RequirePackage{listings}
 \RequirePackage{tabularx}
 \RequirePackage{booktabs}
+\RequirePackage{longtable}           % reference tables that run past one page
 \RequirePackage{amssymb}
 \RequirePackage{fancyhdr}
 \RequirePackage{titlesec}
@@ -131,6 +132,29 @@
 \lstnewenvironment{py}[1][]{\lstset{language=Python,#1}}{}
 \lstnewenvironment{js}[1][]{\lstset{language=JavaScript,#1}}{}
 \lstnewenvironment{sh}[1][]{\lstset{language=bash,#1}}{}
+
+% --- reference tables ----------------------------------------------------
+% For command tables long enough to run past a page break. The header row
+% repeats on every page and the first column is typewriter, so entries are
+% written plain: "git add & Adds changes to the staging area \\".
+%   cmdtable   command + description
+%   cmdtable3  command + description + example
+% The optional argument widens the command column for long command names
+% ("terraform state list"); the description column takes what is left.
+\newenvironment{cmdtable}[1][3.2cm]
+  {\small\longtable{@{}>{\ttfamily}p{#1} p{\dimexpr\textwidth-#1-2\tabcolsep\relax}@{}}
+   \toprule
+   \rowcolor{tablehead}\textrm{\bfseries Command} & \bfseries Description \\
+   \midrule\endhead}
+  {\bottomrule\endlongtable}
+
+\newenvironment{cmdtable3}
+  {\small\longtable{@{}>{\ttfamily}p{3.0cm} p{5.4cm} >{\ttfamily}p{6.8cm}@{}}
+   \toprule
+   \rowcolor{tablehead}\textrm{\bfseries Command} & \bfseries Description
+     & \textrm{\bfseries Example} \\
+   \midrule\endhead}
+  {\bottomrule\endlongtable}
 
 % --- headings: coloured, larger, NOT bold --------------------------------
 \titleformat{\section}{\huge\color{accent}}{\thesection.}{0.5em}{}

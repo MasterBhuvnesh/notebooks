@@ -1,13 +1,23 @@
 {
-  "books": 1,
-  "pages": 29,
-  "generated": "2026-08-14",
+  "books": 2,
+  "pages": 39,
+  "generated": "2026-08-15",
   "documents": [
+    {
+      "slug": "devops-cheatsheet",
+      "title": "DevOps Cheat Sheet",
+      "pages": 10,
+      "bytes": 204885,
+      "diagrams": 0,
+      "created": "2026-08-15",
+      "updated": "2026-08-15",
+      "pdf": "docs/devops-cheatsheet/main.pdf"
+    },
     {
       "slug": "rabbitmq",
       "title": "RabbitMQ",
       "pages": 29,
-      "bytes": 978152,
+      "bytes": 1088394,
       "diagrams": 9,
       "created": "2026-08-15",
       "updated": "2026-08-15",
