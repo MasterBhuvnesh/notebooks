@@ -1,11 +1,11 @@
 {
-  "built_at": "2026-08-15 12:50 UTC",
-  "bytes": 260163,
-  "commit": "b287ae7",
+  "built_at": "2026-08-15 14:46 UTC",
+  "bytes": 328891,
+  "commit": "29edd0e",
   "diagram_count": 0,
   "diagrams": {},
-  "pages": 21,
+  "pages": 23,
   "sty": "cb6cc5e7ecc594fedfea3dad4a29b3011f3c44e8553b31d9845e1d0edd00bc2c",
-  "tex": "65e99d1305e89397c3c7ebfc424532d4e3fa8eff76edcac9bfa4ce422a4d17cf",
+  "tex": "d974828be715bbe874d2eadabe9484411fc400942c200d0b1a3d9fecaf0636e2",
   "title": "DevOps Cheat Sheet"
 }

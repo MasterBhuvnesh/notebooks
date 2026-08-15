@@ -1,13 +1,13 @@
 {
   "books": 2,
-  "pages": 50,
+  "pages": 52,
   "generated": "2026-08-15",
   "documents": [
     {
       "slug": "devops-cheatsheet",
       "title": "DevOps Cheat Sheet",
-      "pages": 21,
-      "bytes": 260163,
+      "pages": 23,
+      "bytes": 328891,
       "diagrams": 0,
       "created": "2026-08-15",
       "updated": "2026-08-15",
