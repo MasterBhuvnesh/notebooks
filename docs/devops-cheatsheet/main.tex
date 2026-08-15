@@ -10,97 +10,6 @@
 \begin{document}
 \notebookcover
 
-\section{Installing the tools}
-
-Docker, kubectl, Helm and Terraform are all single binaries with a package in
-every mainstream package manager. Install them that way rather than by hand:
-the manager puts the binary on your \texttt{PATH} and upgrades it later.
-
-\subsection{Windows}
-
-\texttt{winget} ships with Windows 11 and recent Windows 10 builds. Chocolatey
-(\texttt{choco install}) and Scoop (\texttt{scoop install}) carry the same
-packages if you already use one.
-
-\begin{sh}
-winget install Docker.DockerDesktop
-winget install Kubernetes.kubectl
-winget install Helm.Helm
-winget install HashiCorp.Terraform
-\end{sh}
-
-\field{Close and reopen the terminal afterwards.}{A running shell keeps the
-\texttt{PATH} it started with, so a freshly installed binary is not found until
-you open a new one. Docker Desktop also has to be launched once before
-\texttt{docker} will talk to anything.}
-
-\subsection{macOS}
-
-Homebrew covers all four. The \texttt{-{}-cask} form installs the Docker Desktop
-application; use \texttt{brew install docker} instead if you only want the CLI
-against a remote or Colima daemon.
-
-\begin{sh}
-brew install --cask docker
-brew install kubectl helm
-brew install hashicorp/tap/terraform
-\end{sh}
-
-\subsection{Linux}
-
-Docker Engine, via the convenience script. The \texttt{usermod} line is what
-lets you run \texttt{docker} without \texttt{sudo}, and it only takes effect
-after you log out and back in.
-
-\begin{sh}
-curl -fsSL https://get.docker.com | sh
-sudo usermod -aG docker $USER
-\end{sh}
-
-kubectl, pinned to whatever the current stable release is:
-
-\begin{sh}
-curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-\end{sh}
-
-Helm, via the official installer script. Read it before running it on a machine
-that matters: it installs a binary into \texttt{/usr/local/bin} with
-\texttt{sudo}.
-
-\begin{sh}
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-\end{sh}
-
-Terraform, from the HashiCorp apt repository on Debian and Ubuntu. On the RHEL
-family use \texttt{dnf config-manager} with
-\texttt{https://rpm.releases.hashicorp.com}.
-
-\begin{sh}
-wget -O- https://apt.releases.hashicorp.com/gpg | \
-  sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-  https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-  sudo tee /etc/apt/sources.list.d/hashicorp.list
-sudo apt update && sudo apt install terraform
-\end{sh}
-
-\field{Snap works too}{for Helm (\texttt{snap install helm -{}-classic}) and
-kubectl (\texttt{snap install kubectl -{}-classic}), if your distribution
-already has snapd.}
-
-\subsection{Verify}
-
-\begin{cmdtable}[5.6cm]
-docker -{}-version & Prints the Engine version. "Cannot connect to the Docker daemon" means Docker is installed but not running \nr
-kubectl version -{}-client & Prints the client version without needing a cluster. Drop \texttt{-{}-client} to check the cluster connection as well \nr
-helm version & Prints \texttt{version.BuildInfo}. Helm 3 has no server component, but it reads your kubeconfig, so fix \texttt{kubectl} first \nr
-terraform -version & Prints the version and warns when a newer one is out \\
-\end{cmdtable}
-
-\newpage
 \section{Linux}
 
 Linux is the ground every other tool here stands on. These commands navigate the
@@ -271,6 +180,44 @@ Git tracks every change, lets a team work on the same code without collisions, a
 lets you undo a mistake. These commands cover the everyday work and the recovery
 tools you reach for when something has gone wrong.
 
+\subsection{Installation}
+
+\begin{sh}
+# Windows
+winget install Git.Git
+winget install GitHub.cli
+# macOS
+brew install git gh
+# Linux (Debian/Ubuntu) -- git is in the base repositories, gh is not
+sudo apt install git
+\end{sh}
+
+The GitHub CLI needs its own apt repository on Debian and Ubuntu:
+
+\begin{sh}
+sudo mkdir -p -m 755 /etc/apt/keyrings
+wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+  sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] \
+  https://cli.github.com/packages stable main" | \
+  sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+sudo apt update && sudo apt install gh
+\end{sh}
+
+\field{First run:}{\texttt{git} refuses to commit until it knows who you are, and
+\texttt{gh} needs a token before it can reach GitHub. Do both once per machine:}
+
+\begin{sh}
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+gh auth login
+\end{sh}
+
+\field{Verify:}{\texttt{git -{}-version} and \texttt{gh -{}-version}.
+\texttt{gh auth status} says whether the token is still good.}
+
 \subsection{Basic}
 
 \begin{cmdtable3}
@@ -351,6 +298,27 @@ gh repo create & Creates a new GitHub repository & gh repo create my-repo \\
 Docker packages an application and everything it needs into a portable container, so
 it runs the same way on a laptop, in CI and in production.
 
+\subsection{Installation}
+
+\begin{sh}
+# Windows
+winget install Docker.DockerDesktop
+# macOS -- drop --cask for the CLI alone, against a remote or Colima daemon
+brew install --cask docker
+# Linux
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+\end{sh}
+
+\field{On Linux, the \texttt{usermod} line matters.}{It is what lets you run
+\texttt{docker} without \texttt{sudo}, and it only takes effect after you log
+out and back in. On Windows and macOS, Docker Desktop has to be launched once
+before the CLI can talk to anything.}
+
+\field{Verify:}{\texttt{docker -{}-version} prints the Engine version.
+\texttt{Cannot connect to the Docker daemon} means Docker is installed but not
+running, which is a different problem.}
+
 \subsection{Basic}
 
 \begin{cmdtable3}[4.2cm]
@@ -420,6 +388,26 @@ docker checkpoint rm & Removes a checkpoint & docker checkpoint rm container\_na
 Kubernetes is the conductor of a container orchestra. It automates the deployment,
 scaling and management of containerised applications across a cluster of machines.
 
+\subsection{Installation}
+
+\texttt{kubectl} is the client. It talks to a cluster you already have, so
+installing it does not give you Kubernetes; for a local cluster use Docker
+Desktop's built-in one, or \texttt{kind}, \texttt{k3d} or \texttt{minikube}.
+
+\begin{sh}
+# Windows
+winget install Kubernetes.kubectl
+# macOS
+brew install kubectl
+# Linux -- pinned to the current stable release
+curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+\end{sh}
+
+\field{Verify:}{\texttt{kubectl version -{}-client} prints the client version
+without needing a cluster. Drop \texttt{-{}-client} to check the connection as
+well; \texttt{kubectl cluster-info} is the fuller answer.}
+
 \subsection{Basic}
 
 \begin{cmdtable3}[4.4cm]
@@ -485,6 +473,27 @@ kubectl get crds & Lists all CustomResourceDefinitions & kubectl get crds \\
 
 Helm is the package manager for Kubernetes. It installs and manages applications
 packaged as charts, the way \texttt{apt} installs packages on Debian.
+
+\subsection{Installation}
+
+\begin{sh}
+# Windows
+winget install Helm.Helm
+# macOS
+brew install helm
+# Linux -- the official installer script
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+\end{sh}
+
+Read that script before running it on a machine that matters: it installs a
+binary into \texttt{/usr/local/bin} with \texttt{sudo}. If your distribution
+has snapd, \texttt{sudo snap install helm -{}-classic} does the same job.
+
+\field{Verify:}{\texttt{helm version} prints \texttt{version.BuildInfo}. Helm 3
+has no server component, but it reads your kubeconfig, so if it fails on a
+connection error the thing to fix is \texttt{kubectl}, not Helm.}
 
 \subsection{Basic}
 
@@ -580,6 +589,32 @@ helm rollback -{}-recreate-pods & Rolls back to a previous version and recreates
 Terraform builds cloud infrastructure from code. Instead of clicking through an AWS,
 GCP or Azure console, servers and services are declared in configuration files and
 Terraform reconciles reality with them.
+
+\subsection{Installation}
+
+\begin{sh}
+# Windows
+winget install HashiCorp.Terraform
+# macOS
+brew install hashicorp/tap/terraform
+# Linux (Debian/Ubuntu) -- the HashiCorp apt repository
+wget -O- https://apt.releases.hashicorp.com/gpg | \
+  sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+  https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+  sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install terraform
+\end{sh}
+
+On the RHEL family use \texttt{dnf config-manager} against
+\texttt{https://rpm.releases.hashicorp.com} instead.
+
+\field{Verify:}{\texttt{terraform -version} prints the version and warns when a
+newer one is out. Terraform needs no daemon, but every provider it uses is
+downloaded on \texttt{terraform init}, so that is the command that first needs
+network access.}
+
+\subsection{Commands}
 
 \begin{cmdtable}[4.8cm]
 terraform -{}-help & Display general help for the Terraform CLI \nr
