@@ -2,15 +2,20 @@
 \usepackage{notebooks}
 
 \notebooktitle{DevOps Cheat Sheet}
-\notebooksubtitle{Linux, Git, Terraform}
-\notebooktagline{A command reference, grouped by what you are trying to do.}
+\notebooksubtitle{Linux, Git, Docker, Kubernetes, Helm, Terraform}
+\notebooktagline{Every command, grouped by the tool and by what you are trying to do.}
 \notebookauthor{Bhuvnesh Verma}
 \notebooksource{github.com/MasterBhuvnesh/notebooks}
 
 \begin{document}
 \notebookcover
 
-\section{Basic Linux Commands}
+\section{Linux}
+
+Linux is the ground every other tool here stands on. These commands navigate the
+filesystem, manage files, configure permissions and automate work from a terminal.
+
+\subsection{Basic}
 
 \begin{cmdtable}
 pwd & Print the current working directory \\
@@ -27,7 +32,7 @@ echo & Display a line of text \\
 clear & Clear the terminal screen \\
 \end{cmdtable}
 
-\section{Intermediate Linux Commands}
+\subsection{Intermediate}
 
 \begin{cmdtable}
 chmod & Change file permissions \\
@@ -54,7 +59,7 @@ scp & Securely copy files between systems \\
 rsync & Synchronise files and directories \\
 \end{cmdtable}
 
-\section{Advanced Linux Commands}
+\subsection{Advanced}
 
 \begin{cmdtable}
 awk & Text processing and pattern scanning \\
@@ -66,8 +71,8 @@ ln & Create symbolic or hard links \\
 df -h & Display disk usage in human-readable format \\
 free & Display memory usage \\
 iostat & Display CPU and I/O statistics \\
-netstat & Network statistics; \texttt{ss} is the modern replacement \\
-ifconfig & Configure network interfaces; \texttt{ip} is the modern replacement \\
+netstat & Network statistics; \texttt{ss} is the modern alternative \\
+ifconfig/ip & Configure network interfaces; \texttt{ip} is the modern alternative \\
 iptables & Configure firewall rules \\
 systemctl & Control the systemd system and service manager \\
 journalctl & View system logs \\
@@ -81,7 +86,7 @@ env & Display environment variables \\
 export & Set environment variables \\
 \end{cmdtable}
 
-\section{Networking}
+\subsection{Networking}
 
 \begin{cmdtable}
 ip addr & Display or configure IP addresses \\
@@ -93,13 +98,13 @@ ssh & Connect to a remote server via SSH \\
 ftp & Transfer files using the FTP protocol \\
 nmap & Network scanning and discovery \\
 telnet & Communicate with remote hosts \\
-nc & Read and write data over networks (netcat) \\
+netcat (nc) & Read and write data over networks \\
 \end{cmdtable}
 
-\section{File Management and Search}
+\subsection{File management and search}
 
 \begin{cmdtable}
-locate & Find files quickly using a prebuilt database \\
+locate & Find files quickly using a database \\
 stat & Display detailed information about a file \\
 tree & Display directories as a tree \\
 file & Determine a file's type \\
@@ -107,7 +112,7 @@ basename & Extract the filename from a path \\
 dirname & Extract the directory part of a path \\
 \end{cmdtable}
 
-\section{System Monitoring}
+\subsection{System monitoring}
 
 \begin{cmdtable}
 vmstat & Display virtual memory statistics \\
@@ -118,7 +123,7 @@ uptime & Show how long the system has been running \\
 iotop & Display real-time disk I/O by process \\
 \end{cmdtable}
 
-\section{Package Management}
+\subsection{Package management}
 
 \begin{cmdtable}
 apt & Package manager for Debian-based distributions \\
@@ -127,18 +132,18 @@ snap & Manage snap packages \\
 rpm & Manage RPM packages \\
 \end{cmdtable}
 
-\section{Disk and Filesystem}
+\subsection{Disk and filesystem}
 
 \begin{cmdtable}
-mount & Attach a filesystem; \texttt{umount} detaches it \\
+mount/umount & Mount or unmount filesystems \\
 fsck & Check and repair filesystems \\
 mkfs & Create a new filesystem \\
 blkid & Display information about block devices \\
-lsblk & List block devices as a tree \\
+lsblk & List information about block devices \\
 parted & Manage partitions interactively \\
 \end{cmdtable}
 
-\section{Scripting and Automation}
+\subsection{Scripting and automation}
 
 \begin{cmdtable}
 bash & Command interpreter and scripting shell \\
@@ -148,7 +153,7 @@ alias & Create shortcuts for commands \\
 source & Execute commands from a file in the current shell \\
 \end{cmdtable}
 
-\section{Development and Debugging}
+\subsection{Development and debugging}
 
 \begin{cmdtable}
 gcc & Compile C programs \\
@@ -159,92 +164,333 @@ git & Version control system \\
 vim/nano & Text editors for scripting and editing \\
 \end{cmdtable}
 
-\section{Other Useful Commands}
+\subsection{Other useful commands}
 
 \begin{cmdtable}
+uptime & Display system uptime \\
 date & Display or set the system date and time \\
 cal & Display a calendar \\
 man & Display the manual for a command \\
 history & Show previously executed commands \\
+alias & Create custom shortcuts for commands \\
 \end{cmdtable}
 
 \newpage
-\section{Basic Git Commands}
+\section{Git}
+
+Git tracks every change, lets a team work on the same code without collisions, and
+lets you undo a mistake. These commands cover the everyday work and the recovery
+tools you reach for when something has gone wrong.
+
+\subsection{Basic}
 
 \begin{cmdtable3}
 git init & Initialises a new Git repository in the current directory & git init \\
 git clone & Copies a remote repository to the local machine & git clone https://github.com/user/repo.git \\
 git status & Displays the state of the working directory and staging area & git status \\
 git add & Adds changes to the staging area & git add file.txt \\
-git commit & Records staged changes to the repository & git commit -m "Initial commit" \\
-git config & Configures user settings such as name and email & git config -{}-global user.name "Your Name" \\
+git commit & Records changes to the repository & git commit -m "Initial commit" \\
+git config & Configures user settings, such as name and email & git config -{}-global user.name "Your Name" \\
 git log & Shows the commit history & git log \\
-git show & Displays detailed information about a specific commit & git show \\
+git show & Displays detailed information about a specific commit & git show <commit-hash> \\
 git diff & Shows changes between commits, the working directory and the staging area & git diff \\
 git reset & Unstages changes or resets commits & git reset HEAD file.txt \\
 \end{cmdtable3}
 
-\section{Branching and Merging}
+\subsection{Branching and merging}
 
 \begin{cmdtable3}
-git branch & Lists branches or creates a new one & git branch feature-branch \\
+git branch & Lists branches or creates a new branch & git branch feature-branch \\
 git checkout & Switches between branches or restores files & git checkout feature-branch \\
-git switch & Switches branches, the modern alternative to \texttt{checkout} & git switch feature-branch \\
+git switch & Switches branches, the modern alternative to \texttt{git checkout} & git switch feature-branch \\
 git merge & Combines changes from one branch into another & git merge feature-branch \\
 git rebase & Moves or combines commits from one branch onto another & git rebase main \\
-git cherry-pick & Applies specific commits from one branch to another & git cherry-pick \textless commit-hash\textgreater \\
+git cherry-pick & Applies specific commits from one branch to another & git cherry-pick <commit-hash> \\
 \end{cmdtable3}
 
-\section{Remote Repositories}
+\subsection{Remote repositories}
 
 \begin{cmdtable3}
 git remote & Manages remote repository connections & git remote add origin https://github.com/user/repo.git \\
-git push & Sends local commits to a remote repository & git push origin main \\
+git push & Sends changes to a remote repository & git push origin main \\
 git pull & Fetches and merges changes from a remote repository & git pull origin main \\
-git fetch & Downloads changes from a remote without merging them & git fetch origin \\
-git remote -v & Lists the URLs of the configured remotes & git remote -v \\
+git fetch & Downloads changes from a remote repository without merging & git fetch origin \\
+git remote -v & Lists the URLs of remote repositories & git remote -v \\
 \end{cmdtable3}
 
-\section{Stashing and Cleaning}
+\subsection{Stashing and cleaning}
 
 \begin{cmdtable3}
-git stash & Temporarily saves changes that are not yet committed & git stash \\
-git stash pop & Applies stashed changes and drops them from the stash list & git stash pop \\
+git stash & Temporarily saves changes not yet committed & git stash \\
+git stash pop & Applies stashed changes and removes them from the stash list & git stash pop \\
 git stash list & Lists all stashes & git stash list \\
 git clean & Removes untracked files from the working directory & git clean -f \\
 \end{cmdtable3}
 
-\section{Tagging}
+\subsection{Tagging}
 
 \begin{cmdtable3}
 git tag & Creates a tag for a specific commit & git tag -a v1.0 -m "Version 1.0" \\
 git tag -d & Deletes a tag & git tag -d v1.0 \\
-git push & Pushes tags to a remote repository & git push origin -{}-tags \\
+git push -{}-tags & Pushes tags to a remote repository & git push origin -{}-tags \\
 \end{cmdtable3}
 
-\section{Advanced Git Commands}
+\subsection{Advanced}
 
 \begin{cmdtable3}
 git bisect & Finds the commit that introduced a bug & git bisect start \\
-git blame & Shows which commit and author last modified each line & git blame file.txt \\
-git reflog & Shows a log of where the branch tips have been & git reflog \\
+git blame & Shows which commit and author modified each line of a file & git blame file.txt \\
+git reflog & Shows a log of changes to the tip of branches & git reflog \\
 git submodule & Manages external repositories as submodules & git submodule add https://github.com/user/repo.git \\
-git archive & Creates an archive of the repository files & git archive -{}-format=zip HEAD \textgreater\ archive.zip \\
+git archive & Creates an archive of the repository files & git archive -{}-format=zip HEAD > archive.zip \\
 git gc & Cleans up unnecessary files and optimises the repository & git gc \\
 \end{cmdtable3}
 
-\section{GitHub CLI}
+\subsection{GitHub CLI}
 
 \begin{cmdtable3}
-gh auth login & Logs into GitHub from the command line & gh auth login \\
+gh auth login & Logs into GitHub via the command line & gh auth login \\
 gh repo clone & Clones a GitHub repository & gh repo clone user/repo \\
 gh issue list & Lists issues in a GitHub repository & gh issue list \\
-gh pr create & Opens a pull request & gh pr create -{}-title "New Feature" \\
+gh pr create & Creates a pull request on GitHub & gh pr create -{}-title "New Feature" -{}-body "Description" \\
 gh repo create & Creates a new GitHub repository & gh repo create my-repo \\
 \end{cmdtable3}
 
 \newpage
+\section{Docker}
+
+Docker packages an application and everything it needs into a portable container, so
+it runs the same way on a laptop, in CI and in production.
+
+\subsection{Basic}
+
+\begin{cmdtable3}[4.2cm]
+docker -{}-version & Displays the installed Docker version & docker -{}-version \\
+docker info & Shows system-wide information, such as the number of containers and images & docker info \\
+docker pull & Downloads an image from a registry, Docker Hub by default & docker pull ubuntu:latest \\
+docker images & Lists all downloaded images & docker images \\
+docker run & Creates and starts a new container from an image & docker run -it ubuntu bash \\
+docker ps & Lists running containers & docker ps \\
+docker ps -a & Lists all containers, including stopped ones & docker ps -a \\
+docker stop & Stops a running container & docker stop container\_name \\
+docker start & Starts a stopped container & docker start container\_name \\
+docker rm & Removes a container & docker rm container\_name \\
+docker rmi & Removes an image & docker rmi image\_name \\
+docker exec & Runs a command inside a running container & docker exec -it container\_name bash \\
+\end{cmdtable3}
+
+\subsection{Intermediate}
+
+\begin{cmdtable3}[4.6cm]
+docker build & Builds an image from a Dockerfile & docker build -t my\_image . \\
+docker commit & Creates a new image from a container's changes & docker commit container\_name my\_image:tag \\
+docker logs & Fetches logs from a container & docker logs container\_name \\
+docker inspect & Returns detailed information about a container or image & docker inspect container\_name \\
+docker stats & Displays live resource usage of running containers & docker stats \\
+docker cp & Copies files between a container and the host & docker cp container\_name:/path/in/container /path/on/host \\
+docker rename & Renames a container & docker rename old\_name new\_name \\
+docker network ls & Lists all Docker networks & docker network ls \\
+docker network create & Creates a new Docker network & docker network create my\_network \\
+docker network inspect & Shows details about a Docker network & docker network inspect my\_network \\
+docker network connect & Connects a container to a network & docker network connect my\_network container\_name \\
+docker volume ls & Lists all Docker volumes & docker volume ls \\
+docker volume create & Creates a new Docker volume & docker volume create my\_volume \\
+docker volume inspect & Provides details about a volume & docker volume inspect my\_volume \\
+docker volume rm & Removes a Docker volume & docker volume rm my\_volume \\
+\end{cmdtable3}
+
+\subsection{Advanced}
+
+\begin{cmdtable3}[4.6cm]
+docker-compose up & Starts services defined in a \texttt{docker-compose.yml} file & docker-compose up \\
+docker-compose down & Stops and removes services defined in a \texttt{docker-compose.yml} file & docker-compose down \\
+docker-compose logs & Displays logs for services managed by Docker Compose & docker-compose logs \\
+docker-compose exec & Runs a command in a service's container & docker-compose exec service\_name bash \\
+docker save & Exports an image to a tar file & docker save -o my\_image.tar my\_image:tag \\
+docker load & Imports an image from a tar file & docker load < my\_image.tar \\
+docker export & Exports a container's filesystem as a tar file & docker export container\_name > container.tar \\
+docker import & Creates an image from an exported container & docker import container.tar my\_new\_image \\
+docker system df & Displays disk usage by Docker objects & docker system df \\
+docker system prune & Cleans up unused images, containers, volumes and networks & docker system prune \\
+docker tag & Assigns a new tag to an image & docker tag old\_image\_name new\_image\_name \\
+docker push & Uploads an image to a registry & docker push my\_image:tag \\
+docker login & Logs into a Docker registry & docker login \\
+docker logout & Logs out of a Docker registry & docker logout \\
+docker swarm init & Initialises a Docker Swarm mode cluster & docker swarm init \\
+docker service create & Creates a new service in Swarm mode & docker service create -{}-name my\_service nginx \\
+docker stack deploy & Deploys a stack using a Compose file in Swarm mode & docker stack deploy -c docker-compose.yml my\_stack \\
+docker stack rm & Removes a stack in Swarm mode & docker stack rm my\_stack \\
+docker checkpoint create & Creates a checkpoint for a container & docker checkpoint create container\_name checkpoint\_name \\
+docker checkpoint ls & Lists checkpoints for a container & docker checkpoint ls container\_name \\
+docker checkpoint rm & Removes a checkpoint & docker checkpoint rm container\_name checkpoint\_name \\
+\end{cmdtable3}
+
+\newpage
+\section{Kubernetes}
+
+Kubernetes is the conductor of a container orchestra. It automates the deployment,
+scaling and management of containerised applications across a cluster of machines.
+
+\subsection{Basic}
+
+\begin{cmdtable3}[4.4cm]
+kubectl version & Displays the Kubernetes client and server version & kubectl version -{}-short \\
+kubectl cluster-info & Shows information about the cluster & kubectl cluster-info \\
+kubectl get nodes & Lists all nodes in the cluster & kubectl get nodes \\
+kubectl get pods & Lists all pods in the default namespace & kubectl get pods \\
+kubectl get services & Lists all services in the default namespace & kubectl get services \\
+kubectl get namespaces & Lists all namespaces in the cluster & kubectl get namespaces \\
+kubectl describe pod & Shows detailed information about a specific pod & kubectl describe pod pod-name \\
+kubectl logs & Displays logs for a specific pod & kubectl logs pod-name \\
+kubectl create namespace & Creates a new namespace & kubectl create namespace my-namespace \\
+kubectl delete pod & Deletes a specific pod & kubectl delete pod pod-name \\
+\end{cmdtable3}
+
+\subsection{Intermediate}
+
+\begin{cmdtable3}[4.4cm]
+kubectl apply & Applies changes defined in a YAML file & kubectl apply -f deployment.yaml \\
+kubectl delete & Deletes resources defined in a YAML file & kubectl delete -f deployment.yaml \\
+kubectl scale & Scales a deployment to the desired number of replicas & kubectl scale deployment my-deployment -{}-replicas=3 \\
+kubectl expose & Exposes a pod or deployment as a service & kubectl expose deployment my-deployment -{}-type=LoadBalancer -{}-port=80 \\
+kubectl exec & Executes a command in a running pod & kubectl exec -it pod-name -{}- /bin/bash \\
+kubectl port-forward & Forwards a local port to a port in a pod & kubectl port-forward pod-name 8080:80 \\
+kubectl get configmaps & Lists all ConfigMaps in the namespace & kubectl get configmaps \\
+kubectl get secrets & Lists all Secrets in the namespace & kubectl get secrets \\
+kubectl edit & Edits a resource definition directly in the editor & kubectl edit deployment my-deployment \\
+kubectl rollout status & Displays the status of a deployment rollout & kubectl rollout status deployment/my-deployment \\
+\end{cmdtable3}
+
+\subsection{Advanced}
+
+\begin{cmdtable3}[4.6cm]
+kubectl rollout undo & Rolls back a deployment to a previous revision & kubectl rollout undo deployment/my-deployment \\
+kubectl top nodes & Shows resource usage for nodes & kubectl top nodes \\
+kubectl top pods & Displays resource usage for pods & kubectl top pods \\
+kubectl cordon & Marks a node as unschedulable & kubectl cordon node-name \\
+kubectl uncordon & Marks a node as schedulable & kubectl uncordon node-name \\
+kubectl drain & Safely evicts all pods from a node & kubectl drain node-name -{}-ignore-daemonsets \\
+kubectl taint & Adds a taint to a node to control pod placement & kubectl taint nodes node-name key=value:NoSchedule \\
+kubectl get events & Lists all events in the cluster & kubectl get events \\
+kubectl apply -k & Applies resources from a kustomization directory & kubectl apply -k ./kustomization-dir/ \\
+kubectl config view & Displays the kubeconfig file & kubectl config view \\
+kubectl config use-context & Switches the active context in kubeconfig & kubectl config use-context my-cluster \\
+kubectl debug & Creates a debugging session for a pod & kubectl debug pod-name \\
+kubectl delete namespace & Deletes a namespace and its resources & kubectl delete namespace my-namespace \\
+kubectl patch & Updates a resource using a patch & kubectl patch deployment my-deployment -p '\{"spec": \{"replicas": 2\}\}' \\
+kubectl rollout history & Shows the rollout history of a deployment & kubectl rollout history deployment my-deployment \\
+kubectl autoscale & Automatically scales a deployment based on resource usage & kubectl autoscale deployment my-deployment -{}-cpu-percent=50 -{}-min=1 -{}-max=10 \\
+kubectl label & Adds or modifies a label on a resource & kubectl label pod pod-name environment=production \\
+kubectl annotate & Adds or modifies an annotation on a resource & kubectl annotate pod pod-name description="My app pod" \\
+kubectl delete pv & Deletes a PersistentVolume & kubectl delete pv my-pv \\
+kubectl get ingress & Lists all Ingress resources in the namespace & kubectl get ingress \\
+kubectl create configmap & Creates a ConfigMap from a file or literal values & kubectl create configmap my-config -{}-from-literal=key1=value1 \\
+kubectl create secret & Creates a Secret from a file or literal values & kubectl create secret generic my-secret -{}-from-literal=password=myPassword \\
+kubectl api-resources & Lists all available API resources in the cluster & kubectl api-resources \\
+kubectl api-versions & Lists all API versions supported by the cluster & kubectl api-versions \\
+kubectl get crds & Lists all CustomResourceDefinitions & kubectl get crds \\
+\end{cmdtable3}
+
+\newpage
+\section{Helm}
+
+Helm is the package manager for Kubernetes. It installs and manages applications
+packaged as charts, the way \texttt{apt} installs packages on Debian.
+
+\subsection{Basic}
+
+\begin{cmdtable3}[4.4cm]
+helm help & Displays help for the Helm CLI or a specific command & helm help \\
+helm version & Shows the Helm client and server version & helm version \\
+helm repo add & Adds a new chart repository & helm repo add stable https://charts.helm.sh/stable \\
+helm repo update & Updates all chart repositories to the latest version & helm repo update \\
+helm repo list & Lists all the repositories added to Helm & helm repo list \\
+helm search hub & Searches for charts on Helm Hub & helm search hub nginx \\
+helm search repo & Searches for charts in the repositories & helm search repo stable/nginx \\
+helm show chart & Displays a chart's metadata and dependencies & helm show chart stable/nginx \\
+\end{cmdtable3}
+
+\subsection{Installing and upgrading charts}
+
+\begin{cmdtable3}[4.6cm]
+helm install & Installs a chart into a Kubernetes cluster & helm install my-release stable/nginx \\
+helm upgrade & Upgrades an existing release with a new version of the chart & helm upgrade my-release stable/nginx \\
+helm upgrade -{}-install & Installs a chart if it is not installed, upgrades it if it is & helm upgrade -{}-install my-release stable/nginx \\
+helm uninstall & Uninstalls a release & helm uninstall my-release \\
+helm list & Lists all the releases installed on the cluster & helm list \\
+helm status & Displays the status of a release & helm status my-release \\
+\end{cmdtable3}
+
+\subsection{Working with charts}
+
+\begin{cmdtable3}[5.0cm]
+helm create & Creates a new Helm chart in a specified directory & helm create my-chart \\
+helm lint & Lints a chart to check for common errors & helm lint ./my-chart \\
+helm package & Packages a chart into a \texttt{.tgz} file & helm package ./my-chart \\
+helm template & Renders the Kubernetes YAML from a chart without installing it & helm template my-release ./my-chart \\
+helm dependency update & Updates the dependencies in \texttt{Chart.yaml} & helm dependency update ./my-chart \\
+helm dependency build & Builds dependencies for a chart & helm dependency build ./my-chart \\
+helm dependency list & Lists all dependencies for a chart & helm dependency list ./my-chart \\
+\end{cmdtable3}
+
+\subsection{Inspecting and testing}
+
+\begin{cmdtable3}[4.4cm]
+helm get all & Gets all information for a release, values and templates included & helm get all my-release \\
+helm get values & Displays the values used in a release & helm get values my-release \\
+helm test & Runs the tests defined in a chart & helm test my-release \\
+helm template -{}-debug & Renders manifests and includes debug output & helm template my-release ./my-chart -{}-debug \\
+helm install -{}-dry-run & Simulates an installation without performing it & helm install my-release stable/nginx -{}-dry-run \\
+helm upgrade -{}-dry-run & Simulates an upgrade without applying it & helm upgrade my-release stable/nginx -{}-dry-run \\
+\end{cmdtable3}
+
+\subsection{Values and customisation}
+
+\begin{cmdtable3}[4.6cm]
+helm install -{}-values & Installs a chart with custom values & helm install my-release stable/nginx -{}-values values.yaml \\
+helm upgrade -{}-values & Upgrades a release with custom values & helm upgrade my-release stable/nginx -{}-values values.yaml \\
+helm install -{}-set & Installs a chart with a value set on the command line & helm install my-release stable/nginx -{}-set replicaCount=3 \\
+helm upgrade -{}-set & Upgrades a release with a value set on the command line & helm upgrade my-release stable/nginx -{}-set replicaCount=5 \\
+helm uninstall -{}-purge & Removes a release and its resources, release history included & helm uninstall my-release -{}-purge \\
+\end{cmdtable3}
+
+\subsection{Namespaces and contexts}
+
+\begin{cmdtable3}[5.0cm]
+helm list -{}-namespace & Lists releases in a specific namespace & helm list -{}-namespace kube-system \\
+helm list -n & Short form of the same thing & helm list -n kube-system \\
+helm install -{}-namespace & Installs a chart into a specific namespace & helm install my-release stable/nginx -{}-namespace mynamespace \\
+helm upgrade -{}-namespace & Upgrades a release in a specific namespace & helm upgrade my-release stable/nginx -{}-namespace mynamespace \\
+helm uninstall -{}-namespace & Uninstalls a release from a specific namespace & helm uninstall my-release -{}-namespace kube-system \\
+helm install -{}-kube-context & Installs a chart into the cluster named by a kubeconfig context & helm install my-release stable/nginx -{}-kube-context my-cluster \\
+helm upgrade -{}-kube-context & Upgrades a release in a specific context & helm upgrade my-release stable/nginx -{}-kube-context my-cluster \\
+\end{cmdtable3}
+
+\subsection{Repositories and publishing}
+
+\begin{cmdtable3}[4.8cm]
+helm repo remove & Removes a chart repository & helm repo remove stable \\
+helm repo index & Creates or updates the index file for a chart repository & helm repo index ./charts \\
+helm package -{}-sign & Packages a chart and signs it with a GPG key & helm package ./my-chart -{}-sign -{}-key my-key-id \\
+helm create -{}-starter & Creates a new chart from a starter template & helm create -{}-starter https://github.com/helm/charts.git \\
+helm push & Pushes a chart to a chart repository & helm push ./my-chart my-repo \\
+\end{cmdtable3}
+
+\subsection{History and rollbacks}
+
+\begin{cmdtable3}[5.2cm]
+helm rollback & Rolls a release back to a previous version & helm rollback my-release 1 \\
+helm history & Displays the history of a release & helm history my-release \\
+helm history -{}-max & Limits the number of versions shown in the history & helm history my-release -{}-max 5 \\
+helm rollback -{}-recreate-pods & Rolls back to a previous version and recreates the pods & helm rollback my-release 2 -{}-recreate-pods \\
+\end{cmdtable3}
+
+\newpage
 \section{Terraform}
+
+Terraform builds cloud infrastructure from code. Instead of clicking through an AWS,
+GCP or Azure console, servers and services are declared in configuration files and
+Terraform reconciles reality with them.
 
 \begin{cmdtable}[4.8cm]
 terraform -{}-help & Display general help for the Terraform CLI \\

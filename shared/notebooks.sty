@@ -23,6 +23,10 @@
 \RequirePackage{amssymb}
 \RequirePackage{fancyhdr}
 \RequirePackage{titlesec}
+\RequirePackage{microtype}
+% Typewriter text is full of "--flag". Without this, the font's dash ligature
+% turns it into an en dash and the flag silently reads as "-flag".
+\DisableLigatures[-]{family=tt*}
 
 % --- colours (MUST come before hyperref, which references them) ----------
 \definecolor{accent}{HTML}{1F5FA9}     % blue: headings, links, rules
@@ -148,8 +152,9 @@
    \midrule\endhead}
   {\bottomrule\endlongtable}
 
-\newenvironment{cmdtable3}
-  {\small\longtable{@{}>{\ttfamily}p{3.0cm} p{5.4cm} >{\ttfamily}p{6.8cm}@{}}
+\newenvironment{cmdtable3}[1][3.0cm]
+  {\small\longtable{@{}>{\ttfamily}p{#1} p{5.0cm}
+      >{\ttfamily}p{\dimexpr\textwidth-#1-5.0cm-4\tabcolsep\relax}@{}}
    \toprule
    \rowcolor{tablehead}\textrm{\bfseries Command} & \bfseries Description
      & \textrm{\bfseries Example} \\

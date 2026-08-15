@@ -1,13 +1,13 @@
 {
   "books": 2,
-  "pages": 39,
+  "pages": 46,
   "generated": "2026-08-15",
   "documents": [
     {
       "slug": "devops-cheatsheet",
       "title": "DevOps Cheat Sheet",
-      "pages": 10,
-      "bytes": 204885,
+      "pages": 17,
+      "bytes": 243756,
       "diagrams": 0,
       "created": "2026-08-15",
       "updated": "2026-08-15",
@@ -17,7 +17,7 @@
       "slug": "rabbitmq",
       "title": "RabbitMQ",
       "pages": 29,
-      "bytes": 1088394,
+      "bytes": 1090351,
       "diagrams": 9,
       "created": "2026-08-15",
       "updated": "2026-08-15",
