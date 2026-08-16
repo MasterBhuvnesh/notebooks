@@ -1,0 +1,494 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{notebooks}
+
+\notebooktitle{Linux Commands}
+\notebooksubtitle{Permissions, Users and Groups}
+\notebooktagline{Why "Permission denied" happens, and what to do about it.}
+\notebookauthor{Bhuvnesh Verma}
+\notebooksource{github.com/MasterBhuvnesh/notebooks}
+
+\begin{document}
+\notebookcover
+
+\section{File Permissions}
+
+In Linux, \textbf{permissions (modes)} control who can \textbf{read, write, or execute} a
+file or directory.
+
+When you use:
+
+\begin{sh}
+mkdir -m 755 myapp
+\end{sh}
+
+the \lstinline|755| is the \textbf{permission mode} assigned to the directory.
+
+\subsection{Permission Types}
+
+There are three permission bits:
+
+\begin{center}
+\small
+\begin{tabular}{@{}l l l@{}}
+\toprule
+\rowcolor{tablehead}\bfseries Permission & \bfseries Symbol & \bfseries Value \\
+\midrule
+Read    & \texttt{r} & 4 \\
+Write   & \texttt{w} & 2 \\
+Execute & \texttt{x} & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The values are added together:
+
+\begin{center}
+\small
+\begin{tabular}{@{}l l l@{}}
+\toprule
+\rowcolor{tablehead}\bfseries Permission Set & \bfseries Calculation & \bfseries Value \\
+\midrule
+\texttt{-{}-{}-} & 0     & 0 \\
+\texttt{-{}-x}   & 1     & 1 \\
+\texttt{-w-}     & 2     & 2 \\
+\texttt{-wx}     & 2+1   & 3 \\
+\texttt{r-{}-}   & 4     & 4 \\
+\texttt{r-x}     & 4+1   & 5 \\
+\texttt{rw-}     & 4+2   & 6 \\
+\texttt{rwx}     & 4+2+1 & 7 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Who Gets Permissions?}
+
+Linux divides users into three groups:
+
+\begin{center}
+\small
+\begin{tabular}{@{}l l@{}}
+\toprule
+\rowcolor{tablehead}\bfseries Group & \bfseries Meaning \\
+\midrule
+User (\texttt{u})   & Owner of the file \\
+Group (\texttt{g})  & Users in the file's group \\
+Others (\texttt{o}) & Everyone else \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A permission like \lstinline|755| means:
+
+\begin{lstlisting}[language=]
+7   5   5
+│   │   │
+│   │   └── Others
+│   └────── Group
+└────────── Owner
+\end{lstlisting}
+
+\subsection{Example: 755}
+
+Break it down:
+
+\begin{lstlisting}[language=]
+7 = rwx = 4+2+1
+5 = r-x = 4+1
+5 = r-x = 4+1
+\end{lstlisting}
+
+Result: \lstinline|rwxr-xr-x|. Meaning:
+
+\begin{center}
+\small
+\begin{tabular}{@{}l l@{}}
+\toprule
+\rowcolor{tablehead}\bfseries User Type & \bfseries Permissions \\
+\midrule
+Owner  & Read, Write, Execute \\
+Group  & Read, Execute \\
+Others & Read, Execute \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Example: 700}
+
+\begin{lstlisting}[language=]
+7 = rwx
+0 = ---
+0 = ---
+\end{lstlisting}
+
+Result: \lstinline|rwx------|. Only the owner can access it. Useful for:
+
+\begin{sh}
+mkdir -m 700 secrets
+\end{sh}
+
+\subsection{Example: 777}
+
+Result: \lstinline|rwxrwxrwx|. Everyone can read, write and execute.
+
+\field{Warning:}{Usually avoided, because anyone can modify the contents.}
+
+\subsection{Example: 644}
+
+Common for files.
+
+\begin{lstlisting}[language=]
+6 = rw-
+4 = r--
+4 = r--
+\end{lstlisting}
+
+Result: \lstinline|rw-r--r--|. The owner can read and write; everyone else can only read.
+
+\subsection{What Does Execute Mean for a Directory?}
+
+For a \textbf{file}, \texttt{x} means the file can be run as a program or script. For a
+\textbf{directory}, \texttt{x} means you can enter it, that is \lstinline|cd| into it.
+
+\begin{sh}
+chmod 600 mydir
+\end{sh}
+
+That gives \lstinline|rw-------|. You can see the directory, but you \textbf{cannot}
+\lstinline|cd| into it, because execute permission is missing. To enter a directory,
+\texttt{x} permission is required.
+
+\subsection{Viewing Permissions}
+
+\begin{sh}
+ls -l
+\end{sh}
+
+Example output:
+
+\begin{lstlisting}[language=]
+drwxr-xr-x 2 bhuvnesh users 4096 Aug 15 project
+\end{lstlisting}
+
+Breakdown:
+
+\begin{lstlisting}[language=]
+d rwx r-x r-x
+│ │   │   │
+│ │   │   └── Others
+│ │   └────── Group
+│ └────────── Owner
+└──────────── Directory
+\end{lstlisting}
+
+\subsection{Changing Permissions}
+
+Numeric method:
+
+\begin{sh}
+chmod 755 project
+chmod 700 secrets
+chmod 644 file.txt
+\end{sh}
+
+Symbolic method:
+
+\begin{sh}
+chmod u+x script.sh   # add execute permission for the owner
+chmod g+w file.txt    # add write permission for the group
+chmod o-r file.txt    # remove read permission for others
+\end{sh}
+
+\subsection{Common Modes You Will Use}
+
+\begin{center}
+\small
+\begin{tabular}{@{}l l l@{}}
+\toprule
+\rowcolor{tablehead}\bfseries Mode & \bfseries Meaning & \bfseries Typical Use \\
+\midrule
+755 & \texttt{rwxr-xr-x} & Application directories \\
+700 & \texttt{rwx-{}-{}-{}-{}-{}-} & Private directories \\
+644 & \texttt{rw-r-{}-r-{}-} & Regular files \\
+600 & \texttt{rw-{}-{}-{}-{}-{}-{}-} & Secrets, keys, passwords \\
+777 & \texttt{rwxrwxrwx} & Rarely recommended \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection*{Real-world examples}
+
+\begin{sh}
+mkdir -m 755 backend
+mkdir -m 700 .ssh
+touch app.js
+chmod 644 app.js
+chmod 600 id_rsa
+\end{sh}
+
+For software development you will most often see:
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Directories:} \lstinline|755|
+  \item \textbf{Source code files:} \lstinline|644|
+  \item \textbf{Shell scripts:} \lstinline|755|
+  \item \textbf{SSH private keys and \lstinline|.env| files:} \lstinline|600| or \lstinline|400|
+\end{itemize}
+
+\newpage
+\section{Users, Groups and Ownership}
+
+To really understand Linux permissions, you need to understand \textbf{users},
+\textbf{groups} and \textbf{ownership} first. Linux is a multi-user operating system. On a
+company server:
+
+\begin{lstlisting}[language=]
+ubuntu
+├── bhuvnesh
+├── rohan
+├── alice
+└── john
+\end{lstlisting}
+
+Each person has their own account.
+
+\subsection{Viewing the Current User}
+
+\begin{sh}
+whoami
+# bhuvnesh
+
+id
+# uid=1000(bhuvnesh) gid=1000(bhuvnesh) groups=1000(bhuvnesh),27(sudo)
+\end{sh}
+
+\begin{itemize}\itemsep2pt
+  \item UID = User ID
+  \item GID = Group ID
+  \item Groups = the groups this user belongs to
+\end{itemize}
+
+\subsection{What is a User?}
+
+A user is an account that can log in, own files, run processes and hold permissions.
+
+\begin{sh}
+sudo useradd john    # create a user
+sudo passwd john     # set the password
+\end{sh}
+
+\subsection{What is a Group?}
+
+A group is a collection of users.
+
+\begin{lstlisting}[language=]
+developers
+├── bhuvnesh
+├── rohan
+└── alice
+\end{lstlisting}
+
+Instead of assigning permissions to each user, assign them to the group.
+
+\subsection{Managing Groups}
+
+\begin{sh}
+sudo groupadd developers          # create a group
+cat /etc/group                    # check it exists
+
+sudo usermod -aG developers john  # add a user (-a append, -G group)
+groups john
+# john : john developers
+
+sudo gpasswd -d john developers   # remove a user from the group
+sudo groupdel developers          # delete the group
+\end{sh}
+
+\subsection{Deleting a User}
+
+\begin{sh}
+sudo userdel john      # delete the user
+sudo userdel -r john   # delete the user and their home directory
+\end{sh}
+
+\subsection{Where Users Are Stored}
+
+Linux stores users in \lstinline|/etc/passwd|:
+
+\begin{sh}
+cat /etc/passwd
+\end{sh}
+
+\begin{lstlisting}[language=]
+john:x:1001:1001::/home/john:/bin/bash
+\end{lstlisting}
+
+The fields are: username, password placeholder, UID, GID, comment, home directory, shell.
+
+\subsection{Where Passwords Are Stored}
+
+\begin{sh}
+sudo cat /etc/shadow
+\end{sh}
+
+Only root can read it. It contains hashed passwords.
+
+\subsection{What is Root?}
+
+Linux has a superuser called \texttt{root}. Root can create and delete users, modify any
+file, install software and shut the server down.
+
+\begin{sh}
+sudo su
+# or
+su -
+
+whoami
+# root
+\end{sh}
+
+\subsection{Ownership of Files}
+
+\begin{sh}
+touch app.js
+ls -l
+# -rw-r--r-- 1 bhuvnesh developers 0 Aug 15 app.js
+\end{sh}
+
+Here the owner is \texttt{bhuvnesh} and the group is \texttt{developers}.
+
+\begin{sh}
+sudo chown john app.js              # change the owner
+sudo chgrp developers app.js        # change the group
+sudo chown john:developers app.js   # change both at once
+\end{sh}
+
+\subsection{Directory Permissions Example}
+
+\begin{sh}
+mkdir project
+chmod 770 project
+\end{sh}
+
+With owner \texttt{bhuvnesh} and group \texttt{developers}, \lstinline|770| means
+\lstinline|rwxrwx---|:
+
+\begin{center}
+\small
+\begin{tabular}{@{}l l@{}}
+\toprule
+\rowcolor{tablehead}\bfseries Who & \bfseries Access \\
+\midrule
+Owner  & Full \\
+Group  & Full \\
+Others & None \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+So anyone in \texttt{developers} can use the directory.
+
+\subsection{Real Company Example}
+
+\begin{lstlisting}[language=]
+developers          designers
+├── bhuvnesh        ├── john
+├── rohan           └── sara
+└── alice
+\end{lstlisting}
+
+Create a shared directory:
+
+\begin{sh}
+sudo mkdir /shared-code
+sudo chown root:developers /shared-code
+sudo chmod 770 /shared-code
+\end{sh}
+
+Developers can access it; designers cannot.
+
+\subsection{Sudo Access}
+
+Not every user can become root. On Ubuntu, users allowed to run \lstinline|sudo| belong to
+the \texttt{sudo} group.
+
+\begin{sh}
+groups bhuvnesh
+# bhuvnesh sudo
+
+sudo usermod -aG sudo john   # now john can run: sudo apt update
+\end{sh}
+
+\subsection{System Users vs Human Users}
+
+Listing \lstinline|/etc/passwd| shows entries like \texttt{root}, \texttt{daemon},
+\texttt{www-data}, \texttt{mysql}, \texttt{postgres}, \texttt{nginx}, \texttt{ubuntu} and
+\texttt{bhuvnesh}. Not all of them are humans.
+
+\begin{center}
+\small
+\begin{tabular}{@{}l l@{}}
+\toprule
+\rowcolor{tablehead}\bfseries User & \bfseries Purpose \\
+\midrule
+\texttt{root}     & Administrator \\
+\texttt{mysql}    & MySQL service \\
+\texttt{postgres} & PostgreSQL service \\
+\texttt{nginx}    & Nginx server \\
+\texttt{www-data} & Apache / Nginx web apps \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These are called \textbf{service accounts}.
+
+\subsection{Process Ownership}
+
+Every running process belongs to a user.
+
+\begin{sh}
+ps aux
+\end{sh}
+
+\begin{lstlisting}[language=]
+USER      PID
+root      123
+postgres  456
+nginx     789
+\end{lstlisting}
+
+PostgreSQL runs as \texttt{postgres} and Nginx runs as \texttt{nginx}. This improves
+security.
+
+\subsection{Useful Admin Commands}
+
+\begin{cmdtable3}[3.4cm]
+useradd & Create a user, with a home directory & sudo useradd -m john \nr
+passwd & Set a user's password & sudo passwd john \nr
+groupadd & Create a group & sudo groupadd developers \nr
+usermod & Add a user to a group & sudo usermod -aG developers john \nr
+chown & Change the owner of a file & sudo chown john file.txt \nr
+chgrp & Change the group of a file & sudo chgrp developers file.txt \nr
+userdel & Delete a user and their home directory & sudo userdel -r john \nr
+groupdel & Delete a group & sudo groupdel developers \nr
+whoami & Show the current user & whoami \nr
+id & Show user and group IDs & id \\
+\end{cmdtable3}
+
+\subsection{How This Applies to Docker, Nginx and PostgreSQL}
+
+When you run \lstinline|docker run nginx|, Nginx inside the container often runs as
+\texttt{nginx}, not \texttt{root}. When PostgreSQL starts, \texttt{postgres} owns the
+database files. When GitHub Actions deploys code, \texttt{ubuntu} or a dedicated deployment
+user may own the files.
+
+Understanding \textbf{users, groups, ownership and permissions} is one of the most important
+Linux concepts, because it explains why commands sometimes fail with:
+
+\begin{lstlisting}[language=]
+Permission denied
+\end{lstlisting}
+
+Most of the time the current user is not the owner, is not in the required group, or lacks
+the necessary permission bits (\texttt{r}, \texttt{w}, \texttt{x}).
+
+\end{document}

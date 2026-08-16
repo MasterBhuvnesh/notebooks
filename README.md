@@ -20,6 +20,7 @@ LaTeX for the page, mermaid for the diagrams, one shared style, built by CI.
 | Book | Created | Updated | PDF |
 | :---: | :---: | :---: | :---: |
 | DevOps Cheat Sheet | 2026-08-15 | 2026-08-15 | [pdf](docs/devops-cheatsheet/main.pdf) |
+| Linux Commands | 2026-08-16 | 2026-08-16 | [pdf](docs/linux-commands/main.pdf) |
 | RabbitMQ | 2026-08-15 | 2026-08-15 | [pdf](docs/rabbitmq/main.pdf) |
 
 <!-- INDEX:END -->

@@ -1,7 +1,7 @@
 {
-  "books": 2,
-  "pages": 52,
-  "generated": "2026-08-15",
+  "books": 3,
+  "pages": 61,
+  "generated": "2026-08-16",
   "documents": [
     {
       "slug": "devops-cheatsheet",
@@ -12,6 +12,16 @@
       "created": "2026-08-15",
       "updated": "2026-08-15",
       "pdf": "docs/devops-cheatsheet/main.pdf"
+    },
+    {
+      "slug": "linux-commands",
+      "title": "Linux Commands",
+      "pages": 9,
+      "bytes": 308528,
+      "diagrams": 0,
+      "created": "2026-08-16",
+      "updated": "2026-08-16",
+      "pdf": "docs/linux-commands/main.pdf"
     },
     {
       "slug": "rabbitmq",

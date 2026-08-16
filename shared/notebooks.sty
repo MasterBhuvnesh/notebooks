@@ -128,7 +128,8 @@
   upquote=true,
   extendedchars=true,
   % pdflatex cannot typeset raw UTF-8 inside listings; map each glyph you use.
-  literate={✓}{{$\checkmark$}}1 {✗}{{$\times$}}1,
+  literate={✓}{{$\checkmark$}}1 {✗}{{$\times$}}1
+           {│}{{|}}1 {├}{{+}}1 {└}{{+}}1 {─}{{-}}1,
 }
 
 % Each env takes an optional \lstset override, used to shrink a dense page:

@@ -1,7 +1,7 @@
 {
-  "built_at": "2026-08-15 15:01 UTC",
+  "built_at": "2026-08-16 20:05 UTC",
   "bytes": 1090346,
-  "commit": "a668338",
+  "commit": "12e791c",
   "diagram_count": 9,
   "diagrams": {
     "01-hello-world.mmd": "175ce7cc264772087b0a5cc93283d846e4679437ecd4e06bf32f46a8fe38ffc6",
@@ -15,7 +15,7 @@
     "09-replicated-queues.mmd": "0523fdb189a80a2a01d072ca53e410d04d4a2b45a5d27daaf49a5ef5653ad07a"
   },
   "pages": 29,
-  "sty": "cb6cc5e7ecc594fedfea3dad4a29b3011f3c44e8553b31d9845e1d0edd00bc2c",
+  "sty": "c39dbdde91d81ca3bd6eb5306086ab888e331b4480744c665a61c964b762971e",
   "tex": "19ced3b467430fe8ea51aa582b986fd90d5d68c9ddb408c7ffad4e890d12d66d",
   "title": "RabbitMQ"
 }
