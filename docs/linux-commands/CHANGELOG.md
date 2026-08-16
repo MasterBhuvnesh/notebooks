@@ -6,4 +6,4 @@
 
 | Date | Commit | Change | Author |
 |---|---|---|---|
-| - | - | _No commits recorded yet._ | - |
+| 2026-08-17 | `dd40356` | feat(linux-commands): add a Linux permissions and users notebook | bhuvii |
