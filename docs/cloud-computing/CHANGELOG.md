@@ -6,4 +6,4 @@
 
 | Date | Commit | Change | Author |
 |---|---|---|---|
-| - | - | _No commits recorded yet._ | - |
+| 2026-08-20 | `b8b5b20` | feat(cloud-computing): add a Cloud Computing notebook | bhuvii |
