@@ -1,0 +1,10 @@
+flowchart LR
+    HW["Physical hardware<br/>CPU, memory, storage, NIC"]
+    HV["Hypervisor / VMM<br/>intercepts and translates guest requests"]
+    OS1["Guest OS 1"]
+    OS2["Guest OS 2"]
+    OS3["Guest OS 3"]
+    HW --> HV
+    HV --> OS1
+    HV --> OS2
+    HV --> OS3

@@ -1,0 +1,24 @@
+{
+  "built_at": "2026-08-20 04:58 UTC",
+  "bytes": 1121730,
+  "commit": "c0f96b2",
+  "diagram_count": 12,
+  "diagrams": {
+    "01-virtualization-layers.mmd": "b8c999b97fca3c7a582212e8db9e78dc0990bb70de8f495530c305c897c38fda",
+    "02-hypervisor-how-it-works.mmd": "1bc778dc61d45f487c722b080652dedfe5abf52aea6c393653a370729fc9f3ee",
+    "03-type1-vs-type2.mmd": "b5ae73568f3fd273ba8e2bd121d2ccf706f402729a7e4036bf01cb7e67b907d5",
+    "04-full-virtualization.mmd": "e8b8a5e0198392a40eec405ec2f152b90409a89f2a012ea7bcdf9ee36ff5bd80",
+    "05-paravirtualization.mmd": "26459ff7b438daf79349733ae5fc4a4e38a1752449b6f5c9c323c260fb628d40",
+    "06-hardware-assisted.mmd": "f8e3df1a86e72aafed8324418c62e7d100051d823f8c30f8b516830dc16b9cc2",
+    "07-types-of-virtualization.mmd": "2264c7a608831fa241126d26e8bd851fc0f703172e28875e75ea8568bead2c59",
+    "08-before-after-virtualization.mmd": "06b188862ea368586321bf34cf572dcdc59991049ef1bdaa9648403e4b2e4989",
+    "09-levels-of-virtualization.mmd": "c834adfe4ec2b3aab0f17f6fdeb32a29f386383d81630a5cbd6a6fe40657f7db",
+    "10-network-virtualization.mmd": "3987db1e2a7aeca88b5e760192ab944ff23048db29f3fa9c6212b818d52ca5df",
+    "11-storage-virtualization.mmd": "5fd898642bf391e46fe0db2888a443954238c2358abbbf6e97a6bcf3072ef942",
+    "12-containers-vs-vms.mmd": "9bd9c83c681d04aee9c39c00addad4f657caced966d5696e23d6e9be65d33b34"
+  },
+  "pages": 17,
+  "sty": "60bd516f2197995d4f10f3d428528e85a3e31744b65cc1a2ca75d3e474621fb7",
+  "tex": "f2dc153f7a9b1a5246b32b9e2310e975f1c5805f2f65f6dac58d257004d38009",
+  "title": "Cloud Computing"
+}

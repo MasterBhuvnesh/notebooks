@@ -1,0 +1,11 @@
+flowchart LR
+    subgraph NR["Non-root mode privilege levels"]
+        R3["Ring 3 - User apps"]
+        R0["Ring 0 - Guest OS"]
+    end
+    subgraph RM["Root mode privilege levels"]
+        VMM["VMM"]
+    end
+    R3 -->|direct execution of user requests| HW["Host computer hardware"]
+    R0 -->|OS requests trap to VMM, no binary translation| VMM
+    VMM --> HW

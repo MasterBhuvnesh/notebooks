@@ -1,0 +1,4 @@
+flowchart LR
+    R3["Ring 3 - User apps"] -->|direct execution of user requests| HW["Host computer hardware"]
+    R0["Ring 0 - Paravirtualized guest OS"] -->|hypercalls replace non-virtualizable instructions| VL["Virtualization layer"]
+    VL --> HW

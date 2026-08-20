@@ -1,0 +1,11 @@
+flowchart TB
+    VM1["VM1<br/>App + OS"] --> NA1["Virtual NIC"]
+    VM2["VM2<br/>App + OS"] --> NA2["Virtual NIC"]
+    VM3["VM3<br/>App + OS"] --> NA3["Virtual NIC"]
+    VM4["VM4<br/>App + OS"] --> NA4["Virtual NIC"]
+    NA1 --> VS1["Virtual switch"]
+    NA2 --> VS1
+    NA3 --> VS2["Virtual switch"]
+    NA4 --> VS2
+    VS1 --> PN1["Physical NIC"] --> LAN1["Local area network"]
+    VS2 --> PN2["Physical NIC"] --> LAN2["Local area network"]

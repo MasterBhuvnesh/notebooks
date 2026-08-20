@@ -1,8 +1,18 @@
 {
-  "books": 3,
-  "pages": 61,
-  "generated": "2026-08-16",
+  "books": 4,
+  "pages": 78,
+  "generated": "2026-08-20",
   "documents": [
+    {
+      "slug": "cloud-computing",
+      "title": "Cloud Computing",
+      "pages": 17,
+      "bytes": 1121730,
+      "diagrams": 12,
+      "created": "2026-08-20",
+      "updated": "2026-08-20",
+      "pdf": "docs/cloud-computing/main.pdf"
+    },
     {
       "slug": "devops-cheatsheet",
       "title": "DevOps Cheat Sheet",
@@ -27,7 +37,7 @@
       "slug": "rabbitmq",
       "title": "RabbitMQ",
       "pages": 29,
-      "bytes": 1090346,
+      "bytes": 1090319,
       "diagrams": 9,
       "created": "2026-08-15",
       "updated": "2026-08-15",

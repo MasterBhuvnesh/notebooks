@@ -1,0 +1,13 @@
+flowchart TB
+    subgraph AF["(b) After virtualization"]
+        direction TB
+        AP1["Application"] --> G1["Guest OS"]
+        AP2["Application"] --> G2["Guest OS"]
+        G1 --> VL["Virtualization layer - hypervisor or VMM"]
+        G2 --> VL
+        VL --> HW2["Hardware running the host OS"]
+    end
+    subgraph B["(a) Traditional computer"]
+        direction TB
+        AP["Application"] --> HOS["Host operating system"] --> HW1["Hardware"]
+    end

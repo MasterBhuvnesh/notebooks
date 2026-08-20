@@ -1,0 +1,18 @@
+flowchart TB
+    subgraph T2["Type 2 - hosted"]
+        direction TB
+        A3["App"] --- O3["Guest OS"]
+        A4["App"] --- O4["Guest OS"]
+        O3 --> H2["Hypervisor"]
+        O4 --> H2
+        H2 --> HOS["Host operating system"]
+        HOS --> W2["Hardware"]
+    end
+    subgraph T1["Type 1 - bare metal"]
+        direction TB
+        A1["App"] --- O1["Guest OS"]
+        A2["App"] --- O2["Guest OS"]
+        O1 --> H1["Hypervisor"]
+        O2 --> H1
+        H1 --> W1["Hardware"]
+    end

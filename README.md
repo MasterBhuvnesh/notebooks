@@ -19,6 +19,7 @@ LaTeX for the page, mermaid for the diagrams, one shared style, built by CI.
 
 | Book | Created | Updated | PDF |
 | :---: | :---: | :---: | :---: |
+| Cloud Computing | 2026-08-20 | 2026-08-20 | [pdf](docs/cloud-computing/main.pdf) |
 | DevOps Cheat Sheet | 2026-08-15 | 2026-08-15 | [pdf](docs/devops-cheatsheet/main.pdf) |
 | Linux Commands | 2026-08-17 | 2026-08-17 | [pdf](docs/linux-commands/main.pdf) |
 | RabbitMQ | 2026-08-15 | 2026-08-15 | [pdf](docs/rabbitmq/main.pdf) |

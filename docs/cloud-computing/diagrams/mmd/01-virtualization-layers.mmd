@@ -1,0 +1,20 @@
+flowchart TB
+    subgraph L3["Layer 3 - Virtual machines"]
+        VM1["App + Guest OS"]
+        VM2["App + Guest OS"]
+        VM3["App + Guest OS"]
+    end
+    subgraph L2["Layer 2 - Virtual infrastructure"]
+        VI["Hypervisor, infrastructure services, automation"]
+    end
+    subgraph L1["Layer 1 - Physical resources"]
+        S["Servers"]
+        N["Network"]
+        D["Storage"]
+    end
+    VM1 --> VI
+    VM2 --> VI
+    VM3 --> VI
+    VI --> S
+    VI --> N
+    VI --> D

@@ -1,0 +1,5 @@
+flowchart TB
+    VAS["Virtual application servers"] --> FC["SAN fibre channel switch fabric"]
+    PS["Physical servers<br/>intranet, file server, SQL cluster"] --> FC
+    FC --> SP["Storage pools - storage area network"]
+    SP --> R["Disk sets<br/>RAID 1+0, RAID 1, RAID 5"]

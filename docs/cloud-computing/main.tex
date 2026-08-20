@@ -1,0 +1,452 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{notebooks}
+
+\notebooktitle{Cloud Computing}
+\notebooksubtitle{CAT7002 Course Notes}
+\notebooktagline{One part per unit. Unit 1: virtualization concepts and hypervisors.}
+\notebookauthor{by Bhuvnesh Verma}
+\notebooksource{CAT7002 Cloud Computing, RBU Nagpur}
+
+\begin{document}
+\notebookcover
+
+\part*{Unit 1: Virtualization Concepts and Hypervisors}
+
+\section{Introduction to Servers}
+
+\field{Short description:}{A server is a computer or software system that provides services,
+resources, or data to other computers, called clients, over a network.}
+
+\field{Everyday examples:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Opening a website: the browser sends a request to a \textbf{web server}.
+  \item Checking Gmail: a \textbf{mail server} delivers the messages.
+  \item Using online banking: a \textbf{database server} stores and retrieves the account.
+\end{itemize}
+
+\field{What a server does:}{Stores files, hosts websites, manages databases, runs
+applications, sends and receives email, shares printers and other resources, and manages
+users and security.}
+
+\subsection{Types of servers}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead} \textbf{Server type} & \textbf{Purpose} \\
+\midrule
+Web server & Hosts websites \\
+File server & Stores and shares files \\
+Database server & Stores databases \\
+Mail server & Sends and receives emails \\
+Application server & Runs business applications \\
+Print server & Manages printers \\
+DNS server & Converts domain names into IP addresses \\
+\bottomrule
+\end{tabularx}
+
+\section{The Traditional Server Model}
+
+\field{Short description:}{Before virtualization and cloud computing, organizations
+typically deployed \textbf{one physical server for one application}. Each application had
+its own dedicated hardware.}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead} \textbf{Application} & \textbf{Physical server} \\
+\midrule
+Website & Server 1 \\
+Database & Server 2 \\
+Email & Server 3 \\
+ERP & Server 4 \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Advantages}
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{High performance.} Applications have direct access to hardware resources.
+  \item \textbf{Better security.} Each application runs on its own physical machine.
+  \item \textbf{Reliability.} No interference from other applications sharing the hardware.
+  \item \textbf{Simple architecture.} Easy to install, configure and troubleshoot.
+  \item \textbf{Full hardware control.} Administrators control the server hardware completely.
+\end{itemize}
+
+\subsection{Disadvantages}
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Low resource utilization.} Most servers use only 10--20\% of CPU and memory,
+        leaving the rest idle.
+  \item \textbf{High cost.} Each application requires separate hardware.
+  \item \textbf{High power consumption.} More servers draw more electricity and need more
+        cooling.
+  \item \textbf{More physical space.} Multiple servers occupy valuable rack space.
+  \item \textbf{Difficult scalability.} A new application often means buying new hardware.
+  \item \textbf{Higher maintenance.} Every server needs updates, monitoring, backups and
+        repairs.
+  \item \textbf{Single point of failure.} If a physical server fails, its application becomes
+        unavailable.
+\end{itemize}
+
+\subsection*{Why a new technology was needed}
+
+As organizations expanded they faced too many physical servers, rising hardware costs,
+increased electricity and cooling expenses, underutilized resources, complex management, and
+slow deployment of new services. These limitations led to \textbf{virtualization}, which
+allows multiple virtual servers to run on a single physical machine, and virtualization in
+turn became the foundation for \textbf{cloud computing}.
+
+\newpage
+\section{Introduction to Virtualization}
+
+\field{Short description:}{Virtualization is a methodology for dividing computer resources
+into more than one execution environment, applying concepts such as partitioning,
+time-sharing, machine simulation and emulation.}
+
+\field{Theory:}{Virtualization is a method in which multiple independent operating systems
+run on one physical computer. It maximizes the usage of available physical resources, so one
+can achieve high server usage: it increases total computing power while decreasing overhead.
+Increasing the number of logical operating systems on a single host reduces hardware
+acquisition and maintenance cost for an organization.}
+
+\field{How it works:}{The architecture has three layers. Layer 1 is the physical
+infrastructure of servers, networks and storage. Layer 2 is the virtual infrastructure,
+consisting of hypervisors, virtual infrastructure services and automated solutions that
+optimize the IT process. Layer 3 holds the virtual machines, where different operating
+systems and applications are deployed. A single virtual infrastructure supports more than one
+virtual machine, so the physical resources of the whole infrastructure are shared across many
+virtual machines for maximum efficiency.}
+
+\subsection{Architecture diagram}
+\mmd[0.62]{01-virtualization-layers.png}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item Virtualization is a trend in IT that includes autonomic computing and utility
+        computing: the environment manages itself, and every resource is seen as a utility
+        that a client pays per use.
+  \item It reduces the burden of workloads on users by centralizing administrative tasks and
+        improving scalability.
+\end{itemize}
+
+\subsection{Reasons for using virtualization}
+
+\begin{itemize}\itemsep3pt
+  \item Virtual machines consolidate the workloads of under-utilized servers, saving on
+        hardware, environmental costs and management.
+  \item Legacy applications can keep running inside a VM.
+  \item A VM provides a secure sandbox for running an untrusted application.
+  \item A VM helps in building a secured computing platform.
+  \item A VM provides an illusion of hardware.
+  \item A VM simulates networks of independent computers.
+  \item A VM supports running distinct operating systems with different versions.
+\end{itemize}
+
+\newpage
+\section{Hypervisor}
+
+\field{Short description:}{A hypervisor, or Virtual Machine Monitor (VMM), is software that
+lets multiple operating systems run on a single physical machine.}
+
+\field{Theory:}{It manages hardware resources such as CPU, memory and storage and allocates
+them to virtual machines without interference. This improves hardware utilization, reduces
+costs, and provides flexibility in cloud and server environments.}
+
+\field{How it works:}{A hypervisor runs on hardware or on a host OS to create and manage
+virtual machines, each with its own virtual CPU, memory, storage and network. It intercepts
+guest OS requests and translates them to physical hardware, ensuring isolation, security and
+stability.}
+
+\subsection{Architecture diagram}
+\mmd[0.34]{02-hypervisor-how-it-works.png}
+
+\subsection{Type 1 hypervisor}
+
+A Type 1 hypervisor runs directly on the host's hardware and does not rely on a host
+operating system. This architecture offers better performance and security because there is
+no intermediary OS. It is the standard for enterprise-level data centres and for cloud
+providers such as Amazon Web Services and Microsoft Azure.
+
+\field{Examples:}{VMware ESXi, Microsoft Hyper-V, KVM (Kernel-based Virtual Machine), Xen.}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Pros:} high performance through direct hardware access; strong security with
+        no intermediate OS layer; suitable for mission-critical workloads.
+  \item \textbf{Cons:} requires dedicated hardware; setup and management are complex compared
+        to Type 2.
+\end{itemize}
+
+\subsection{Type 2 hypervisor}
+
+A Type 2 hypervisor runs on top of a conventional operating system such as Windows, macOS or
+Linux. It is essentially an application within the host OS. This type is generally used for
+desktop virtualization, development and testing, where a user needs to run multiple operating
+systems on a personal computer. Performance is slightly lower than Type 1 because of the
+overhead of the host OS.
+
+\field{Examples:}{Oracle VM VirtualBox, VMware Workstation, Parallels Desktop.}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Pros:} easy to install and use; useful for development, testing and malware
+        analysis; good host--guest integration features.
+  \item \textbf{Cons:} slower performance with no direct hardware access; security depends on
+        the host OS, so a compromise of the host may affect the guests.
+\end{itemize}
+
+\subsection{Type 1 versus Type 2}
+\mmd[0.44]{03-type1-vs-type2.png}
+
+\newpage
+\section{Full Virtualization}
+
+\field{Short description:}{Full virtualization was introduced by IBM in 1966. It was the
+first software solution for server virtualization and uses binary translation together with
+direct execution.}
+
+\field{How it works:}{The virtual machine completely isolates the guest OS from the
+virtualization layer and the hardware. Kernel code is translated to replace non-virtualizable
+instructions with new sequences of instructions that have the intended effect on the virtual
+hardware, while user level code is executed directly on the processor for high performance.}
+
+\field{Examples:}{Microsoft and Parallels systems.}
+
+\subsection{Architecture diagram}
+\mmd[0.30]{04-full-virtualization.png}
+
+\section{Paravirtualization}
+
+\field{Short description:}{Paravirtualization is the category of CPU virtualization that uses
+hypercalls for operations handled at compile time.}
+
+\field{How it works:}{The guest OS is not completely isolated, only partially isolated by the
+virtual machine from the virtualization layer and hardware. The OS kernel is modified to
+replace non-virtualizable instructions with hypercalls that communicate directly with the
+virtualization layer, which improves performance and efficiency.}
+
+\field{Examples:}{VMware and Xen.}
+
+\subsection{Architecture diagram}
+\mmd[0.30]{05-paravirtualization.png}
+
+\newpage
+\section{Hardware Based Virtualization}
+
+\field{Short description:}{Hardware vendors added CPU features that simplify virtualization
+directly in silicon.}
+
+\field{How it works:}{First generation enhancements include Intel Virtualization Technology
+(VT-x) and AMD's AMD-V. Both target privileged instructions with a new CPU execution mode that
+allows the VMM to run in a root mode below ring 0. Privileged and sensitive calls are set to
+trap automatically to the hypervisor, removing the need for either binary translation or
+paravirtualization. The guest state is stored in Virtual Machine Control Structures (VT-x) or
+Virtual Machine Control Blocks (AMD-V).}
+
+\subsection{Architecture diagram}
+\mmd[0.36]{06-hardware-assisted.png}
+
+\newpage
+\section{Types of Virtualization}
+
+\subsection{Overview}
+\mmd[0.24]{07-types-of-virtualization.png}
+
+\subsection{Desktop virtualization}
+
+Also called client virtualization. The virtualization happens on the user's site: desktops
+are replaced with thin clients that use datacentre resources.
+
+\subsection{Network virtualization}
+
+Part of the virtualization infrastructure, used especially when virtualizing servers. It
+allows multiple switches, VLANs and NAT-ing to be created in software.
+
+\mmd[0.46]{10-network-virtualization.png}
+
+\newpage
+\subsection{Server and machine virtualization}
+
+Virtualizing the server infrastructure, so no further physical servers are needed for
+different purposes.
+
+\subsection{Storage virtualization}
+
+Widely used in datacentres with large storage. It helps create, delete and allocate storage
+to different hardware, over a network connection. The leading technology here is the SAN.
+
+\mmd[0.40]{11-storage-virtualization.png}
+
+\subsection{Operating system level virtualization}
+
+An abstraction layer between the traditional OS and user applications. OS-level virtualization
+creates isolated \textbf{containers} on a single physical server, using one OS instance to
+utilize the hardware and software in data centres. The containers behave like real servers. It
+is commonly used to create virtual hosting environments that allocate hardware resources among
+a large number of mutually distrusting users, and to a lesser extent to consolidate server
+hardware by moving services on separate hosts into containers or VMs on one server.
+
+\subsection{Application virtualization}
+
+The technology isolates applications from the underlying operating system and from other
+applications, to increase compatibility and manageability. Docker can be used for this
+purpose.
+
+\newpage
+\section{Levels of Virtualization}
+
+\field{Short description:}{A traditional computer runs a host operating system tailored to its
+hardware architecture. After virtualization, different user applications managed by their own
+guest operating systems can run on the same hardware, independent of the host OS. This is done
+by adding a software layer called the virtualization layer, known as the hypervisor or virtual
+machine monitor.}
+
+\subsection{Before and after virtualization}
+\mmd[0.42]{08-before-after-virtualization.png}
+
+\subsection{Implementation levels}
+
+Virtualization can be implemented at different levels within a computing system, offering
+varying degrees of isolation and flexibility.
+
+\mmd[0.20]{09-levels-of-virtualization.png}
+
+\newpage
+\subsection{Instruction set architecture level}
+
+\begin{itemize}\itemsep2pt
+  \item Virtualization is performed by emulating a given ISA with the ISA of the host machine.
+  \item For example, MIPS binary code can run on an x86-based host machine through ISA
+        emulation.
+  \item It becomes possible to run a large amount of legacy binary code written for various
+        processors on any given new hardware host.
+\end{itemize}
+
+\subsection{Hardware abstraction level}
+
+\begin{itemize}\itemsep2pt
+  \item Hardware-level virtualization is performed right on top of the bare hardware. It
+        generates a virtual hardware environment for a VM, and the process manages the
+        underlying hardware through virtualization.
+  \item The idea is to virtualize a computer's resources, such as its processors, memory and
+        I/O devices, to upgrade the hardware utilization rate by multiple concurrent users.
+  \item It was implemented in the IBM VM/370 in the 1960s. More recently the Xen hypervisor
+        has been applied to virtualize x86-based machines running Linux or other guest OS
+        applications.
+\end{itemize}
+
+\subsection{Operating system level}
+
+\begin{itemize}\itemsep2pt
+  \item An abstraction layer between the traditional OS and user applications.
+  \item It creates isolated containers on a single physical server, with the OS instances
+        utilizing the hardware and software in data centres.
+  \item The containers behave like real servers, and are commonly used for virtual hosting
+        environments allocating hardware among mutually distrusting users.
+\end{itemize}
+
+\subsection{Library support level}
+
+\begin{itemize}\itemsep2pt
+  \item Most applications use APIs exported by user-level libraries rather than lengthy system
+        calls, so a well-documented API becomes another candidate for virtualization.
+  \item Virtualization with library interfaces controls the communication link between
+        applications and the rest of the system through API hooks.
+  \item WINE implements this approach to support Windows applications on top of UNIX hosts.
+  \item vCUDA allows applications executing within VMs to leverage GPU hardware acceleration.
+\end{itemize}
+
+\subsection{User-application level}
+
+\begin{itemize}\itemsep2pt
+  \item Virtualization at the application level virtualizes an application as a VM. On a
+        traditional OS an application runs as a process, so this is also known as
+        process-level virtualization.
+  \item The most popular approach is to deploy high level language (HLL) VMs. The
+        virtualization layer sits as an application program on top of the operating system and
+        exports the abstraction of a VM that runs programs compiled to a particular abstract
+        machine definition.
+  \item The Microsoft .NET CLR and the Java Virtual Machine are two good examples.
+\end{itemize}
+
+\newpage
+\section{Containers}
+
+\field{Short description:}{A container is an isolated, stand-alone unit that encapsulates an
+application and all its dependencies. It runs consistently in any environment, independent of
+the host system.}
+
+\field{Theory:}{It is a light, executable software package that wraps everything an
+application needs: libraries, configuration files and binaries. The application behaves the
+same way on a developer's laptop, in a testing environment, or on a production server. Unlike
+traditional virtual machines that carry a full OS, containers pack only what is required,
+which makes them faster and more efficient.}
+
+\field{How it works:}{Containerization is the process of packing an application together with
+all its dependencies into a container so it runs consistently from one computing environment
+to another. In simple terms it uses the host OS kernel to run many isolated instances of
+applications on the same machine, which makes it very lightweight and efficient.}
+
+\subsection{Containers versus virtual machines}
+
+Both containers and VMs run applications in isolated environments, but they differ in
+architecture, performance, resource usage and startup time.
+
+\mmd[0.40]{12-containers-vs-vms.png}
+
+\newpage
+\subsection{Comparison}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead} & \textbf{Containers} & \textbf{Virtual machines} \\
+\midrule
+Architecture & All containers share the host OS kernel; the running user spaces are isolated,
+which makes them lightweight. & A hypervisor running on the host OS includes a full guest OS
+with virtualized hardware. \\
+\addlinespace
+Boot time & Much less, typically seconds, as no full OS has to boot. & Longer, because the
+full OS in the VM must be initialized. \\
+\addlinespace
+Isolation & At the process level, less strong than a VM, though for many use cases this does
+not matter. & Very good, because each VM is a system on its own with its own OS. \\
+\addlinespace
+Resource usage & Fewer resources: only the necessary binaries and libraries, not an entire
+OS. & Very high, as the full OS overhead is incurred for each instance. \\
+\bottomrule
+\end{tabularx}
+
+\section{Container Orchestration}
+
+\field{Short description:}{Container orchestration is the process of automating the
+deployment, management, scaling and networking of containers throughout their lifecycle.}
+
+\field{Theory:}{Orchestration platforms such as Kubernetes create a smooth, self-managing
+operation and coordinate microservices held in separate containers. Kubernetes eliminates many
+of the manual processes involved in deploying and scaling containerized applications, and Red
+Hat creates essential tools for securing, simplifying and automatically updating container
+infrastructure.}
+
+\subsection{Why it is needed}
+
+When many containers run across different machines, managing them manually becomes difficult.
+An orchestration platform automates:
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Deployment:} starts and distributes containers across servers.
+  \item \textbf{Scaling:} increases or decreases the number of container instances based on
+        demand.
+  \item \textbf{Load balancing:} distributes incoming traffic among healthy containers.
+  \item \textbf{Self-healing:} restarts failed containers or moves them to healthy nodes.
+  \item \textbf{Service discovery:} allows containers to find and communicate with each other.
+  \item \textbf{Rolling updates and rollbacks:} updates applications with minimal downtime and
+        reverts changes if needed.
+  \item \textbf{Resource management:} efficiently allocates CPU, memory and storage.
+\end{itemize}
+
+\subsection*{Benefits}
+
+Orchestration platforms automate the entire lifecycle of containers, transforming what would
+be a non-stop maintenance operation for IT teams into a smooth, self-managing one, and bring
+advantages in development methods, costs and security.
+
+\end{document}

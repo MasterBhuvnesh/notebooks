@@ -1,0 +1,15 @@
+flowchart TB
+    subgraph C["Containers"]
+        direction TB
+        C1["Container"] --> CE["Container engine, e.g. Docker"]
+        C2["Container"] --> CE
+        C3["Container"] --> CE
+        CE --> COS["Operating system"]
+        COS --> IH2["Infrastructure - host servers"]
+    end
+    subgraph V["Virtual machines"]
+        direction TB
+        GV1["Guest OS: Windows"] --> HYP["Hypervisor"]
+        GV2["Guest OS: Linux"] --> HYP
+        HYP --> IH1["Infrastructure - host servers"]
+    end
