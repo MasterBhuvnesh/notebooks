@@ -3,14 +3,14 @@
 
 \notebooktitle{Cloud Computing}
 \notebooksubtitle{CAT7002 Course Notes}
-\notebooktagline{One part per unit. Unit 1: virtualization concepts and hypervisors.}
+\notebooktagline{Servers, virtualization, data centres and the addressing that connects them.}
 \notebookauthor{by Bhuvnesh Verma}
 \notebooksource{CAT7002 Cloud Computing, RBU Nagpur}
 
 \begin{document}
 \notebookcover
 
-\part*{Unit 1: Virtualization Concepts and Hypervisors}
+\unitpart{Virtualization Concepts and Hypervisors}
 
 \section{Introduction to Servers}
 
@@ -448,5 +448,1063 @@ An orchestration platform automates:
 Orchestration platforms automate the entire lifecycle of containers, transforming what would
 be a non-stop maintenance operation for IT teams into a smooth, self-managing one, and bring
 advantages in development methods, costs and security.
+
+\newpage
+\unitpart{Virtualization Technologies and Data Center Management}
+
+\section{Virtualization Technologies}
+
+\field{Short description:}{Unit 1 covered what virtualization is and how a hypervisor works.
+This unit covers the technologies that implement it, the data centre those technologies run
+in, and the addressing scheme that ties the machines together.}
+
+Five technologies are studied in this unit.
+
+\begin{enumerate}\itemsep3pt
+  \item Software virtualization
+  \item Hardware virtualization
+  \item Application virtualization
+  \item Storage virtualization
+  \item Operating system virtualization
+\end{enumerate}
+
+\mmd[0.30]{13-virtualization-technologies.png}
+
+\newpage
+\section{Software Virtualization}
+
+\field{Short description:}{Software virtualization is a technique that allows a server to run
+multiple operating systems and applications by creating a virtual environment.}
+
+\field{Theory:}{Software virtualization develops a virtual environment in which software,
+applications and operating systems can be installed. A virtualized software is simply an
+application that has been installed inside such an environment. It lets a user run more than
+one operating system on the same machine. VMware and VirtualBox are common examples.}
+
+\subsection{Components}
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Hypervisor:} a piece of software that manages and allocates hardware
+        resources to the virtual machines.
+  \item \textbf{Virtual machines:} independent computers, each running its own operating
+        system on a portion of the physical machine's hardware.
+  \item \textbf{Abstraction layer:} the layer of separation between the physical hardware and
+        the virtual machines.
+\end{itemize}
+
+\subsection{Types of software virtualization}
+
+The three forms studied in this unit are operating system virtualization, application
+virtualization and service virtualization. Each is covered in its own section below.
+
+\newpage
+\section{Operating System Virtualization}
+
+\field{Short description:}{A virtualization technique in which the virtualization software
+runs on top of a host operating system and creates isolated environments called containers.}
+
+\field{Theory:}{Multiple applications or services run independently on the same physical
+hardware while sharing the underlying OS kernel. The virtualization layer creates an
+abstraction between the hardware and the applications, which improves resource utilization and
+isolation. Unlike traditional virtualization, which creates complete virtual machines,
+OS-based virtualization shares the host kernel among the containers, so it is lighter and more
+efficient.}
+
+\field{How it works:}{The host operating system kernel manages the containers through
+specialised features that control resource access and allocation. Each container operates as
+an isolated environment with its own process space, network interfaces and file systems, while
+sharing the underlying kernel. The kernel enforces limits on CPU time, memory usage, disk
+space and network bandwidth for each container, so one container cannot affect the others and
+no conflicts or security breaches arise between them.}
+
+\subsection{Architecture diagram}
+\mmd[0.40]{14-os-virtualization.png}
+
+\subsection{Types of virtual disk}
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Private virtual disk:} dedicated to a single container. It keeps data and
+        configuration across restarts, much like a local hard disk.
+  \item \textbf{Shared virtual disk:} used by several containers at the same time. Changes go
+        to a temporary cache that is cleared on restart, which gives every container the same
+        baseline configuration.
+\end{itemize}
+
+\subsection{Advantages}
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Resource efficiency:} containers share the host kernel, so memory and storage
+        overhead is lower than with full virtualization.
+  \item \textbf{Fast startup:} a container starts quickly because no full OS boot is needed.
+  \item \textbf{High density:} more containers fit on the same hardware than virtual machines.
+  \item \textbf{Portability:} containers move easily between host systems.
+\end{itemize}
+
+\subsection{Disadvantages}
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{OS dependency:} every container must use the same operating system as the host.
+  \item \textbf{Security concerns:} a kernel vulnerability can affect all containers at once.
+  \item \textbf{Limited isolation:} isolation is weaker than in hardware-based virtualization.
+\end{itemize}
+
+\newpage
+\section{Application Virtualization}
+
+\field{Short description:}{Application virtualization is the ability to run an application in
+an environment different from the one it was developed for.}
+
+\field{Theory:}{It allows IT administrators to install applications on a server and then
+deliver them remotely to users' computers. The experience of using a virtualized application
+is the same as using an application installed on a physical machine.}
+
+\field{How it works:}{The common approach is server based. An administrator installs the
+applications once, either in the organisation's data centre or through a hosting service, and
+then uses application virtualization software to deliver them to users' desktops and other
+connected devices. The user accesses the application as if it were installed locally, and the
+user's actions are conveyed back to the server to be executed. Application virtualization is
+an integral part of digital workspaces and desktop virtualization.}
+
+\subsection{Architecture diagram}
+\mmd[0.34]{15-application-virtualization.png}
+
+\subsection{Benefits}
+
+\begin{itemize}\itemsep4pt
+  \item \textbf{Simplified management:} the applications to be delivered are installed on a
+        single server rather than on every user device, which makes installing software,
+        updates and patches far easier for the IT team.
+  \item \textbf{Scalability:} administrators can deploy virtual applications to every
+        connected device regardless of its operating system or storage capacity. The
+        organisation then spends less on hardware, because employees only need a basic
+        computer to reach the applications they work with.
+  \item \textbf{Security:} access to applications is controlled centrally, so licences are
+        easy to revoke when a user no longer needs them. The application never has to be
+        uninstalled from a user's device, because it stays resident but reachable only through
+        its container. This central control matters most when a device is lost or stolen,
+        since sensitive data can no longer be reached remotely.
+\end{itemize}
+
+\newpage
+\section{Service Virtualization}
+
+\field{Short description:}{Service virtualization simulates the behaviour of software
+services, APIs, databases or third-party applications.}
+
+\field{Theory:}{It lets developers and testers build, integrate and test an application even
+when the real service is unavailable, incomplete, expensive to access or difficult to
+configure. In simple terms, it creates a virtual version of a dependent service that behaves
+like the real one without requiring the actual system.}
+
+\field{How it works:}{Instead of communicating with the actual service, the application talks
+to the virtual service, which returns predefined or dynamically generated responses.}
+
+\field{Examples:}{Typical simulated responses are payment successful, payment failed, user not
+found, server timeout and invalid request.}
+
+\subsection{Architecture diagram}
+\mmd[0.34]{16-service-virtualization.png}
+
+\newpage
+\section{Hardware Virtualization}
+
+\field{Short description:}{Hardware virtualization allows multiple virtual machines to run on
+a single physical machine.}
+
+\field{Theory:}{It creates a virtual version of a computer's hardware components: the CPU,
+memory, storage and network. The resulting virtual environment, the virtual machine, acts like
+a real computer and runs its own operating system and applications independently of the host
+system.}
+
+\field{How it works:}{A software layer called the hypervisor creates and manages the virtual
+machines on a single physical server. The hypervisor allocates the server's resources, such as
+CPU, memory and storage, to each VM, so several operating systems and applications run
+independently on the same hardware.}
+
+\subsection{Benefits}
+
+\begin{itemize}\itemsep4pt
+  \item \textbf{Improved resource utilization:} consolidating several workloads onto one
+        physical server makes better use of the hardware, so fewer physical servers are
+        needed and energy consumption and floor space both drop.
+  \item \textbf{Cost savings:} fewer machines means savings on both capital expenditure,
+        which is buying the servers, and operational expenditure, which is maintaining and
+        powering them.
+  \item \textbf{Flexibility and scalability:} virtual machines are easy to create, modify and
+        move, which matters for a business that has to adapt quickly to changing workloads.
+  \item \textbf{Isolation and security:} each VM operates in isolation, so malware or a system
+        failure is contained within a single VM.
+  \item \textbf{Simplified management:} centralised tools let administrators manage many
+        virtual environments from one interface, which is especially useful when the
+        infrastructure is spread across several locations.
+\end{itemize}
+
+\newpage
+\section{Storage Virtualization}
+
+\field{Short description:}{Storage virtualization brings several storage devices together into
+a single entity, for better efficiency, security and management.}
+
+\field{Theory:}{Storage virtualization is a newer concept under virtualization: storage
+systems use it to gain functionality and features. A storage system is also called a storage
+array, a disk array or a filer. It uses special hardware and software to provide fast and
+reliable storage for computing and processing data, and it is designed to accommodate large
+capacity together with data protection.}
+
+\field{How it works:}{Multiple physical storage devices are combined into a single logical
+storage pool by a virtualization layer. That layer manages allocation, maps logical volumes to
+physical devices and handles every read and write transparently. Users and applications see a
+single logical storage system, while the software manages the physical storage underneath and
+improves utilization, scalability, performance and ease of management.}
+
+\subsection{Types of storage virtualization}
+\mmd[0.24]{17-storage-virtualization-types.png}
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Block level virtualization:} separates logical storage from physical storage
+        at the block level, as in IBM SVC and EMC VPLEX.
+  \item \textbf{File level virtualization:} abstracts the file system from the physical
+        storage, as in NAS solutions such as NetApp.
+  \item \textbf{Object based storage:} holds data as objects rather than as files or blocks,
+        as in AWS S3 and Ceph.
+\end{itemize}
+
+\subsection{Benefits}
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Enhanced storage utilization:} aggregates different storage devices
+        efficiently.
+  \item \textbf{Scalability:} storage scales easily as requirements grow.
+  \item \textbf{Savings:} hardware cost falls because existing resources are reused.
+  \item \textbf{Very high availability:} redundancy and failover support are built in.
+  \item \textbf{Improved performance:} workload is distributed dynamically across the storage.
+  \item \textbf{Easier data migration:} data moves from one storage system to another
+        seamlessly.
+  \item \textbf{Energy efficiency:} optimised storage usage draws less power.
+\end{itemize}
+
+\newpage
+\section{The Data Center}
+
+\field{Short description:}{A data centre is a centralised facility that houses computing
+resources: servers, storage systems, networking equipment, power systems, cooling systems and
+security infrastructure.}
+
+\field{Theory:}{It is designed to store, process, manage and distribute large amounts of data
+and applications continuously and securely. In simple terms, the data centre is the backbone
+of modern IT infrastructure, providing the environment needed to run business applications,
+websites, cloud services, databases and enterprise systems.}
+
+\subsection{Need for a data centre}
+
+\begin{itemize}\itemsep2pt
+  \item Centralised storage and management of data
+  \item High-speed data processing
+  \item Secure storage of business information
+  \item Continuous availability of services
+  \item Disaster recovery and backup
+  \item Support for cloud computing and virtualization
+  \item Efficient resource utilization
+\end{itemize}
+
+\subsection{Objectives of a data centre}
+
+\begin{itemize}\itemsep2pt
+  \item Provide reliable IT services
+  \item Ensure high availability of applications
+  \item Store and process large volumes of data
+  \item Protect data against failures and cyber threats
+  \item Improve business continuity
+  \item Optimise resource utilization
+\end{itemize}
+
+\subsection{Components}
+\mmd[0.34]{18-data-center-components.png}
+
+\newpage
+\section{High Availability of a Data Center}
+
+\field{Short description:}{High availability is the capability of a data centre to keep
+applications, servers, storage and network services available with minimal or no downtime,
+even when hardware, software or network failures occur.}
+
+\field{Theory:}{The primary objective is continuous service to users, achieved by eliminating
+single points of failure and by enabling automatic recovery from failures.}
+
+\subsection{Architecture diagram}
+\mmd[0.34]{19-high-availability.png}
+
+\subsection{Need for high availability}
+
+Organisations require uninterrupted service, for the following reasons.
+
+\begin{itemize}\itemsep2pt
+  \item Continuous business operations
+  \item Better customer satisfaction
+  \item Prevention of financial loss
+  \item Protection against hardware failures
+  \item Data protection
+  \item Disaster recovery
+  \item Compliance with service level agreements
+  \item Improved business reputation
+\end{itemize}
+
+\subsection{Causes of data centre downtime}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Category} & \textbf{Typical causes} \\
+\midrule
+Hardware failures & Server crash, hard disk failure, storage controller failure, memory
+failure, power supply unit failure \\
+\addlinespace
+Software failures & Operating system crash, application bugs, database corruption,
+configuration errors \\
+\addlinespace
+Network failures & Router failure, switch failure, ISP outage, cable damage \\
+\addlinespace
+Human errors & Wrong configuration, accidental deletion, improper maintenance \\
+\addlinespace
+Power failures & Power outage, UPS failure, generator malfunction \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\section{Data Center Maintenance}
+
+\field{Short description:}{Data centre maintenance is the set of processes that keep a data
+centre operating as required, for example to meet an uptime objective such as 99.9 per cent or
+a service level agreement.}
+
+\field{Theory:}{The tasks are monitoring and inspecting the equipment and systems, from
+hardware to electrical, cooling and cabling, and then carrying out the maintenance and repair
+work needed to meet the operational objectives.}
+
+\subsection{Why it matters}
+
+Maintenance underpins most of the IT services a business runs. If the business runs its ERP
+software in its own data centre, maintenance is what keeps the ERP working. Maintenance is
+also cheaper than the alternative: system failures are stressful and costly to handle, and
+proactive work detects problems before they cause trouble.
+
+The following problems arise from insufficient or unplanned maintenance.
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Equipment failures:} neglected cooling leads to hot spots, which cause
+        equipment to overheat and fail.
+  \item \textbf{Power outages:} poor maintenance of the power system causes an outage, which
+        disrupts service and can even lose data.
+  \item \textbf{Cabling problems:} badly set up and managed cables lead to unintended
+        disconnections.
+  \item \textbf{Water damage:} ignoring water lines and temperature changes leads to flooding,
+        which makes equipment fail.
+  \item \textbf{Cleaning problems:} accumulated dust and debris interrupt air flow, damage
+        sensitive equipment and can even start fires.
+\end{itemize}
+
+\newpage
+\section{Planned Maintenance}
+
+\field{Short description:}{Planned maintenance is maintenance scheduled in advance and carried
+out during predefined maintenance windows, so that disruption to users and business operations
+is minimal.}
+
+\field{Theory:}{Because the work is planned, users are informed beforehand, backups are taken
+and contingency plans are prepared.}
+
+\subsection{Objectives}
+
+\begin{itemize}\itemsep2pt
+  \item Improve system performance
+  \item Prevent equipment failure
+  \item Increase system reliability
+  \item Enhance security
+  \item Extend equipment lifespan
+  \item Ensure business continuity
+\end{itemize}
+
+\subsection{Characteristics}
+
+\begin{itemize}\itemsep2pt
+  \item Scheduled in advance
+  \item Performed during maintenance windows
+  \item Users are notified before the work starts
+  \item Backup systems are prepared
+  \item Low risk of unexpected failure
+  \item Easy to manage and monitor
+\end{itemize}
+
+\subsection{Activities}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Area} & \textbf{Activities} \\
+\midrule
+Hardware & Cleaning servers and racks, replacing faulty hard disks, upgrading RAM, replacing
+power supplies and cooling fans, checking UPS batteries, generator maintenance. For example,
+replacing an aging hard disk before it fails. \\
+\addlinespace
+Software & Operating system updates, security patches, application and database upgrades,
+firmware and driver updates. For example, applying the latest security patches to Linux
+servers. \\
+\addlinespace
+Network & Router firmware updates, switch software upgrades, firewall configuration updates,
+cable inspection, network optimisation. For example, upgrading switch firmware for
+stability. \\
+\addlinespace
+Storage & RAID health check, storage expansion, disk replacement, SAN firmware update, backup
+verification. \\
+\addlinespace
+Security & Antivirus updates, firewall rule updates, access control review, password policy
+updates, security auditing. \\
+\addlinespace
+Backup & Testing backups, verifying recovery procedures, restoring sample data, disaster
+recovery testing. \\
+\addlinespace
+Cooling & Cleaning air filters, checking cooling units, temperature monitoring, airflow
+optimisation. \\
+\addlinespace
+Power & UPS testing, generator testing, battery replacement, PDU inspection. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Advantages}
+
+\begin{itemize}\itemsep2pt
+  \item Reduces unexpected failures
+  \item Improves system availability
+  \item Enhances security
+  \item Increases equipment life
+  \item Reduces repair costs
+  \item Better resource planning
+  \item Minimises business disruption
+\end{itemize}
+
+\subsection{Disadvantages}
+
+\begin{itemize}\itemsep2pt
+  \item Requires scheduled downtime, unless redundant systems are in place
+  \item Needs careful planning
+  \item May temporarily affect users
+  \item Requires extra manpower and coordination
+\end{itemize}
+
+\newpage
+\section{Unplanned Maintenance}
+
+\field{Short description:}{Unplanned maintenance is unexpected maintenance caused by a sudden
+failure, fault or emergency. It is not scheduled in advance and needs immediate action to
+restore normal operation and keep downtime short.}
+
+\subsection{Causes}
+
+\begin{itemize}\itemsep2pt
+  \item Hardware failures in servers, storage devices or network switches
+  \item Power outages or UPS failure
+  \item Cooling system malfunction
+  \item Network connectivity issues
+  \item Software crashes or operating system failures
+  \item Cyberattacks such as malware, ransomware and DDoS
+  \item Human errors such as accidental deletion or wrong configuration
+  \item Fire, flood or other natural disasters
+\end{itemize}
+
+\subsection{Common activities}
+
+\begin{enumerate}\itemsep3pt
+  \item \textbf{Emergency hardware replacement:} replace failed hard disks, SSDs, RAM, CPUs,
+        power supplies or network cards, and faulty switches, routers or cables.
+  \item \textbf{Server recovery:} reboot crashed servers, restore failed virtual machines and
+        recover operating systems from backup images.
+  \item \textbf{Storage recovery:} replace failed disks in RAID arrays, rebuild the RAID
+        configuration and restore lost data from backups.
+  \item \textbf{Network troubleshooting:} find and repair broken links, replace damaged
+        switches or routers and reconfigure network settings after a failure.
+  \item \textbf{Power system recovery:} repair or replace faulty UPS batteries, restore
+        generator functionality and switch to backup power during a utility failure.
+  \item \textbf{Cooling system repair:} fix malfunctioning air conditioning units, restore
+        temperature and humidity control and prevent servers from overheating.
+\end{enumerate}
+
+\subsection{Steps followed}
+
+\begin{enumerate}\itemsep2pt
+  \item Detect the problem through the monitoring systems.
+  \item Analyse and identify the root cause.
+  \item Isolate the affected equipment or service.
+  \item Repair or replace the faulty components.
+  \item Restore systems and services.
+  \item Test functionality to confirm normal operation.
+  \item Document the incident and the corrective actions.
+  \item Implement preventive measures so it does not recur.
+\end{enumerate}
+
+\subsection{Challenges}
+
+\begin{itemize}\itemsep2pt
+  \item Unexpected downtime and loss of productivity
+  \item Risk of data loss
+  \item Increased operational costs
+  \item Service level agreement violations and customer dissatisfaction
+  \item Higher workload for the IT staff
+\end{itemize}
+
+\subsection{Best practices to reduce it}
+
+\begin{itemize}\itemsep2pt
+  \item Implement continuous monitoring and alerting.
+  \item Perform regular preventive maintenance.
+  \item Maintain redundant hardware and network paths.
+  \item Keep reliable backups and disaster recovery plans.
+  \item Use high availability and failover systems.
+  \item Conduct periodic hardware health checks.
+  \item Apply security updates and patches on time.
+\end{itemize}
+
+\subsection{Planned versus unplanned maintenance}
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Planned maintenance} & \textbf{Unplanned maintenance} \\
+\midrule
+Scheduled in advance & Occurs unexpectedly \\
+\addlinespace
+Preventive in nature & Corrective or emergency in nature \\
+\addlinespace
+Minimal downtime & Downtime is often unavoidable \\
+\addlinespace
+Lower maintenance cost & Higher maintenance cost \\
+\addlinespace
+Better resource planning & Immediate resource allocation required \\
+\addlinespace
+Reduces the risk of failures & Responds after failures occur \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\section{Server Migration}
+
+\field{Short description:}{Server migration is the process of transferring a server's data,
+processes and configuration to a new target server or cloud instance.}
+
+\field{Theory:}{Organisations migrate servers for resource optimisation, to reduce maintenance
+overhead, for better support and for deeper integration and modernisation. The process varies
+with the source and target machine architectures, and it needs careful planning, the right
+tools and testing to succeed.}
+
+\subsection{Benefits}
+
+\begin{itemize}\itemsep4pt
+  \item \textbf{Update to modern services:} move from outdated and restrictive infrastructure
+        to modern, scalable, maintainable platforms. In a cloud environment the servers are
+        virtualized and are called instances.
+  \item \textbf{Integration with other services:} modern server environments connect more
+        easily to well-known tools and services, which enables faster automation.
+  \item \textbf{Lower management overhead:} migrating to the cloud shifts maintenance from the
+        organisation's own IT team to the hosting provider. On-premises hardware means the
+        internal team handles updates and backups; on cloud infrastructure the provider does.
+  \item \textbf{Cost reductions:} on-premises infrastructure is a capital expenditure, while
+        cloud services are billed monthly, annually or pay as you go, which for many
+        organisations is the more efficient budgeting model.
+  \item \textbf{Security hardening:} modern platforms carry the latest encryption, identity
+        controls and data security tools, although configuring the environment to suit the
+        organisation's own requirements remains the customer's job.
+  \item \textbf{Better performance:} cloud instances reach data held in the same cloud
+        environment faster, and offer a wider range of storage and compute options.
+\end{itemize}
+
+\newpage
+\subsection{Types of server migration}
+\mmd[0.28]{20-migration-types.png}
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Physical to physical (P2P):} moving a workload from one physical server to
+        another, for example replacing an old server with a newer, faster one.
+  \item \textbf{Physical to virtual (P2V):} converting a physical server into a virtual
+        machine. This gives better resource utilization, easier backup, lower hardware cost
+        and simpler management.
+  \item \textbf{Virtual to virtual (V2V):} migrating a VM from one virtualization platform to
+        another, for example VMware to Hyper-V or VMware ESXi to KVM.
+  \item \textbf{Virtual to cloud (V2C):} moving virtual machines from on-premises
+        infrastructure to a cloud service.
+  \item \textbf{Cloud to cloud (C2C):} migrating applications and data between cloud
+        providers, for example AWS to Microsoft Azure or Azure to Google Cloud Platform.
+\end{itemize}
+
+\newpage
+\subsection{Migration considerations}
+
+\subsubsection{Business considerations}
+
+Migration should align with the business goals. The points to weigh are business continuity,
+downtime requirements, budget constraints, return on investment, project timeline and
+regulatory compliance. For example, a hospital migrating its patient databases must keep
+medical records reachable throughout the migration.
+
+\subsubsection{Hardware considerations}
+
+Verify that the destination environment meets the hardware requirements: processor
+architecture, number of CPU cores, RAM capacity, storage capacity, disk type (SSD or HDD) and
+network interface speed.
+
+\subsubsection{Software compatibility}
+
+Applications must still work after the move. Check operating system compatibility, database
+versions, middleware compatibility, drivers and application dependencies.
+
+\subsubsection{Data integrity}
+
+Data must stay accurate and complete throughout the migration. The activities are a full data
+backup, data validation, checksum verification and database consistency checks.
+
+\subsection*{Self study}
+
+Network considerations, security considerations, performance considerations, downtime planning
+and risk management are left as self study.
+
+\newpage
+\section{Planning a Server Migration}
+
+A successful migration begins with careful planning. The pre-migration process has three
+phases: discovery, assessment and migration planning.
+
+\mmd[0.24]{21-migration-phases.png}
+
+\subsection{Phase 1: Discovery}
+
+Discovery is the process of collecting complete information about the existing IT
+infrastructure before the migration. Its purpose is to understand the current environment and
+identify every resource that has to move.
+
+\begin{enumerate}\itemsep3pt
+  \item \textbf{Server inventory:} server name, IP address, operating system, CPU details,
+        RAM, storage and installed software.
+  \item \textbf{Application discovery:} installed applications, running services, web servers,
+        databases and middleware.
+  \item \textbf{Dependency mapping:} applications rarely work on their own, so identify the
+        dependencies among applications, databases, file servers, authentication servers and
+        external APIs.
+  \item \textbf{Performance monitoring:} CPU utilization, RAM usage, disk usage, network
+        traffic, peak workload and storage growth. These metrics are what size the new
+        environment correctly.
+  \item \textbf{Security discovery:} user accounts, access rights, certificates, firewall
+        rules and encryption methods.
+\end{enumerate}
+
+\subsection{Phase 2: Assessment}
+
+Assessment analyses the information collected during discovery, to judge whether the migration
+is feasible and to prepare a strategy. Its objectives are to evaluate compatibility, estimate
+resources, identify risks, estimate costs and select the migration method.
+
+\begin{enumerate}\itemsep3pt
+  \item \textbf{Compatibility assessment:} operating system support, application compatibility,
+        database compatibility, driver support and hardware compatibility.
+  \item \textbf{Capacity planning:} estimate future CPU, memory, storage and network bandwidth
+        requirements, so the new environment can carry both the current and the future
+        workload.
+  \item \textbf{Risk assessment:} analyse downtime, performance degradation, security issues,
+        data corruption and hardware failure, and assign a probability and an impact to each.
+  \item \textbf{Cost assessment:} hardware, cloud services, licensing, migration tools, staff
+        training and maintenance.
+  \item \textbf{Migration strategy selection:} covered below.
+  \item \textbf{Backup planning:} take complete backups, verify their integrity, store them
+        securely and prepare rollback procedures.
+\end{enumerate}
+
+\subsubsection{Migration strategies}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Strategy} & \textbf{What it means} & \textbf{Notes} \\
+\midrule
+Rehosting & Move applications without changing their architecture, also called lift and
+shift. & Fast, low cost, minimal modifications. \\
+\addlinespace
+Replatforming & Make minor optimisations while migrating. & For example, moving a database to
+a managed cloud database service. \\
+\addlinespace
+Refactoring & Redesign the application for a cloud-native environment, also called
+re-architecting. & High scalability, better performance and long-term flexibility, but high
+cost and complexity. \\
+\addlinespace
+Repurchasing & Replace the existing software with a SaaS product. & For example, replacing an
+on-premises email server with Microsoft 365. \\
+\bottomrule
+\end{tabularx}
+
+\newpage
+\subsection{Phase 3: Migration}
+
+Migration is the actual transfer of applications, operating systems, databases and data to the
+target environment.
+
+\begin{enumerate}\itemsep3pt
+  \item \textbf{Prepare the target environment:} configure servers, virtual machines, storage,
+        networks and security policies.
+  \item \textbf{Back up the existing systems:} operating system, applications, databases,
+        configuration files and user data.
+  \item \textbf{Transfer the data:} by network transfer, storage replication, backup
+        restoration, migration tools or cloud migration services.
+  \item \textbf{Migrate the applications:} install the applications, restore the databases,
+        configure the services and update the configuration files.
+  \item \textbf{Test:} functional testing, performance testing, security testing and user
+        acceptance testing, to confirm the applications work after the move.
+  \item \textbf{Go live:} redirect user traffic, update DNS records, activate production
+        services and monitor system health.
+  \item \textbf{Post-migration validation:} verify data integrity, application functionality,
+        user authentication, network connectivity, backup operations and performance.
+\end{enumerate}
+
+\subsection{Best practices}
+
+\begin{itemize}\itemsep2pt
+  \item Maintain a complete inventory of servers and applications.
+  \item Perform full backups and verify their integrity.
+  \item Test the migration in a staging environment before production.
+  \item Schedule the migration during off-peak hours to minimise downtime.
+  \item Monitor system performance throughout the migration.
+  \item Prepare and test a rollback plan.
+  \item Validate data integrity and application functionality afterwards.
+  \item Document every step for future reference and audits.
+\end{itemize}
+
+\subsection{Advantages of proper planning}
+
+Reduced downtime, improved application performance, better scalability, efficient resource
+utilization, lower operational costs, enhanced security, improved disaster recovery and
+simpler infrastructure management.
+
+\newpage
+\section{Networking Concepts: Masks and CIDR}
+
+\field{Short description:}{A mask is what separates the network identifier from the host
+identifier in an IP address.}
+
+\field{Theory:}{A mask is a 32-bit number made of a run of 1s followed by a run of 0s. It does
+not apply to classes D and E. Classless interdomain routing, or CIDR, writes the mask in the
+short form \texttt{/n}, where \texttt{n} is the number of 1 bits.}
+
+\begin{tabularx}{\textwidth}{@{}llXl@{}}
+\toprule
+\rowcolor{tablehead}\textbf{CIDR} & \textbf{Dotted decimal} & \textbf{Binary} &
+\textbf{Class} \\
+\midrule
+\texttt{/8} & \texttt{255.0.0.0} & \texttt{11111111 00000000 00000000 00000000} & A \\
+\texttt{/16} & \texttt{255.255.0.0} & \texttt{11111111 11111111 00000000 00000000} & B \\
+\texttt{/24} & \texttt{255.255.255.0} & \texttt{11111111 11111111 11111111 00000000} & C \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Notes}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Subnetting:} an organisation granted a large block in class A or B divides the
+        addresses into several contiguous groups and assigns each group to a smaller network,
+        called a subnet.
+  \item \textbf{Supernetting:} an organisation combines several class C blocks to create a
+        larger range of addresses. Several networks are combined into one supernetwork, or
+        supernet.
+\end{itemize}
+
+\newpage
+\section{Subnetting}
+
+\field{Short description:}{Subnetting divides a large granted block into several smaller
+networks, by borrowing bits from the host part and adding them to the network part.}
+
+\field{Theory:}{Subnetting increases the number of 1s in the mask: a subnet mask has more 1s
+than the corresponding default mask. To build a subnet mask, change some of the leftmost 0s in
+the default mask to 1s. The number of subnets follows from the number of extra 1s: if there
+are $n$ extra 1s there are $2^{n}$ subnets, and if $N$ subnets are needed the number of extra
+1s is $\log_{2} N$. The number of subnets must therefore be a power of 2.}
+
+\subsection{Levels of hierarchy}
+\mmd[0.44]{22-subnet-hierarchy.png}
+
+Without subnetting the address has two levels of hierarchy, network and host. With subnetting
+it has three: network, subnet and host.
+
+\subsection{Finding the subnetwork address}
+
+The subnet address is found the same way as the network address, by applying the mask to the
+address. There are two ways to do it.
+
+\begin{itemize}\itemsep3pt
+  \item \textbf{Straight method:} write both the address and the mask in binary and apply the
+        AND operation.
+  \item \textbf{Short-cut method:} if the byte in the mask is 255, copy the byte of the
+        address. If the byte in the mask is 0, replace the byte of the address with 0. If the
+        byte is neither 255 nor 0, write that byte of the mask and of the address in binary
+        and AND them.
+\end{itemize}
+
+\subsection*{Example: straight method}
+
+What is the subnetwork address if the destination address is \texttt{200.45.34.56} and the
+subnet mask is \texttt{255.255.240.0}?
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Line} & \textbf{Binary} \\
+\midrule
+Address & \texttt{11001000 00101101 00100010 00111000} \\
+Mask & \texttt{11111111 11111111 11110000 00000000} \\
+Result & \texttt{11001000 00101101 00100000 00000000} \\
+\bottomrule
+\end{tabularx}
+
+The subnetwork address is \texttt{200.45.32.0}.
+
+\subsection*{Example: short-cut method}
+
+What is the subnetwork address if the destination address is \texttt{19.30.84.5} and the mask
+is \texttt{255.255.192.0}? The first two bytes of the mask are 255, so \texttt{19} and
+\texttt{30} are copied. The last byte of the mask is 0, so \texttt{5} becomes \texttt{0}. The
+third byte is neither, so AND it: \texttt{01010100} AND \texttt{11000000} is
+\texttt{01000000}, which is 64. The subnetwork address is \texttt{19.30.64.0}.
+
+\subsection*{Example: designing subnets in class C}
+
+A company is granted the site address \texttt{201.70.64.0}, a class C address, and needs six
+subnets.
+
+The default mask of class C has 24 ones. Six is not a power of 2, and the next power of 2 is
+$8 = 2^{3}$, so three more 1s are needed. The subnet mask has $24 + 3 = 27$ ones and
+$32 - 27 = 5$ zeros, which is \texttt{11111111 11111111 11111111 11100000}, or
+\texttt{255.255.255.224}. There are 8 subnets and each holds $2^{5} = 32$ addresses.
+
+\subsection*{Example: designing subnets in class B}
+
+A company is granted the site address \texttt{181.56.0.0}, a class B address, and needs 1000
+subnets.
+
+The default mask of class B has 16 ones. One thousand is not a power of 2, and the next power
+of 2 is $1024 = 2^{10}$, so ten more 1s are needed. The subnet mask has $16 + 10 = 26$ ones
+and $32 - 26 = 6$ zeros, which is \texttt{11111111 11111111 11111111 11000000}, or
+\texttt{255.255.255.192}. There are 1024 subnets and each holds $2^{6} = 64$ addresses.
+
+\newpage
+\section{Supernetting}
+
+\field{Short description:}{Supernetting is the opposite of subnetting. Bits are borrowed from
+the network side to combine a group of networks into one large supernetwork.}
+
+\field{Theory:}{Demand for midsize blocks is high. Class A and class B addresses are almost
+depleted, while class C addresses are still available but a block of 256 addresses is too
+small for many organisations. In supernetting, several class C blocks are combined into a
+larger range. This decreases the number of 1s in the mask: for four class C blocks the mask
+changes from \texttt{/24} to \texttt{/22}. An organisation needing 1000 addresses can be
+granted four contiguous class C blocks forming one supernetwork.}
+
+\mmd[0.30]{23-supernetwork.png}
+
+In subnetting, the first address of the subnet and the subnet mask define the range of
+addresses. In supernetting, the first address of the supernet and the supernet mask define the
+range.
+
+\subsection*{Example: which packet belongs to the supernet}
+
+A supernet has the first address \texttt{205.16.32.0} and the supernet mask
+\texttt{255.255.248.0}. A router receives three packets, for \texttt{205.16.37.44},
+\texttt{205.16.42.56} and \texttt{205.17.33.76}.
+
+Applying the supernet mask gives \texttt{205.16.32.0}, \texttt{205.16.40.0} and
+\texttt{205.17.32.0} respectively. Only the first address belongs to this supernet.
+
+\subsection*{Example: valid sets of blocks}
+
+A company needs 600 addresses. Which of these sets of class C blocks can form a supernet?
+
+\begin{enumerate}\itemsep2pt
+  \item \texttt{198.47.32.0}, \texttt{198.47.33.0}, \texttt{198.47.34.0}. No, there are only
+        three blocks.
+  \item \texttt{198.47.32.0}, \texttt{198.47.42.0}, \texttt{198.47.52.0}, \texttt{198.47.62.0}.
+        No, the blocks are not contiguous.
+  \item \texttt{198.47.31.0}, \texttt{198.47.32.0}, \texttt{198.47.33.0}, \texttt{198.47.52.0}.
+        No, 31 in the first block is not divisible by 4.
+  \item \texttt{198.47.32.0}, \texttt{198.47.33.0}, \texttt{198.47.34.0}, \texttt{198.47.35.0}.
+        Yes, all three requirements are fulfilled.
+\end{enumerate}
+
+\subsection*{Example: the supernet mask for 16 blocks}
+
+Sixteen blocks need four 1s of the default mask changed to 0s, so the mask is
+\texttt{11111111 11111111 11110000 00000000}, or \texttt{255.255.240.0}.
+
+\subsection*{Example: size and range of a supernet}
+
+A supernet has the first address \texttt{205.16.32.0} and the supernet mask
+\texttt{255.255.248.0}. The mask has 21 ones and the default mask has 24, so the difference of
+3 gives $2^{3} = 8$ blocks. They run from \texttt{205.16.32.0} to \texttt{205.16.39.0}, so the
+first address is \texttt{205.16.32.0} and the last is \texttt{205.16.39.255}.
+
+\newpage
+\section{Classless Addressing}
+
+\field{Short description:}{Classless addressing removes the classes altogether. Addresses are
+still granted in blocks, but the size of a block varies with the nature and size of the
+organisation.}
+
+\field{Theory:}{Classless addressing was designed to overcome address depletion and give more
+organisations access to the Internet. A household may be given only two addresses, while a
+large organisation may be given thousands. It is referred to as classless interdomain routing,
+or CIDR, and the block granted is called a CIDR block.}
+
+\subsection{Rules for allocating a block}
+
+\begin{enumerate}\itemsep3pt
+  \item The IP addresses in the CIDR block must all be contiguous.
+  \item The block size must be a power of 2, and the size of the block equals the number of IP
+        addresses in it.
+  \item The first IP address of the block must be divisible by the block size.
+\end{enumerate}
+
+For the beginning address, if the block has fewer than 256 addresses only the rightmost byte
+has to be checked; if it has fewer than 65,536 addresses only the two rightmost bytes have to
+be checked, and so on.
+
+\subsection{Slash notation}
+
+Slash notation, also called CIDR notation, is a shorter way of writing a subnet mask: instead
+of the full mask, only the number of 1 bits is written after a slash. A block in classes A, B
+and C is written \texttt{A.B.C.D/n}, where $n$ is 8, 16 or 24 respectively.
+
+\subsection{Extracting information from an address}
+
+Given any address in the block and the prefix length $n$, three facts follow.
+
+\begin{enumerate}\itemsep3pt
+  \item The number of addresses in the block is $N = 2^{32-n}$.
+  \item The first address is found by keeping the $n$ leftmost bits and setting the $32 - n$
+        rightmost bits to 0.
+  \item The last address is found by keeping the $n$ leftmost bits and setting the $32 - n$
+        rightmost bits to 1.
+\end{enumerate}
+
+\subsection{Address mask}
+
+The address mask is a 32-bit number whose $n$ leftmost bits are 1 and whose remaining
+$32 - n$ bits are 0. A computer finds it easily because it is the complement of $2^{32-n} - 1$.
+Defined this way, the mask lets a program extract the block information with the bitwise NOT,
+AND and OR operations.
+
+\begin{enumerate}\itemsep2pt
+  \item Number of addresses: $N = $ NOT(mask) $+ 1$.
+  \item First address: (any address in the block) AND (mask).
+  \item Last address: (any address in the block) OR NOT(mask).
+\end{enumerate}
+
+\newpage
+\subsection*{Example: range of a block}
+
+A small organisation is given the block \texttt{205.16.37.24/29}. To find the last address,
+keep the first 29 bits and change the last 3 bits to 1s.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Line} & \textbf{Binary} \\
+\midrule
+Beginning & \texttt{11001111 00010000 00100101 00011000} \\
+Ending & \texttt{11001111 00010000 00100101 00011111} \\
+\bottomrule
+\end{tabularx}
+
+There are 8 addresses in the block. The same answer follows from the suffix length: it is
+$32 - 29 = 3$, so there are $2^{3} = 8$ addresses, and if the first address is
+\texttt{205.16.37.24} the last is \texttt{205.16.37.31}, because $24 + 7 = 31$.
+
+\subsection*{Example: finding the network address}
+
+What is the network address if one of the addresses is \texttt{167.199.170.82/27}?
+
+The prefix length is 27, so keep the first 27 bits and change the remaining 5 to 0s. Those 5
+bits fall in the last byte, which is \texttt{01010010}. Changing the last 5 bits to 0 gives
+\texttt{01000000}, or 64. The network address is \texttt{167.199.170.64/27}.
+
+\subsection*{Example: subnetting a classless block}
+
+An organisation is granted \texttt{130.34.12.64/26} and needs four subnets.
+
+The suffix length is 6, so the block holds $2^{6} = 64$ addresses. Split four ways, each
+subnet has 16 addresses. Four subnets need two more 1s on the site prefix, so the subnet
+prefix is \texttt{/28}.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Subnet} & \textbf{Range} \\
+\midrule
+1 & \texttt{130.34.12.64/28} to \texttt{130.34.12.79/28} \\
+2 & \texttt{130.34.12.80/28} to \texttt{130.34.12.95/28} \\
+3 & \texttt{130.34.12.96/28} to \texttt{130.34.12.111/28} \\
+4 & \texttt{130.34.12.112/28} to \texttt{130.34.12.127/28} \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Example: first and last address of a block}
+
+One address of a block is \texttt{205.16.37.39/28}. In binary it is
+\texttt{11001101 00010000 00100101 00100111}.
+
+Setting the $32 - 28 = 4$ rightmost bits to 0 gives
+\texttt{11001101 00010000 00100101 00100000}, which is \texttt{205.16.37.32}. Setting the same
+4 bits to 1 gives \texttt{11001101 00010000 00100101 00101111}, which is
+\texttt{205.16.37.47}.
+
+The same result comes from the mask, which for \texttt{/28} is
+\texttt{11111111 11111111 11111111 11110000}. ANDing the address with the mask gives the first
+address. ORing it with the complement of the mask gives the last address. Complementing the
+mask, reading it as a decimal number and adding 1 gives the number of addresses.
+
+\newpage
+\subsection*{Example: an ISP distributing a block}
+
+An ISP is granted \texttt{190.100.0.0/16} and has to serve three groups of customers: 64
+customers needing 256 addresses each, 128 customers needing 128 addresses each, and 128
+customers needing 64 addresses each.
+
+\begin{tabularx}{\textwidth}{@{}lllX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Group} & \textbf{Suffix} & \textbf{Prefix} & \textbf{Sub-blocks} \\
+\midrule
+1 & 8 & \texttt{/24} & \texttt{190.100.0.0/24} to \texttt{190.100.63.255/24}, total
+$64 \times 256 = 16{,}384$ \\
+\addlinespace
+2 & 7 & \texttt{/25} & \texttt{190.100.64.0/25} to \texttt{190.100.127.255/25}, total
+$128 \times 128 = 16{,}384$ \\
+\addlinespace
+3 & 6 & \texttt{/26} & \texttt{190.100.128.0/26} to \texttt{190.100.159.255/26}, total
+$128 \times 64 = 8{,}192$ \\
+\bottomrule
+\end{tabularx}
+
+The block granted holds 65,536 addresses and 40,960 of them are allocated, so 24,576 addresses
+are still available.
+
+\newpage
+\section{Practice Problems}
+
+\begin{enumerate}\itemsep6pt
+  \item A router receives a packet with the destination address \texttt{190.240.33.91}. Show
+        how it finds the network and the subnetwork address to route the packet, assuming the
+        subnet mask is \texttt{/19}.
+  \item An organisation is granted the block \texttt{130.56.0.0/16} and the administrator
+        wants 1024 subnets. Find the number of addresses in each subnet, the subnet prefix,
+        the first and last address of the first subnet, and the first and last address of the
+        last subnet.
+  \item Each of the following addresses belongs to a block. Find the first and the last
+        address in each block: \texttt{14.12.72.8/24}, \texttt{200.107.16.17/18} and
+        \texttt{70.110.19.17/16}.
+  \item An organisation is granted a block beginning at \texttt{14.24.74.0/24} and needs three
+        sub-blocks for its three subnets: one of 10 addresses, one of 60 addresses and one of
+        120 addresses. Design the sub-blocks.
+  \item An ISP is granted the block \texttt{16.12.64.0/20} and has to allocate addresses for 8
+        organisations, each with 256 addresses. Find the number and range of addresses in the
+        ISP block, the range for each organisation and the range that stays unallocated, then
+        show the outline of the distribution.
+  \item An ISP is granted the block \texttt{80.70.56.0/21} and has to allocate addresses for
+        two organisations of 500 addresses each, two of 250 addresses each and three of 50
+        addresses each. Answer the same three parts as the previous problem.
+\end{enumerate}
 
 \end{document}

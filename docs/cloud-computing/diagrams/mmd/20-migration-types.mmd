@@ -1,0 +1,6 @@
+flowchart LR
+    P1["Physical server"] -- "P2P" --> P2["Newer<br/>physical server"]
+    P1 -- "P2V" --> V1["Virtual machine"]
+    V1 -- "V2V" --> V2["Another<br/>hypervisor"]
+    V1 -- "V2C" --> C1["Cloud instance"]
+    C1 -- "C2C" --> C2["Another cloud<br/>provider"]

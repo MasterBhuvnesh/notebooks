@@ -1,0 +1,6 @@
+flowchart TB
+    C1["Container 1<br/>app and libraries"] --> V
+    C2["Container 2<br/>app and libraries"] --> V
+    C3["Container 3<br/>app and libraries"] --> V
+    V["Virtualization layer<br/>container engine"] --> K["Host operating system kernel<br/>process, network and file system isolation"]
+    K --> H["Physical hardware"]

@@ -20,6 +20,7 @@
 \RequirePackage{tabularx}
 \RequirePackage{booktabs}
 \RequirePackage{longtable}           % reference tables that run past one page
+\RequirePackage{etoolbox}            % for the \BeforeBeginEnvironment hooks below
 \RequirePackage{amssymb}
 \RequirePackage{fancyhdr}
 \RequirePackage{titlesec}
@@ -138,6 +139,19 @@
 \lstnewenvironment{js}[1][]{\lstset{language=JavaScript,#1}}{}
 \lstnewenvironment{sh}[1][]{\lstset{language=bash,#1}}{}
 
+% --- table spacing -------------------------------------------------------
+% Two blank lines above and below every table, so a table never sits flush
+% against the paragraph before or after it. Glue at a page break is discarded,
+% so a table at the top of a page does not gain a gap.
+\newlength{\tablegap}
+\setlength{\tablegap}{2\baselineskip}
+\BeforeBeginEnvironment{tabularx}{\par\addvspace{\tablegap}}
+\AfterEndEnvironment{tabularx}{\par\addvspace{\tablegap}}
+\BeforeBeginEnvironment{tabular}{\par\addvspace{\tablegap}}
+\AfterEndEnvironment{tabular}{\par\addvspace{\tablegap}}
+\setlength{\LTpre}{\tablegap}        % longtable has its own pre/post skips
+\setlength{\LTpost}{\tablegap}
+
 % --- reference tables ----------------------------------------------------
 % For command tables long enough to run past a page break. The header row
 % repeats on every page and the first column is typewriter, so entries are
@@ -182,6 +196,16 @@
 \titleformat{\part}[display]{\centering\Huge\color{accent}}{}{0pt}{}
             [{\color{rulecol}\titlerule[1.2pt]}]
 \titlespacing*{\part}{0pt}{0pt}{20pt}
+
+% \unitpart{Title} -- a numbered unit divider. Sections restart at 1 inside
+% each unit and carry the unit number, so Unit 2's fourth section is 2.4 and
+% its second subsection 2.4.2. Books with no units never call this and keep
+% plain 1, 2, 3 section numbers.
+\newcounter{unit}
+\newcommand{\unitpart}[1]{%
+  \renewcommand{\thesection}{\theunit.\arabic{section}}%
+  \stepcounter{unit}\setcounter{section}{0}%
+  \part*{Unit \theunit: #1}}
 \titleformat{\section}{\huge\color{accent}}{\thesection.}{0.5em}{}
             [{\color{rulecol}\titlerule[1pt]}]
 \titleformat{\subsection}{\Large\color{accent}}{\thesubsection}{0.5em}{}
@@ -189,6 +213,12 @@
 \titlespacing*{\section}{0pt}{6pt}{10pt}
 \titlespacing*{\subsection}{0pt}{14pt}{6pt}
 \titlespacing*{\subsubsection}{0pt}{12pt}{4pt}
+
+% Unit-numbered sections ("2.11", "2.11.3") are wider than article's default
+% number box, which would run the number into the title in the TOC.
+\patchcmd{\l@section}{1.5em}{3.0em}{}{}
+\renewcommand*\l@subsection{\@dottedtocline{2}{3.0em}{3.8em}}
+\renewcommand*\l@subsubsection{\@dottedtocline{3}{6.8em}{4.8em}}
 
 \pagestyle{fancy}
 \fancyhf{}

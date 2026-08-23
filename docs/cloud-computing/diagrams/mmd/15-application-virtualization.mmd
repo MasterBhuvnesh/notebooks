@@ -1,0 +1,6 @@
+flowchart LR
+    S["Application server<br/>apps installed once<br/>in the data centre"] --> D["Application<br/>virtualization<br/>software"]
+    D --> U1["Desktop"]
+    D --> U2["Laptop"]
+    D --> U3["Thin client"]
+    U1 -. "user actions sent back" .-> S

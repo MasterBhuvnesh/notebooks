@@ -1,0 +1,7 @@
+flowchart LR
+    U["Users"] --> LB["Load balancer"]
+    LB --> S1["Server 1<br/>active"]
+    LB --> S2["Server 2<br/>standby"]
+    S1 --> ST["Redundant storage<br/>RAID and replication"]
+    S2 --> ST
+    S1 -. "on failure, traffic<br/>moves automatically" .-> S2

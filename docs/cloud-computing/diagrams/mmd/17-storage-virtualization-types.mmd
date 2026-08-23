@@ -1,0 +1,4 @@
+flowchart LR
+    S["Storage<br/>virtualization"] --> B["Block level<br/>logical blocks split from<br/>physical blocks<br/>IBM SVC, EMC VPLEX"]
+    S --> F["File level<br/>file system split from<br/>physical storage<br/>NAS, NetApp"]
+    S --> O["Object based<br/>data held as objects,<br/>not files or blocks<br/>AWS S3, Ceph"]

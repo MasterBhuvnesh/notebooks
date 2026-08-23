@@ -1,8 +1,8 @@
 {
-  "built_at": "2026-08-20 04:58 UTC",
-  "bytes": 1121730,
-  "commit": "c0f96b2",
-  "diagram_count": 12,
+  "built_at": "2026-08-23 10:05 UTC",
+  "bytes": 2060978,
+  "commit": "b8b5b20",
+  "diagram_count": 23,
   "diagrams": {
     "01-virtualization-layers.mmd": "b8c999b97fca3c7a582212e8db9e78dc0990bb70de8f495530c305c897c38fda",
     "02-hypervisor-how-it-works.mmd": "1bc778dc61d45f487c722b080652dedfe5abf52aea6c393653a370729fc9f3ee",
@@ -15,10 +15,21 @@
     "09-levels-of-virtualization.mmd": "c834adfe4ec2b3aab0f17f6fdeb32a29f386383d81630a5cbd6a6fe40657f7db",
     "10-network-virtualization.mmd": "3987db1e2a7aeca88b5e760192ab944ff23048db29f3fa9c6212b818d52ca5df",
     "11-storage-virtualization.mmd": "5fd898642bf391e46fe0db2888a443954238c2358abbbf6e97a6bcf3072ef942",
-    "12-containers-vs-vms.mmd": "9bd9c83c681d04aee9c39c00addad4f657caced966d5696e23d6e9be65d33b34"
+    "12-containers-vs-vms.mmd": "9bd9c83c681d04aee9c39c00addad4f657caced966d5696e23d6e9be65d33b34",
+    "13-virtualization-technologies.mmd": "005218490cf12ce25a3f40dce1f1c24c6cd4efef4ff257579ee92cd75f1629e6",
+    "14-os-virtualization.mmd": "760c63537c2ded476c9f5bd4c8537e1837c8aa1c11a85af4473cfbdf06cbdea8",
+    "15-application-virtualization.mmd": "54cb4b644b07e5e774e864bcf99e9c2b95b01776804b6cd19236a9a9e5775d5f",
+    "16-service-virtualization.mmd": "e4573c9d9b29c5c7c29886af03fa786e654b01d6de25fbb91112243dcea81b91",
+    "17-storage-virtualization-types.mmd": "60c08dcd99327ac11724c53de346e7bb653d5b4d80f3c3acbb7a2726058632c3",
+    "18-data-center-components.mmd": "783ee343563b93105902fb64ff471443639bda673eaa712c0773e11e408f876e",
+    "19-high-availability.mmd": "ee7f23e5474d2ddebb60169a60137292505da0b9731cc765298b8be50c62ebbf",
+    "20-migration-types.mmd": "30daca80fdc395bf92678f470fd803cd951db88fa041ea0ed6a12d8d905dd2db",
+    "21-migration-phases.mmd": "79d563201dc7e5881796df87f55b5be12bc10b1a082d109ac5442163e91a511a",
+    "22-subnet-hierarchy.mmd": "fd4d0a0c7ae833cab2bc3ed21b7bdd763ea32b997dad081e8c93b5a8a0e79418",
+    "23-supernetwork.mmd": "3eb2ae0f4900e801ee7d6e2a4fbcdafc8f62d12be761082312d517cd2a53e318"
   },
-  "pages": 17,
-  "sty": "60bd516f2197995d4f10f3d428528e85a3e31744b65cc1a2ca75d3e474621fb7",
-  "tex": "f2dc153f7a9b1a5246b32b9e2310e975f1c5805f2f65f6dac58d257004d38009",
+  "pages": 47,
+  "sty": "b5c4f6c91e7d8050bc3219c50db42f24f47cc9f49bc79b9a616731ad0fc483d5",
+  "tex": "31cc824ae878978f8a302e9a19dd758afb583fb49ba3e5dd100426ddf57a4a43",
   "title": "Cloud Computing"
 }

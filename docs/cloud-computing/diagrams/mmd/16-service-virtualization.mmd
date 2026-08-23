@@ -1,0 +1,4 @@
+flowchart LR
+    A["Application<br/>under development<br/>or test"] --> V["Virtual service<br/>simulates the real one"]
+    V --> R["Predefined responses<br/>payment successful<br/>payment failed<br/>user not found<br/>server timeout"]
+    A -. "unavailable, incomplete<br/>or expensive to call" .-> X["Actual service<br/>API, database,<br/>third party system"]

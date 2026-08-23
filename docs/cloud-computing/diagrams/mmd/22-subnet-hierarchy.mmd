@@ -1,0 +1,14 @@
+flowchart TB
+    subgraph B["Three levels: subnetted"]
+        direction TB
+        NB["Site 141.14.0.0/16"] --> S1["Subnet<br/>141.14.0.0/18"]
+        NB --> S2["Subnet<br/>141.14.64.0/18"]
+        NB --> S3["Subnet<br/>141.14.128.0/18"]
+        S1 --> H1["Hosts"]
+        S2 --> H2["Hosts"]
+        S3 --> H3["Hosts"]
+    end
+    subgraph A["Two levels: not subnetted"]
+        direction TB
+        NA["Site 141.14.0.0/16"] --> HA["All hosts in<br/>one network"]
+    end
