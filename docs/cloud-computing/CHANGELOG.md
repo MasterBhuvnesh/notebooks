@@ -6,5 +6,5 @@
 
 | Date | Commit | Change | Author |
 |---|---|---|---|
-| 2026-08-23 | `2e66699` | feat(cloud-computing): add Unit 2 and number sections per unit | bhuvii |
+| 2026-08-23 | `bc783a8` | feat(cloud-computing): add Unit 2 and number sections per unit | bhuvii |
 | 2026-08-20 | `b8b5b20` | feat(cloud-computing): add a Cloud Computing notebook | bhuvii |
