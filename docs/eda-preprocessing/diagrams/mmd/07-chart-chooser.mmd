@@ -1,0 +1,23 @@
+flowchart TD
+    A{"How many variables<br/>at once?"}
+    A -- "ONE" --> U["Univariate"]
+    A -- "TWO" --> B["Bivariate"]
+    A -- "THREE or more" --> M["Multivariate"]
+
+    U --> U1["Numerical:<br/>histogram, KDE, boxplot"]
+    U1 --> U2["Categorical:<br/>countplot, bar chart"]
+
+    B --> B1["Num vs Num:<br/>scatter plot"]
+    B1 --> B2["Cat vs Num:<br/>box or violin plot"]
+    B2 --> B3["Cat vs Cat:<br/>countplot with hue"]
+
+    M --> M1["Pairplot:<br/>every numeric pair"]
+    M1 --> M2["Correlation heatmap"]
+    M2 --> M3["Facets or hue:<br/>a third variable"]
+
+    classDef uni fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    classDef bi fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    classDef multi fill:#F6F6F4,stroke:#8a8a84,color:#333
+    class U,U1,U2 uni
+    class B,B1,B2,B3 bi
+    class M,M1,M2,M3 multi

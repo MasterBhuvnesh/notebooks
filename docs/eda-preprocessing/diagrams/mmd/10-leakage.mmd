@@ -1,0 +1,22 @@
+flowchart TD
+    subgraph RIGHT["RIGHT - split first"]
+        direction TB
+        R1["Full dataset"] --> R2["train_test_split<br/>stratify=y"]
+        R2 --> R3["fit_transform on TRAIN<br/>learns median, mean, std"]
+        R2 --> R4["transform on TEST<br/>reuses the train values"]
+        R3 --> R5["Model training"]
+        R4 --> R6["Honest evaluation"]
+        R5 --> R6
+    end
+
+    subgraph WRONG["WRONG - the whole-dataset habit"]
+        direction TB
+        W1["Full dataset"] --> W2["Impute + scale<br/>using stats from ALL rows"]
+        W2 --> W3["train_test_split"]
+        W3 --> W4["Test score looks great"]
+        W4 --> W5["Production score collapses<br/>the test rows had already<br/>leaked into the mean"]
+    end
+    classDef bad fill:#FBE4E4,stroke:#B03030,color:#6d1b1b
+    classDef good fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    class W1,W2,W3,W4,W5 bad
+    class R1,R2,R3,R4,R5,R6 good

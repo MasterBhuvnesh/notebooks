@@ -1,0 +1,17 @@
+flowchart TD
+    A{"Is the value<br/>physically possible?"}
+    A -- "No" --> C["DATA ERROR<br/>fix at source, drop the row,<br/>or set to NaN and impute"]
+    A -- "Yes" --> D{"Does it repeat<br/>coherently across rows?"}
+    D -- "No, the row looks<br/>broken elsewhere" --> C
+    D -- "Yes, a valid outlier" --> F{"Which model?"}
+    F -- "Trees, forests,<br/>boosting" --> G["LEAVE UNCHANGED<br/>splits are rank based"]
+    F -- "Linear, SVM,<br/>kNN, PCA, NN" --> H{"How many rows<br/>are affected?"}
+    H -- "Under 1%" --> I["REMOVE the rows"]
+    H -- "More than that" --> J["CAP at the bound,<br/>or log-transform"]
+
+    classDef err fill:#FBE4E4,stroke:#B03030,color:#6d1b1b
+    classDef ok fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    classDef q fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    class C,I err
+    class G,J ok
+    class A,D,F,H q

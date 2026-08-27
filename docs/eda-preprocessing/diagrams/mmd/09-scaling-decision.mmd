@@ -1,0 +1,23 @@
+flowchart TD
+    B{"Which algorithm?"}
+    B -- "Trees, forests, boosting,<br/>Naive Bayes" --> N["NO SCALING NEEDED<br/>splits compare a feature<br/>to itself"]
+    B -- "Linear, SVM, kNN,<br/>K-Means, PCA, NN" --> C{"Outliers<br/>present?"}
+
+    C -- "Yes" --> D["RobustScaler,<br/>or log1p then<br/>StandardScaler"]
+    C -- "No" --> E{"Is the input<br/>naturally bounded?"}
+
+    E -- "Yes, pixels<br/>or percentages" --> F["MinMaxScaler"]
+    E -- "No" --> G["StandardScaler<br/>the default"]
+
+    D --> H["Fit on TRAIN only.<br/>Transform train and test."]
+    F --> H
+    G --> H
+
+    classDef no fill:#F6F6F4,stroke:#8a8a84,color:#333
+    classDef yes fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    classDef q fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    classDef warn fill:#FBE4E4,stroke:#B03030,color:#6d1b1b
+    class N no
+    class D,F,G yes
+    class B,C,E q
+    class H warn

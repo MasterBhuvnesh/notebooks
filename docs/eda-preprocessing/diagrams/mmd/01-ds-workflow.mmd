@@ -1,0 +1,21 @@
+flowchart TD
+    subgraph R1["Understand the data"]
+        direction LR
+        A["Data<br/>Collection"] --> B["Data<br/>Cleaning"] --> C["EDA"]
+    end
+    subgraph R2["Prepare the features"]
+        direction LR
+        D["Feature<br/>Engineering"] --> E["Encoding"] --> F["Scaling"]
+    end
+    subgraph R3["Fit and judge"]
+        direction LR
+        G["Train / Test<br/>Split"] --> H["Model<br/>Training"] --> I["Evaluation"]
+    end
+    R1 --> R2 --> R3
+
+    classDef explore fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    classDef prep fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    classDef model fill:#F6F6F4,stroke:#8a8a84,color:#333
+    class B,C explore
+    class D,E,F,G prep
+    class A,H,I model

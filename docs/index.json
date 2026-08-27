@@ -1,7 +1,7 @@
 {
-  "books": 4,
-  "pages": 109,
-  "generated": "2026-08-23",
+  "books": 5,
+  "pages": 185,
+  "generated": "2026-08-27",
   "documents": [
     {
       "slug": "cloud-computing",
@@ -22,6 +22,16 @@
       "created": "2026-08-15",
       "updated": "2026-08-15",
       "pdf": "docs/devops-cheatsheet/main.pdf"
+    },
+    {
+      "slug": "eda-preprocessing",
+      "title": "Exploratory Data Analysis",
+      "pages": 76,
+      "bytes": 2566135,
+      "diagrams": 12,
+      "created": "2026-08-27",
+      "updated": "2026-08-27",
+      "pdf": "docs/eda-preprocessing/main.pdf"
     },
     {
       "slug": "linux-commands",

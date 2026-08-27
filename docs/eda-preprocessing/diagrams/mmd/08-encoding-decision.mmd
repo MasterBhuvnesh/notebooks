@@ -1,0 +1,18 @@
+flowchart TD
+    A{"Does the order<br/>carry meaning?"}
+    A -- "Yes" --> C["ORDINAL ENCODING<br/>map the order yourself"]
+    A -- "No, labels only" --> D{"How many<br/>unique values?"}
+
+    D -- "2, binary" --> E["Map to 0/1"]
+    D -- "3 to 15" --> F{"Which model?"}
+    D -- "Hundreds" --> G["Do not one-hot.<br/>Target or frequency<br/>encoding, or extract<br/>a feature"]
+
+    F -- "Linear, SVM,<br/>kNN, NN" --> H["ONE-HOT ENCODING<br/>drop_first=True"]
+    F -- "Trees, RF,<br/>XGBoost" --> I["Label encoding is fine<br/>and keeps it narrow"]
+
+    classDef q fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    classDef ans fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    classDef warn fill:#FBE4E4,stroke:#B03030,color:#6d1b1b
+    class A,D,F q
+    class C,E,H,I ans
+    class G warn

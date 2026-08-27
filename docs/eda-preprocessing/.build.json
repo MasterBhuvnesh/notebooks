@@ -1,0 +1,24 @@
+{
+  "built_at": "2026-08-27 15:22 UTC",
+  "bytes": 2566135,
+  "commit": "6d66eba",
+  "diagram_count": 12,
+  "diagrams": {
+    "01-ds-workflow.mmd": "eaf81397fa7c6d819917e007f738f09b28612e47c74eaed2b64362a4e48937c3",
+    "02-eda-vs-preprocessing.mmd": "f8b7b5e6b489120d9f7f507cd491fa96684f818f56fb77a47825139796157413",
+    "03-variable-types.mmd": "752e20ca155ef0f54b664d02df2af8501f4a975879b65b60270609b810aede21",
+    "04-missing-decision.mmd": "fb6dfbb0c67c0ddc01791658c9fcfa6b3cf328737c74232b5639ca9443d37724",
+    "05-imputation-choice.mmd": "da5f852c72467e8888ad6a2f34c5cc0eee4530749b3086389f87d29512afc1e1",
+    "06-outlier-decision.mmd": "737356465e15be836a6a560833609e61ed3aceb94dcebe6cde59ed9a84f19e57",
+    "07-chart-chooser.mmd": "de5329fbb24b308bc416031ce1c06cb80c0cad54783f174f886f571f892ecee4",
+    "08-encoding-decision.mmd": "2fb88940d7e2ff85bd95237f5c8d131816e801834cc7f873f4229af65aa74166",
+    "09-scaling-decision.mmd": "7254fe1731674e627041764f74363e711c4d9cd6b70df58f09cae9636ac69e32",
+    "10-leakage.mmd": "599925260ca22c4ba9f68e42f68f5270316ec00e8c6b3c4e5051850bc1e7e2ad",
+    "11-full-pipeline.mmd": "0c16a6116859c58aad960d8947abf2d9935e44b1337ed9c7345a6b885a4d34ee",
+    "12-fe-titanic.mmd": "bbe50e3d93239a22e25b45e65064f0156a8a6fec8fd3de308e51eaf0d2b6d20c"
+  },
+  "pages": 76,
+  "sty": "b5c4f6c91e7d8050bc3219c50db42f24f47cc9f49bc79b9a616731ad0fc483d5",
+  "tex": "59a74497140489a3f4263fc9bc864580f5ac00e7b79b7bc3979834163ba66356",
+  "title": "Exploratory Data Analysis"
+}

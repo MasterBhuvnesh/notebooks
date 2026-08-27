@@ -1,0 +1,31 @@
+flowchart TD
+    subgraph S1["Understand"]
+        direction LR
+        A["1. Load"] --> B["2. Inspect"]
+    end
+    subgraph S2["Clean"]
+        direction LR
+        C["3. Missing<br/>values"] --> D["4. Duplicates"] --> E["5. Outliers"]
+    end
+    subgraph S3["Explore and build"]
+        direction LR
+        F["6. EDA"] --> G["7. Feature<br/>engineering"]
+    end
+    subgraph S4["Prepare"]
+        direction LR
+        H["8. Split FIRST<br/>stratify=y"] --> I["9. Impute, encode,<br/>scale on train"]
+    end
+    subgraph S5["Model"]
+        direction LR
+        J["10. Train"] --> K["11. Evaluate"] --> L["12. Cross-<br/>validate"]
+    end
+    S1 --> S2 --> S3 --> S4 --> S5
+
+    classDef clean fill:#FBE4E4,stroke:#B03030,color:#6d1b1b
+    classDef explore fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    classDef prep fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    classDef model fill:#F6F6F4,stroke:#8a8a84,color:#333
+    class C,D,E clean
+    class A,B,F explore
+    class G,H,I prep
+    class J,K,L model

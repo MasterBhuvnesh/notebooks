@@ -1,0 +1,18 @@
+flowchart TD
+    V["Variable"] --> N["Numerical<br/>arithmetic is meaningful"]
+    V --> C["Categorical<br/>labels, not quantities"]
+    N --> NC["Continuous<br/>Age, Fare"]
+    N --> ND["Discrete<br/>SibSp, Parch"]
+    C --> CN["Nominal - no order<br/>Sex, Embarked"]
+    C --> CO["Ordinal - has order<br/>Pclass 1 &gt; 2 &gt; 3"]
+    NC --> P1["Histogram, KDE, Boxplot<br/>Median or mean imputation<br/>Scaling"]
+    ND --> P1
+    CN --> P2["Countplot, Bar chart<br/>Mode imputation<br/>One-Hot Encoding"]
+    CO --> P3["Countplot, Bar chart<br/>Mode imputation<br/>Ordinal / Label Encoding"]
+
+    classDef num fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    classDef cat fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    classDef act fill:#F6F6F4,stroke:#8a8a84,color:#333
+    class N,NC,ND num
+    class C,CN,CO cat
+    class P1,P2,P3 act

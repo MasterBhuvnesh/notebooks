@@ -1,0 +1,18 @@
+flowchart TD
+    Q1{"How much of the<br/>column is missing?"}
+    Q1 -- "over 60%" --> Q2{"Is the absence<br/>itself informative?"}
+    Q1 -- "5% to 60%" --> D4["IMPUTE<br/>the next diagram chooses<br/>which statistic"]
+    Q1 -- "under 5%" --> Q4{"Are the rows<br/>expendable?"}
+
+    Q2 -- "No" --> D1["Drop the column"]
+    Q2 -- "Yes" --> D2["Keep it as a flag,<br/>then drop the column"]
+
+    Q4 -- "Yes" --> D3["Drop the rows"]
+    Q4 -- "No, every row counts" --> D4
+
+    classDef drop fill:#FBE4E4,stroke:#B03030,color:#6d1b1b
+    classDef imp fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    classDef q fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    class D1,D3 drop
+    class D2,D4 imp
+    class Q1,Q2,Q4 q

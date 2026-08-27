@@ -1,0 +1,18 @@
+flowchart TD
+    A{"Is the column<br/>numeric?"}
+    A -- "No" --> M["MODE<br/>most frequent<br/>category"]
+    A -- "Yes" --> B{"Skew between<br/>-0.5 and +0.5?"}
+    B -- "No, skewed" --> E["MEDIAN<br/>outlier-proof"]
+    B -- "Yes" --> C{"Outliers<br/>present?"}
+    C -- "Yes" --> E
+    C -- "No" --> F["MEAN<br/>uses every<br/>observation"]
+    M --> H["Add a Was_Missing<br/>indicator column when<br/>the rate is high"]
+    E --> H
+    F --> H
+
+    classDef q fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    classDef ans fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    classDef note fill:#F6F6F4,stroke:#8a8a84,color:#333
+    class A,B,C q
+    class E,F,M ans
+    class H note

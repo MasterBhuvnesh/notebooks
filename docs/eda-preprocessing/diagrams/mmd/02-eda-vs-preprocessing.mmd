@@ -1,0 +1,18 @@
+flowchart LR
+    subgraph PREP["Preprocessing - changing the data"]
+        direction TB
+        B1["Impute<br/>Age to median"] --> B2["Encode<br/>Sex to 0/1"]
+        B2 --> B3["Scale<br/>Fare to z-score"]
+    end
+    subgraph EDA["EDA - asking questions"]
+        direction TB
+        A1["Summarise<br/>describe, info"] --> A2["Visualise<br/>hist, box, heatmap"]
+        A2 --> A3["Hypothesise<br/>'women survived more'"]
+    end
+    A3 -- "decisions" --> B1
+    B3 -- "new questions" --> A1
+
+    classDef explore fill:#E8EFF8,stroke:#1F5FA9,color:#12315c
+    classDef prep fill:#E4F2EE,stroke:#0E7C66,color:#0b4d40
+    class A1,A2,A3 explore
+    class B1,B2,B3 prep
