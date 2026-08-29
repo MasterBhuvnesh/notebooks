@@ -23,6 +23,7 @@ LaTeX for the page, mermaid for the diagrams, one shared style, built by CI.
 | DevOps Cheat Sheet | 2026-08-15 | 2026-08-15 | [pdf](docs/devops-cheatsheet/main.pdf) |
 | Exploratory Data Analysis | 2026-08-27 | 2026-08-27 | [pdf](docs/eda-preprocessing/main.pdf) |
 | Linux Commands | 2026-08-17 | 2026-08-17 | [pdf](docs/linux-commands/main.pdf) |
+| Model Evaluation Metrics | 2026-08-29 | 2026-08-29 | [pdf](docs/model-evaluation-metrics/main.pdf) |
 | RabbitMQ | 2026-08-15 | 2026-08-15 | [pdf](docs/rabbitmq/main.pdf) |
 
 <!-- INDEX:END -->

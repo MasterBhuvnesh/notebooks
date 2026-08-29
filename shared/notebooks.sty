@@ -133,11 +133,23 @@
            {│}{{|}}1 {├}{{+}}1 {└}{{+}}1 {─}{{-}}1,
 }
 
+\lstdefinelanguage{HCL}{
+  keywords={resource, data, module, variable, output, locals, provider, terraform,
+            for_each, count, depends_on, lifecycle, dynamic, each, var, local, true, false},
+  ndkeywords={for, in, if, tags, source, type, default, description, value},
+  sensitive=true,
+  comment=[l]{\#},
+  morecomment=[l]{//},
+  morestring=[b]",
+}
+
 % Each env takes an optional \lstset override, used to shrink a dense page:
 %   \begin{js}[basicstyle=\ttfamily\scriptsize]
 \lstnewenvironment{py}[1][]{\lstset{language=Python,#1}}{}
 \lstnewenvironment{js}[1][]{\lstset{language=JavaScript,#1}}{}
 \lstnewenvironment{sh}[1][]{\lstset{language=bash,#1}}{}
+\lstnewenvironment{hcl}[1][]{\lstset{language=HCL,#1}}{}
+\lstnewenvironment{txt}[1][]{\lstset{language={},#1}}{}
 
 % --- table spacing -------------------------------------------------------
 % Two blank lines above and below every table, so a table never sits flush
@@ -202,10 +214,21 @@
 % its second subsection 2.4.2. Books with no units never call this and keep
 % plain 1, 2, 3 section numbers.
 \newcounter{unit}
-\newcommand{\unitpart}[1]{%
+% The optional argument renames the divider: \unitpart[Part]{...} for a book
+% whose author calls them Parts. The divider also lands in the table of
+% contents, so a long book's contents page groups instead of running flat.
+\newcommand{\unitpart}[2][Unit]{%
   \renewcommand{\thesection}{\theunit.\arabic{section}}%
   \stepcounter{unit}\setcounter{section}{0}%
-  \part*{Unit \theunit: #1}}
+  \part*{#1 \theunit: #2}%
+  \addcontentsline{toc}{part}{#1 \theunit: #2}}
+
+% \appendixpart{A}{Cheat Sheets} -- same divider, but lettered and outside the
+% unit sequence, so its sections number A.1, A.2, ...
+\newcommand{\appendixpart}[2]{%
+  \renewcommand{\theunit}{#1}\setcounter{section}{0}%
+  \part*{Appendix #1: #2}%
+  \addcontentsline{toc}{part}{Appendix #1: #2}}
 \titleformat{\section}{\huge\color{accent}}{\thesection.}{0.5em}{}
             [{\color{rulecol}\titlerule[1pt]}]
 \titleformat{\subsection}{\Large\color{accent}}{\thesubsection}{0.5em}{}
