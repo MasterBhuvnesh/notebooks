@@ -1,0 +1,10 @@
+flowchart TD
+    CP[Cloud Provider] --> R[Region]
+    R --> AZ1[Availability Zone 1]
+    R --> AZ2[Availability Zone 2]
+    R --> AZ3[Availability Zone 3]
+    AZ1 --> S1[Servers]
+    AZ2 --> S2[Servers]
+    AZ3 --> S3[Servers]
+    CP --> EL[Edge Locations]
+    EL --> U[Users Worldwide]

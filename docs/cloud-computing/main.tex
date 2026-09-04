@@ -1507,4 +1507,629 @@ are still available.
         addresses each. Answer the same three parts as the previous problem.
 \end{enumerate}
 
+\unitpart{Cloud Computing Fundamentals}
+
+\section{Importance of Cloud Computing}
+
+\field{Short description:}{Cloud computing lets an organisation obtain computing resources as
+a service instead of buying and running them itself.}
+
+\field{Motivating example:}{Suppose tomorrow you want to start an online shopping website.
+What things do you need?}
+
+\begin{itemize}\itemsep2pt
+  \item Computer / server
+  \item Storage
+  \item Internet
+  \item Database
+  \item Operating system
+  \item Software
+  \item Security
+  \item Application
+\end{itemize}
+
+\field{The point:}{Every one of these can be rented from a cloud provider instead of bought
+and maintained, which is why cloud computing matters to a business getting started quickly.}
+
+\section{Cloud Service Models}
+
+\field{Short description:}{A cloud service model defines how much of the computing stack the
+provider manages on the consumer's behalf.}
+
+\subsection{Overview}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{IaaS} -- Infrastructure as a Service
+  \item \textbf{PaaS} -- Platform as a Service
+  \item \textbf{SaaS} -- Software as a Service
+\end{itemize}
+
+\section{Infrastructure as a Service (IaaS)}
+
+\field{Short description:}{IaaS gives the provider's access to fundamental resources such as
+physical machines, virtual machines and virtual storage.}
+
+\field{Also offered:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Virtual machine disk storage
+  \item Virtual local area networks (VLANs)
+  \item Load balancers
+  \item IP addresses
+  \item Software bundles
+\end{itemize}
+
+\field{How it works:}{All of the above resources are made available to the end user via server
+virtualization, and are accessed by the customer as if they own them.}
+
+\subsection{Architecture diagram}
+\mmd{24-iaas-architecture.png}
+
+\subsection{Benefits}
+
+IaaS allows the cloud provider to freely locate the infrastructure over the Internet in a
+cost-effective manner. Key benefits:
+
+\begin{itemize}\itemsep2pt
+  \item Full control of the computing resources through administrative access to VMs.
+  \item Flexible and efficient renting of computer hardware.
+  \item Portability and interoperability with legacy applications.
+\end{itemize}
+
+\subsection{Issues}
+
+IaaS shares issues with PaaS and SaaS, such as network dependence and browser-based risks. It
+also has issues specific to itself:
+
+\field{Compatibility with legacy security vulnerabilities:}{Because IaaS lets the consumer run
+legacy software on the provider's infrastructure, it exposes the consumer to all of the
+security vulnerabilities of that legacy software.}
+
+\field{Virtual machine sprawl:}{A VM can fall out of date with respect to security updates
+because IaaS allows the consumer to run, suspend or power off virtual machines at will. The
+provider can automatically update such VMs, but the mechanism is hard and complex.}
+
+\field{Robustness of VM-level isolation:}{IaaS offers each consumer an isolated environment
+through the hypervisor, a software layer with hardware support for virtualization that splits
+one physical computer into multiple virtual machines.}
+
+\field{Data erase practices:}{Consumers use virtual machines that share the provider's common
+disk resources. When a consumer releases a resource, the provider must ensure the next
+consumer to rent it does not see data residue from the previous one.}
+
+\subsection{Characteristics}
+
+\begin{itemize}\itemsep2pt
+  \item Virtual machines with pre-installed software.
+  \item Virtual machines with pre-installed operating systems, such as Windows or Linux.
+  \item On-demand availability of resources.
+  \item Ability to store copies of the same data in different locations.
+  \item Computing resources that can be easily scaled up and down.
+\end{itemize}
+
+\section{Platform as a Service (PaaS)}
+
+\field{Short description:}{PaaS offers the development and deployment tools required to build
+applications, including point-and-click tools that let non-developers create web
+applications. Google App Engine and Force.com are example PaaS vendors -- a developer logs
+into these platforms and uses their built-in API to build web applications.}
+
+\field{Main drawback:}{Developer lock-in with a particular vendor. An application written in
+Python against Google's App Engine API is likely to work only in that environment, so vendor
+lock-in is the biggest problem in PaaS.}
+
+\subsection{Architecture diagram}
+\mmd{25-paas-architecture.png}
+
+\subsection{Benefits}
+
+\field{Lower administrative overhead:}{The cloud provider is responsible for administration,
+so the consumer need not worry about it.}
+
+\field{Lower total cost of ownership:}{The consumer need not purchase expensive hardware,
+servers, power or data storage.}
+
+\field{Scalable solutions:}{Very easy to scale up or down automatically based on application
+resource demand.}
+
+\field{More current system software:}{The provider is responsible for maintaining software
+versions and patch installations.}
+
+\subsection{Issues}
+
+\field{Lack of portability between PaaS clouds:}{Although standard languages are used, the
+implementation of platform services may vary. File, queue or hash-table interfaces of one
+platform may differ from another's, making it hard to move workloads between platforms.}
+
+\field{Event based processor scheduling:}{PaaS applications are event oriented, which places
+resource constraints on them -- they must answer a request within a given interval of time.}
+
+\field{Security engineering of PaaS applications:}{Because PaaS applications depend on the
+network, they must explicitly use cryptography and manage security exposures.}
+
+\subsection{Characteristics}
+
+\begin{itemize}\itemsep2pt
+  \item Browser-based development environment; developers create databases and edit
+        application code via an API or point-and-click tools.
+  \item Built-in security, scalability and web service interfaces.
+  \item Built-in tools for defining workflow, approval processes and business rules.
+  \item Easy to integrate with other applications on the same platform.
+  \item Web service interfaces that connect applications outside the platform.
+\end{itemize}
+
+\section{Software as a Service (SaaS)}
+
+\field{Short description:}{SaaS provides a software application as a service to end users --
+software deployed on a hosted service and accessed via the Internet.}
+
+\field{Example SaaS applications:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Billing and invoicing systems
+  \item Customer Relationship Management (CRM) applications
+  \item Help desk applications
+  \item Human Resource (HR) solutions
+\end{itemize}
+
+\field{Customisation:}{Some SaaS applications are not customisable, such as an office suite.
+But SaaS also provides an API that lets a developer build a customised application on top.}
+
+\subsection{Characteristics}
+
+\begin{itemize}\itemsep2pt
+  \item Software is made available over the Internet.
+  \item The software is maintained by the vendor, not by where it runs.
+  \item Licensing may be subscription based or usage based, and is billed on a recurring
+        basis.
+  \item Cost effective, since there is no maintenance burden on the end user.
+  \item Available on demand, and can be scaled up or down on demand.
+  \item Automatically upgraded and updated.
+  \item Offers a shared data model, so multiple users share a single instance of the
+        infrastructure without hard-coding functionality per user.
+  \item All users run the same version of the software.
+\end{itemize}
+
+\subsection{Benefits}
+
+\begin{itemize}\itemsep2pt
+  \item Modest software tools
+  \item Efficient use of software licenses
+  \item Centralised management and data
+  \item Platform responsibilities managed by the provider
+  \item Multitenant solutions
+\end{itemize}
+
+\subsection{Issues}
+
+\field{Browser based risks:}{If the consumer visits a malicious website and the browser is
+infected, subsequent access to a SaaS application can compromise the consumer's data. Using
+multiple browsers, dedicating one to SaaS access, or using a virtual desktop reduces the
+risk.}
+
+\field{Network dependence:}{A SaaS application can only be delivered while the network is
+continuously available, and network reliability cannot be guaranteed by either the provider
+or the consumer.}
+
+\field{Lack of portability between SaaS clouds:}{Transferring workloads from one SaaS cloud to
+another is not easy, because workflow, business logic, user interfaces and support scripts
+can all be provider specific.}
+
+\subsection*{Service model examples}
+
+\begin{enumerate}\itemsep6pt
+  \item A company wants to host its website but does not want to purchase physical servers. It
+        wants control over the operating system, storage and virtual machines. Identify the
+        suitable cloud service model, justify the answer, and give one example.
+  \item A software development team wants to develop and deploy a web application without
+        managing servers, operating systems or hardware. Identify the suitable cloud service
+        model, explain why it is suitable, and give one example.
+  \item A college wants to provide students with online email and document-editing
+        applications, accessed through a web browser without installing or maintaining
+        software. Identify the suitable service model and give two reasons.
+\end{enumerate}
+
+\section{Cloud Deployment Models}
+
+\subsection{Overview diagram}
+\mmd[0.34]{26-deployment-models.png}
+
+\subsection{Public Cloud}
+
+\field{Short description:}{The public cloud allows systems and services to be easily
+accessible to the general public -- for example, Google, Amazon and Microsoft offer cloud
+services over the Internet.}
+
+\field{Benefits:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Cost effective} -- shares the same resources across a large number of
+        consumers, so it has low cost.
+  \item \textbf{Reliability} -- draws on large numbers of resources from different locations,
+        so a failed resource can be replaced by another one.
+  \item \textbf{Flexibility} -- easy to integrate with a private cloud, giving consumers a
+        flexible approach.
+  \item \textbf{Location independence} -- services are delivered through the Internet.
+  \item \textbf{Utility style costing} -- pay-per-use, with resources accessible whenever the
+        consumer needs them.
+  \item \textbf{High scalability} -- resources are made available on demand from a pool, and
+        can be scaled up or down as required.
+\end{itemize}
+
+\field{Disadvantages:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Low security} -- data is hosted off-site on publicly shared resources, so it
+        does not ensure a high level of security.
+  \item \textbf{Less customisable} -- comparatively less customisable than a private cloud.
+\end{itemize}
+
+\subsection{Private Cloud}
+
+\field{Short description:}{The private cloud allows systems and services to be accessible
+within a single organisation, which may manage it internally or through a third party.}
+
+\field{Benefits:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Higher security and privacy} -- not available to the general public, and
+        resources are shared from a distinct pool, ensuring higher security and privacy.
+  \item \textbf{More control} -- more control over resources and hardware than a public cloud,
+        because it is accessed only within the organisation.
+  \item \textbf{Cost and energy efficiency} -- not as cost effective as public clouds, but
+        offers more efficiency than a public cloud.
+\end{itemize}
+
+\field{Disadvantages:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Restricted area} -- accessible only locally, and difficult to deploy globally.
+  \item \textbf{Inflexible pricing} -- purchasing new hardware to meet demand is very costly.
+  \item \textbf{Limited scalability} -- can be scaled only within the capacity of the
+        internally hosted resources.
+\end{itemize}
+
+\subsection{Hybrid Cloud}
+
+\field{Short description:}{The hybrid cloud is a mixture of public and private cloud.
+Non-critical activities are performed using the public cloud, while critical activities are
+performed using the private cloud.}
+
+\field{Benefits:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Scalability} -- offers both public cloud scalability and private cloud
+        scalability.
+  \item \textbf{Flexibility} -- offers both secure resources and scalable public resources.
+  \item \textbf{Cost efficiencies} -- public cloud is more cost effective than private, so the
+        hybrid cloud gains this saving.
+  \item \textbf{Security} -- the private cloud portion ensures a higher degree of security.
+\end{itemize}
+
+\field{Disadvantages:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Networking issues} -- networking becomes complex due to the presence of both
+        private and public cloud.
+  \item \textbf{Security compliance} -- it is necessary to ensure cloud services comply with
+        the organisation's security policies.
+\end{itemize}
+
+\subsection{Community Cloud}
+
+\field{Short description:}{The community cloud allows systems and services to be accessible by
+a group of organisations, sharing infrastructure among several organisations from a specific
+community. It may be managed internally or by a third party.}
+
+\field{Benefits:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Cost effective} -- offers the same advantage as a private cloud at lower cost.
+  \item \textbf{Sharing between organisations} -- provides infrastructure to share cloud
+        resources and capabilities among several organisations.
+  \item \textbf{Security} -- comparatively more secure than the public cloud.
+\end{itemize}
+
+\field{Issues:}{Since all data is housed at one location, care is needed in storing data in a
+community cloud, because it might be accessible by others. Allocating responsibility for
+governance, security and cost is also challenging.}
+
+\subsection*{Deployment model examples}
+
+\begin{enumerate}\itemsep6pt
+  \item ABC E-Commerce has customers across India. During normal days it has 500 users, but
+        during festival sales, users increase to 50{,}000. The company wants to quickly
+        increase computing resources when demand increases and reduce them afterward, without
+        purchasing and maintaining its own servers. Which cloud deployment model should ABC
+        E-Commerce choose? Give a reason.
+  \item A government department stores highly confidential citizen information such as
+        identity details, tax records and official documents. It requires complete control
+        over its servers, network and security policies, and has its own IT team and budget
+        to maintain infrastructure. Which cloud deployment model is most suitable? Why?
+  \item A bank wants to run its core banking system on infrastructure dedicated only to the
+        bank, because of strict security and compliance requirements. However, it also wants
+        to use cloud services for its public website and mobile application during periods of
+        high traffic. Which cloud deployment model(s) should the bank use?
+  \item A company has two applications: Application A requires dedicated infrastructure and
+        handles confidential employee data; Application B is an online shopping application
+        whose users may increase from 1{,}000 to 100{,}000 during sales. Identify the suitable
+        cloud deployment model for each application and justify the answer.
+\end{enumerate}
+
+\section{Regions, Availability Zones and Edge Locations}
+
+\field{Short description:}{Cloud providers such as AWS, Microsoft Azure and Google Cloud have
+data centres distributed across the world. To organise this global infrastructure and provide
+reliable, fast and highly available services, they use the concepts of Regions, Availability
+Zones and Edge Locations.}
+
+\subsection{Region}
+
+\field{Definition:}{A Region is a geographical area of the world in which a cloud provider
+operates one or more data centres or Availability Zones. Providers divide their global
+infrastructure into regions so customers can choose where their cloud resources are
+deployed.}
+
+\field{Example AWS regions:}{Mumbai, Singapore, Tokyo, London, Frankfurt, Northern Virginia,
+Sydney. Azure and Google Cloud have their own geographical regions.}
+
+\field{Why regions are required:}{If a company operates in India with customers primarily
+located in India, but hosts its application in a distant location such as the United States,
+communication may take longer because data has to travel a greater distance. Deploying the
+application in an Indian region instead helps reduce network latency.}
+
+\field{Characteristics:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Geographical location} -- a region represents a specific geographical area.
+  \item \textbf{Contains multiple Availability Zones} -- a region is generally divided into
+        multiple isolated Availability Zones.
+  \item \textbf{Data residency} -- organisations can choose a region based on where they want
+        their data and applications hosted, subject to the provider's services and applicable
+        regulations.
+  \item \textbf{Disaster recovery} -- organisations can use multiple regions for disaster
+        recovery.
+  \item \textbf{Reduced latency} -- selecting a region closer to users reduces network
+        latency.
+  \item \textbf{Service availability} -- not every cloud service is necessarily available in
+        every region.
+\end{itemize}
+
+\subsection{Availability Zone}
+
+\field{Definition:}{An Availability Zone (AZ) is an isolated infrastructure location within a
+cloud Region. A Region contains multiple AZs, designed to operate independently enough that a
+failure in one AZ does not necessarily affect the others.}
+
+\field{Why AZs are required:}{The main purpose of Availability Zones is high availability and
+fault tolerance. If a company runs its entire application in only one Availability Zone, and
+that AZ experiences a power failure, network failure, hardware failure, cooling failure or
+other infrastructure problem, the application may become unavailable. Distributing resources
+across multiple AZs avoids this.}
+
+\field{Characteristics:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Isolation} -- AZs are designed to be isolated from failures in other AZs.
+  \item \textbf{Independent infrastructure} -- each AZ has independent power, cooling,
+        networking and physical facilities, reducing the chance a single failure affects all
+        AZs.
+  \item \textbf{High availability} -- applications can be deployed across multiple AZs.
+  \item \textbf{Fault tolerance} -- using multiple AZs lets applications tolerate certain
+        infrastructure failures.
+  \item \textbf{Low-latency communication} -- AZs within a region are connected by the
+        provider's high-speed network, so applications distributed across AZs communicate
+        efficiently.
+\end{itemize}
+
+\subsection{Edge Location}
+
+\field{Definition:}{An Edge Location is a distributed location where a cloud provider's
+services can cache or deliver content closer to end users. Edge locations are particularly
+important for Content Delivery Networks (CDNs) -- for example, AWS uses Amazon CloudFront to
+deliver content through a global network of edge locations.}
+
+\field{Why edge locations are required:}{Consider a user in Nagpur accessing a website whose
+main server is in the United States. Without caching, the request must travel that long
+distance, resulting in higher latency. With an edge location, the user instead receives
+cached content from a location closer to them, giving faster delivery and lower latency.}
+
+\field{How they work:}{A website's images, videos, CSS files, JavaScript files, web pages and
+other static content are cached across edge locations. When a user requests this content, the
+CDN serves it from the nearest appropriate edge location.}
+
+\subsection{Relationship between Region, AZ and Edge Location}
+\mmd[0.36]{27-region-az-edge.png}
+
+\begin{itemize}\itemsep2pt
+  \item A \textbf{Region} is where cloud resources are deployed.
+  \item An \textbf{Availability Zone} provides isolation and redundancy within a Region.
+  \item An \textbf{Edge Location} brings frequently accessed content and services closer to
+        users.
+  \item If one AZ fails, traffic is served by the other AZs, which ensures high availability
+        and fault tolerance.
+\end{itemize}
+
+\subsection{Difference between Region, AZ and Edge Location}
+
+\begin{tabularx}{\textwidth}{@{}lXXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Parameter} & \textbf{Region} & \textbf{Availability Zone} &
+  \textbf{Edge Location} \\
+\midrule
+Meaning & Geographical area & Isolated infrastructure location within a Region & Location
+  closer to users for content delivery / caching \\
+\addlinespace
+Main purpose & Resource deployment & High availability & Reduce latency \\
+\addlinespace
+Contains & Multiple AZs & Infrastructure / data centres & CDN / cache infrastructure \\
+\addlinespace
+Geographical size & Large & Smaller & Distributed near users \\
+\addlinespace
+Main benefit & Location and regional resilience & Fault tolerance & Faster content delivery \\
+\addlinespace
+Example & Mumbai Region & AZ within Mumbai Region & CloudFront edge location \\
+\addlinespace
+Mainly used for & Compute, storage, databases, etc. & Redundant application deployment & CDN /
+  content delivery \\
+\addlinespace
+Failure impact & Regional failure can affect resources in that region & Failure can affect
+  resources in that AZ & Cached content may be served from another location, depending on the
+  service or design \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Practice problems}
+
+\begin{enumerate}\itemsep6pt
+  \item An AWS Region has 3 Availability Zones. Each AZ contains 20 servers. How many servers
+        are available in the entire Region?
+  \item An e-commerce company uses 2 Regions. Each Region has 3 AZs, and each AZ has 50
+        servers. Find the total number of servers deployed.
+  \item A cloud provider has 3 Regions. Each Region contains 2 AZs. Each AZ has 25 servers.
+        Additionally, the provider has 4 Edge Locations per Region. Find: (i) total AZs,
+        (ii) total servers, (iii) total Edge Locations.
+\end{enumerate}
+
+\section{Cloud Computing: Benefits and Challenges}
+
+\begin{tabularx}{\textwidth}{@{}X X@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Benefits} & \textbf{Challenges} \\
+\midrule
+Cost saving -- reduces hardware and maintenance costs. & Security and privacy -- risk of data
+  breaches and unauthorized access. \\
+\addlinespace
+Scalability -- resources can be increased or decreased as needed. & Internet dependency --
+  requires a reliable Internet connection. \\
+\addlinespace
+Accessibility -- access data and applications from anywhere. & Downtime -- cloud service
+  failures can interrupt operations. \\
+\addlinespace
+Flexibility -- easily adapt resources according to requirements. & Vendor lock-in -- difficult
+  to switch between cloud providers. \\
+\addlinespace
+High availability -- provides reliable access using redundancy. & Limited control -- less
+  control over the underlying infrastructure. \\
+\addlinespace
+Automatic updates -- provider manages updates and maintenance. & Data transfer issues -- large
+  data transfers can be slow or costly. \\
+\addlinespace
+Disaster recovery -- enables backup and recovery of data. & Compliance -- must meet legal and
+  regulatory requirements. \\
+\addlinespace
+Faster deployment -- resources can be deployed quickly. & Performance variations --
+  performance may vary due to network or shared resources. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Benefits, in detail}
+
+\field{Reduced total cost of ownership:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Cost-effective -- reduces hardware, storage, bandwidth and software costs.
+  \item Scalable -- suitable for users and organisations of all sizes.
+  \item Pay-as-you-use -- pay only for the resources consumed.
+  \item Easy access -- resources are managed through web services and APIs.
+  \item Additional services -- supports websites, billing, shopping and shipping.
+  \item Business enablement -- helps small businesses operate like established enterprises.
+\end{itemize}
+
+\field{Increased scalability and reliability:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Leverages the cloud provider's global infrastructure.
+  \item Provides backup and fault tolerance.
+  \item Reduces latency and improves performance.
+  \item Easily handles peak demand -- especially beneficial for small and medium businesses.
+\end{itemize}
+
+\field{Increased test automation:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Enables continuous build and automated testing.
+  \item Provides on-demand test servers at scale.
+  \item Virtualization supports testing across different hardware and software
+        configurations.
+  \item Easily performs large-scale stress and performance testing.
+  \item Pay-as-you-use makes extensive testing cost-effective.
+\end{itemize}
+
+\field{Enabling collaborative applications:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Enables quick and flexible business partnerships.
+  \item Supports easy sharing of information among partners.
+  \item Facilitates collaboration in emerging markets and niche opportunities.
+  \item Cloud platforms enable access to shared CRM and business applications.
+  \item Helps businesses collaborate without complex infrastructure.
+\end{itemize}
+
+\field{Reduced middleware tax:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Reduces the cost and complexity of middleware.
+  \item Simplifies application development and deployment.
+  \item Minimises dependency on complex frameworks and tools.
+  \item Reduces the burden of legacy middleware infrastructure.
+\end{itemize}
+
+\field{Increased application development agility:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Reduces dependency on middleware, databases and IT operations.
+  \item Enables developers to work end-to-end independently.
+  \item Cloud services provide simple, easy-to-use APIs.
+  \item Speeds up application development and deployment, and improves team flexibility.
+\end{itemize}
+
+\field{Increased end-user computing:}{}
+
+\begin{itemize}\itemsep2pt
+  \item Enables users to create customised solutions for their needs.
+  \item Uses simple technologies like JavaScript and REST APIs.
+  \item Mashup tools help users build personalised applications.
+  \item Makes legacy data easily accessible through standard protocols, reducing the need for
+        special-purpose applications.
+\end{itemize}
+
+\subsection{The Challenges}
+
+\field{Service Level Agreements:}{Define the service quality, availability and performance
+expected, and clarify provider and customer responsibilities. They help manage business risks
+and reliability; SLA monitoring tools ensure compliance, which matters for enterprise cloud
+adoption.}
+
+\field{National data protectionism:}{Governments are concerned about data stored outside
+national borders. Data centres may be located far from the data owner's country, and laws may
+restrict data storage and transfer across borders, creating challenges for global cloud
+adoption and compliance.}
+
+\field{Application security:}{Application developers are responsible for security beyond
+authorization. Critical security should be handled outside the browser, using strong
+encryption for data in transit and at rest and following SSL and other security best
+practices. Cloud platforms can provide enterprise-level security.}
+
+\field{Loosely coupled service design:}{Enables applications to work with minimal dependency
+on each other, requiring standard protocols and consistent service design. ATOM publishing
+provides a simple service model, though developers must still manage different protocols and
+service interactions.}
+
+\field{Query oriented versus API oriented programming:}{Cloud computing increasingly uses
+query-oriented programming. Technologies like MapReduce, LINQ and stream processing process
+large datasets using SQL/XQuery-style operations instead of complex APIs, so developers need
+skills in complex queries and data processing.}
+
+\field{Occasionally disconnected operation:}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Offline capability} -- mobile applications must work offline and auto-sync
+        with the cloud upon reconnection.
+  \item \textbf{Client-side execution} -- Google Gears runs web models locally on the client
+        with server sync.
+  \item \textbf{Sync frameworks} -- Microsoft Azure offers flexible frameworks supporting
+        varied data and file sync patterns.
+\end{itemize}
+
 \end{document}
