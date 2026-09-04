@@ -1,8 +1,8 @@
 {
-  "built_at": "2026-08-23 10:05 UTC",
-  "bytes": 2060978,
-  "commit": "b8b5b20",
-  "diagram_count": 23,
+  "built_at": "2026-09-04 07:33 UTC",
+  "bytes": 2243670,
+  "commit": "735d993",
+  "diagram_count": 27,
   "diagrams": {
     "01-virtualization-layers.mmd": "b8c999b97fca3c7a582212e8db9e78dc0990bb70de8f495530c305c897c38fda",
     "02-hypervisor-how-it-works.mmd": "1bc778dc61d45f487c722b080652dedfe5abf52aea6c393653a370729fc9f3ee",
@@ -26,10 +26,14 @@
     "20-migration-types.mmd": "30daca80fdc395bf92678f470fd803cd951db88fa041ea0ed6a12d8d905dd2db",
     "21-migration-phases.mmd": "79d563201dc7e5881796df87f55b5be12bc10b1a082d109ac5442163e91a511a",
     "22-subnet-hierarchy.mmd": "fd4d0a0c7ae833cab2bc3ed21b7bdd763ea32b997dad081e8c93b5a8a0e79418",
-    "23-supernetwork.mmd": "3eb2ae0f4900e801ee7d6e2a4fbcdafc8f62d12be761082312d517cd2a53e318"
+    "23-supernetwork.mmd": "3eb2ae0f4900e801ee7d6e2a4fbcdafc8f62d12be761082312d517cd2a53e318",
+    "24-iaas-architecture.mmd": "eb0ea332d1b8e446d60f2c94e0e1ec4326b96fbc35f0ab175f6de8bec883e1af",
+    "25-paas-architecture.mmd": "9db7201ac0f0c62fee8356f28f13c5a6ff9350c326c0dda447e9cb3c24f97d58",
+    "26-deployment-models.mmd": "d575e02c3cd04ce93db05241f08fd14476bd0850834471bab99362fd7f33b572",
+    "27-region-az-edge.mmd": "76a2f750b2c898d47cba6a553f3ad0e4b80d6527b5989159214808370d07cbc6"
   },
-  "pages": 47,
-  "sty": "b5c4f6c91e7d8050bc3219c50db42f24f47cc9f49bc79b9a616731ad0fc483d5",
-  "tex": "31cc824ae878978f8a302e9a19dd758afb583fb49ba3e5dd100426ddf57a4a43",
+  "pages": 60,
+  "sty": "386c0a82a2416ba0e585baa5e74d48da9776d56d557a307a8f174e113bdf9dcd",
+  "tex": "b8bbd61e715fd83ded984850d26746f737c53ed33b271d91bce4e3c39709d3e3",
   "title": "Cloud Computing"
 }

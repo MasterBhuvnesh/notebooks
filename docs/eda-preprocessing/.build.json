@@ -1,7 +1,7 @@
 {
-  "built_at": "2026-08-27 15:22 UTC",
-  "bytes": 2566135,
-  "commit": "6d66eba",
+  "built_at": "2026-09-04 07:33 UTC",
+  "bytes": 2393484,
+  "commit": "735d993",
   "diagram_count": 12,
   "diagrams": {
     "01-ds-workflow.mmd": "eaf81397fa7c6d819917e007f738f09b28612e47c74eaed2b64362a4e48937c3",
@@ -18,7 +18,7 @@
     "12-fe-titanic.mmd": "bbe50e3d93239a22e25b45e65064f0156a8a6fec8fd3de308e51eaf0d2b6d20c"
   },
   "pages": 76,
-  "sty": "b5c4f6c91e7d8050bc3219c50db42f24f47cc9f49bc79b9a616731ad0fc483d5",
+  "sty": "386c0a82a2416ba0e585baa5e74d48da9776d56d557a307a8f174e113bdf9dcd",
   "tex": "59a74497140489a3f4263fc9bc864580f5ac00e7b79b7bc3979834163ba66356",
   "title": "Exploratory Data Analysis"
 }
