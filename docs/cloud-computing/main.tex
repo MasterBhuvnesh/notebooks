@@ -1484,28 +1484,495 @@ are still available.
 \newpage
 \section{Practice Problems}
 
-\begin{enumerate}\itemsep6pt
-  \item A router receives a packet with the destination address \texttt{190.240.33.91}. Show
-        how it finds the network and the subnetwork address to route the packet, assuming the
-        subnet mask is \texttt{/19}.
-  \item An organisation is granted the block \texttt{130.56.0.0/16} and the administrator
-        wants 1024 subnets. Find the number of addresses in each subnet, the subnet prefix,
-        the first and last address of the first subnet, and the first and last address of the
-        last subnet.
-  \item Each of the following addresses belongs to a block. Find the first and the last
-        address in each block: \texttt{14.12.72.8/24}, \texttt{200.107.16.17/18} and
-        \texttt{70.110.19.17/16}.
-  \item An organisation is granted a block beginning at \texttt{14.24.74.0/24} and needs three
-        sub-blocks for its three subnets: one of 10 addresses, one of 60 addresses and one of
-        120 addresses. Design the sub-blocks.
-  \item An ISP is granted the block \texttt{16.12.64.0/20} and has to allocate addresses for 8
-        organisations, each with 256 addresses. Find the number and range of addresses in the
-        ISP block, the range for each organisation and the range that stays unallocated, then
-        show the outline of the distribution.
-  \item An ISP is granted the block \texttt{80.70.56.0/21} and has to allocate addresses for
-        two organisations of 500 addresses each, two of 250 addresses each and three of 50
-        addresses each. Answer the same three parts as the previous problem.
-\end{enumerate}
+\field{Short description:}{Twenty-two worked problems covering classful addressing,
+subnetting, classless (CIDR) blocks, VLSM and supernetting, in the style of the examples
+above. Each question is followed immediately by its full solution.}
+
+\subsection*{Question 1}
+
+Find the network address of the host with IP address \texttt{168.14.32.12}, assuming the
+default classful mask.
+
+The first octet is 168, and $128 \le 168 \le 191$, so the address is class B. The default
+class B mask is \texttt{255.255.0.0}, or \texttt{/16}.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Line} & \textbf{Binary} \\
+\midrule
+Address & \texttt{10101000 00001110 00100000 00001100} \\
+Mask & \texttt{11111111 11111111 00000000 00000000} \\
+Result & \texttt{10101000 00001110 00000000 00000000} \\
+\bottomrule
+\end{tabularx}
+
+The \textbf{network address is \texttt{168.14.0.0}}.
+
+\subsection*{Question 2}
+
+Find the subnetwork address for IP address \texttt{200.45.34.56} and subnet mask
+\texttt{255.255.240.0}, using the straight binary method.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Line} & \textbf{Binary} \\
+\midrule
+Address & \texttt{11001000 00101101 00100010 00111000} \\
+Mask & \texttt{11111111 11111111 11110000 00000000} \\
+Result & \texttt{11001000 00101101 00100000 00000000} \\
+\bottomrule
+\end{tabularx}
+
+The mask has 20 ones, so the prefix is \texttt{/20} and the \textbf{subnetwork address is
+\texttt{200.45.32.0}}.
+
+\subsection*{Question 3}
+
+Find the subnetwork address for IP address \texttt{19.30.84.5} and subnet mask
+\texttt{255.255.192.0}, using the shortcut method.
+
+The first two mask bytes are 255, so \texttt{19} and \texttt{30} are copied unchanged. The
+last byte is 0, so the fourth octet becomes 0. The third byte, \texttt{192}, is neither 255
+nor 0, so it must be worked out: the block size is $256 - 192 = 64$, and the multiples of 64
+around the third octet (84) are 64--127, so 84 falls in the block starting at 64. The
+\textbf{subnetwork address is \texttt{19.30.64.0}} (prefix \texttt{/18}).
+
+\subsection*{Question 4}
+
+A router receives a packet with destination address \texttt{190.240.224.33}. Find the
+subnetwork address if the subnet mask is \texttt{/19}.
+
+\texttt{/19} is \texttt{255.255.224.0}. The mask breaks in the third octet (224), giving a
+block size of $256 - 224 = 32$. The third octet, 224, is itself an exact multiple of 32, so it
+is the start of its own block (224--255). The first two octets and the fourth octet
+follow the usual rule, giving the \textbf{subnetwork address \texttt{190.240.224.0}}.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Line} & \textbf{Binary} \\
+\midrule
+Address & \texttt{10111110 11110000 11100000 00100001} \\
+Mask & \texttt{11111111 11111111 11100000 00000000} \\
+Result & \texttt{10111110 11110000 11100000 00000000} \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 5}
+
+A router receives a packet with destination address \texttt{190.240.33.91}. Show how the
+router finds the network address and the subnetwork address, assuming the subnet mask is
+\texttt{/19}.
+
+This asks for two different addresses, found with two different masks.
+
+\textbf{Network address (classful):} the first octet, 190, is class B, so the default mask is
+\texttt{255.255.0.0}. ANDing gives \texttt{190.240.0.0}.
+
+\textbf{Subnetwork address (\texttt{/19}):} \texttt{/19} is \texttt{255.255.224.0}, which
+breaks in the third octet with a block size of $256 - 224 = 32$. The third octet, 33, falls in
+the block 32--63, so the subnet starts at 32.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Term} & \textbf{Value} \\
+\midrule
+Network address (classful, \texttt{/16}) & \texttt{190.240.0.0} \\
+Subnetwork address (\texttt{/19}) & \texttt{190.240.32.0} \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 6}
+
+A company is granted the class C address \texttt{201.70.64.0} and needs 6 subnets. Design the
+subnet mask and determine the borrowed bits, number of subnets, hosts per subnet, network
+addresses, broadcast addresses and valid host ranges.
+
+Six is not a power of 2; the next power of 2 is $8 = 2^{3}$, so 3 bits must be borrowed from
+the 8 host bits of the default \texttt{/24} mask. The new prefix is $24 + 3 = 27$, so the mask
+is \texttt{255.255.255.224}, giving $2^{3} = 8$ subnets (two spare, since only 6 were
+requested) and $32 - 27 = 5$ host bits per subnet, i.e.\ $2^{5} = 32$ addresses per subnet, 30
+of them usable once the network and broadcast addresses are removed. The block size is
+$256 - 224 = 32$.
+
+\begin{tabularx}{\textwidth}{@{}clllX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Subnet} & \textbf{Network} & \textbf{Broadcast} & \textbf{Usable host range} & \\
+\midrule
+1 & \texttt{201.70.64.0} & \texttt{201.70.64.31} & \texttt{201.70.64.1}--\texttt{201.70.64.30} & \\
+2 & \texttt{201.70.64.32} & \texttt{201.70.64.63} & \texttt{201.70.64.33}--\texttt{201.70.64.62} & \\
+3 & \texttt{201.70.64.64} & \texttt{201.70.64.95} & \texttt{201.70.64.65}--\texttt{201.70.64.94} & \\
+4 & \texttt{201.70.64.96} & \texttt{201.70.64.127} & \texttt{201.70.64.97}--\texttt{201.70.64.126} & \\
+5 & \texttt{201.70.64.128} & \texttt{201.70.64.159} & \texttt{201.70.64.129}--\texttt{201.70.64.158} & \\
+6 & \texttt{201.70.64.160} & \texttt{201.70.64.191} & \texttt{201.70.64.161}--\texttt{201.70.64.190} & \\
+7* & \texttt{201.70.64.192} & \texttt{201.70.64.223} & \texttt{201.70.64.193}--\texttt{201.70.64.222} & \\
+8* & \texttt{201.70.64.224} & \texttt{201.70.64.255} & \texttt{201.70.64.225}--\texttt{201.70.64.254} & \\
+\bottomrule
+\end{tabularx}
+
+\noindent \texttt{*} Subnets 7 and 8 are spare capacity, since only 6 subnets were requested.
+
+\subsection*{Question 7}
+
+A company is granted the class B address \texttt{181.56.0.0} and needs 1000 subnets. Determine
+the borrowed bits, new subnet mask, prefix length, number of subnets and hosts per subnet.
+
+$2^{9} = 512$ is not enough, but $2^{10} = 1024$ is, so 10 bits are borrowed. The new prefix is
+$16 + 10 = 26$, giving the mask \texttt{255.255.255.192}. There are $2^{10} = 1024$ subnets,
+and $32 - 26 = 6$ host bits per subnet, i.e.\ $2^{6} = 64$ addresses per subnet, 62 usable.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Term} & \textbf{Value} \\
+\midrule
+Borrowed bits & 10 \\
+New subnet mask & \texttt{255.255.255.192} (\texttt{/26}) \\
+Number of subnets & 1024 \\
+Hosts per subnet & 64 total, 62 usable \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 8}
+
+An organisation is granted the block \texttt{130.56.0.0/16} and the administrator requires
+1024 subnets. Find the number of addresses in each subnet, the subnet prefix, and the first
+and last address of the first and last subnets.
+
+$2^{10} = 1024$ exactly, so 10 bits are borrowed and the new prefix is $16 + 10 = 26$, giving
+\texttt{255.255.255.192} and $2^{6} = 64$ addresses per subnet. Borrowing splits the 16-bit
+host space (the third and fourth octets) into 1024 blocks of 64. The first block starts at
+offset 0, giving \texttt{130.56.0.0}--\texttt{130.56.0.63}. The last block starts at offset
+$(1024 - 1) \times 64 = 65472$; dividing by 256 gives a third octet of 255 and a remainder of
+192, so the last subnet is \texttt{130.56.255.192}--\texttt{130.56.255.255}.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Term} & \textbf{Value} \\
+\midrule
+Addresses per subnet & 64 \\
+Subnet prefix & \texttt{/26} (\texttt{255.255.255.192}) \\
+First subnet & \texttt{130.56.0.0} to \texttt{130.56.0.63} \\
+Last subnet & \texttt{130.56.255.192} to \texttt{130.56.255.255} \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 9}
+
+A small organisation is given the block \texttt{205.16.37.24/29}. Find the first address, the
+last address and the number of addresses in the block, using both the binary method and the
+shortcut method.
+
+\textbf{Binary method:} \texttt{/29} is \texttt{255.255.255.248}. ANDing the address with the
+mask gives the first address; ORing it with the inverse mask gives the last.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Line} & \textbf{Binary} \\
+\midrule
+Address & \texttt{11001101 00010000 00100101 00011000} \\
+Mask & \texttt{11111111 11111111 11111111 11111000} \\
+First (AND) & \texttt{11001101 00010000 00100101 00011000} \\
+Last (OR inverse mask) & \texttt{11001101 00010000 00100101 00011111} \\
+\bottomrule
+\end{tabularx}
+
+\textbf{Shortcut method:} the suffix length is 3, so the block size is $2^{3} = 8$. The fourth
+octet, 24, is itself a multiple of 8, so it starts its own block, 24--31. Both methods
+agree: \textbf{first address \texttt{205.16.37.24}, last address \texttt{205.16.37.31}, 8
+addresses in total}.
+
+\subsection*{Question 10}
+
+One address in a block is \texttt{167.199.170.82/27}. Find the network address.
+
+\texttt{/27} is \texttt{255.255.255.224}, so the block size is $256 - 224 = 32$. The fourth
+octet, 82, falls in the block 64--95, so the \textbf{network address is
+\texttt{167.199.170.64}}.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Line} & \textbf{Binary} \\
+\midrule
+Address & \texttt{10100111 11000111 10101010 01010010} \\
+Mask & \texttt{11111111 11111111 11111111 11100000} \\
+Result & \texttt{10100111 11000111 10101010 01000000} \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 11}
+
+One address in a block is \texttt{205.16.37.39/28}. Find the first address, last address,
+total addresses and usable host range, using the binary method and the mask method.
+
+\textbf{Binary method:} \texttt{/28} is \texttt{255.255.255.240}. ANDing gives the first
+address, \texttt{205.16.37.32}; ORing with the inverse mask
+(\texttt{00000000 00000000 00000000 00001111}) gives the last, \texttt{205.16.37.47}.
+
+\textbf{Mask (shortcut) method:} the block size is $256 - 240 = 16$; the fourth octet, 39,
+falls in the block 32--47, giving the same result. With $32 - 28 = 4$ host bits, the
+block holds $2^{4} = 16$ addresses, 14 of them usable.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Term} & \textbf{Value} \\
+\midrule
+First address & \texttt{205.16.37.32} \\
+Last address & \texttt{205.16.37.47} \\
+Total addresses & 16 \\
+Usable host range & \texttt{205.16.37.33}--\texttt{205.16.37.46} \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 12}
+
+Each of the following addresses belongs to a block. Find the first address, last address and
+usable host range for each.
+
+\begin{tabularx}{\textwidth}{@{}lllX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Address} & \textbf{First} & \textbf{Last} & \textbf{Usable host range} \\
+\midrule
+(a) \texttt{14.12.72.8/24} & \texttt{14.12.72.0} & \texttt{14.12.72.255} & \texttt{14.12.72.1}--\texttt{14.12.72.254} \\
+(b) \texttt{200.107.16.17/18} & \texttt{200.107.0.0} & \texttt{200.107.63.255} & \texttt{200.107.0.1}--\texttt{200.107.63.254} \\
+(c) \texttt{70.110.19.17/16} & \texttt{70.110.0.0} & \texttt{70.110.255.255} & \texttt{70.110.0.1}--\texttt{70.110.255.254} \\
+\bottomrule
+\end{tabularx}
+
+For (a), \texttt{/24} fixes the first three octets and only the fourth resets. For (b),
+\texttt{/18} is \texttt{255.255.192.0}, giving a block size of $256 - 192 = 64$ in the third
+octet; 16 falls in the block 0--63. For (c), \texttt{/16} fixes the first two octets
+and both remaining octets range over their full span.
+
+\subsection*{Question 13}
+
+An organisation is granted the block \texttt{130.34.12.64/26} and requires 4 subnets. Design
+the subnets and show the address range of each.
+
+\texttt{/26} gives $32 - 26 = 6$ host bits, a block size of $2^{6} = 64$, so the granted block
+spans \texttt{130.34.12.64}--\texttt{130.34.12.127}. Four subnets need $\log_2 4 = 2$ more borrowed
+bits, giving the prefix \texttt{/28} and a block size of $256 - 240 = 16$, which splits the
+64-address range into four equal parts.
+
+\begin{tabularx}{\textwidth}{@{}clX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Subnet} & \textbf{Address} & \textbf{Range} \\
+\midrule
+1 & \texttt{130.34.12.64/28} & \texttt{130.34.12.64}--\texttt{130.34.12.79} \\
+2 & \texttt{130.34.12.80/28} & \texttt{130.34.12.80}--\texttt{130.34.12.95} \\
+3 & \texttt{130.34.12.96/28} & \texttt{130.34.12.96}--\texttt{130.34.12.111} \\
+4 & \texttt{130.34.12.112/28} & \texttt{130.34.12.112}--\texttt{130.34.12.127} \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 14}
+
+An organisation is granted the block \texttt{14.24.74.0/24} and needs three sub-blocks: one of
+120 addresses, one of 60 and one of 10. Design the VLSM allocation.
+
+VLSM always allocates the largest requirement first, to the smallest power-of-two block that
+is at least as big as the requirement, and continues from where the previous block ended.
+
+\begin{tabularx}{\textwidth}{@{}lccll@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Sub-block} & \textbf{Hosts needed} & \textbf{Prefix} & \textbf{Network address} & \textbf{Range} \\
+\midrule
+1 & 120 & \texttt{/25} & \texttt{14.24.74.0} & \texttt{14.24.74.0}--\texttt{14.24.74.127} \\
+2 & 60 & \texttt{/26} & \texttt{14.24.74.128} & \texttt{14.24.74.128}--\texttt{14.24.74.191} \\
+3 & 10 & \texttt{/28} & \texttt{14.24.74.192} & \texttt{14.24.74.192}--\texttt{14.24.74.207} \\
+Unused & --- & --- & \texttt{14.24.74.208} & \texttt{14.24.74.208}--\texttt{14.24.74.255} \\
+\bottomrule
+\end{tabularx}
+
+The smallest power of 2 at least 120 is $128 = 2^{7}$ (\texttt{/25}); at least 60 is
+$64 = 2^{6}$ (\texttt{/26}); at least 10 is $16 = 2^{4}$ (\texttt{/28}). The three sub-blocks
+use $128 + 64 + 16 = 208$ addresses, leaving $256 - 208 = 48$ addresses unused.
+
+\subsection*{Question 15}
+
+An organisation is granted the block \texttt{14.24.74.0/24} and needs three sub-blocks: one of
+10 addresses, one of 60 and one of 120. Design the VLSM allocation.
+
+The order in which the requirements are listed does not determine the allocation order: VLSM
+always sorts by size, largest first, because larger blocks need stricter address alignment.
+Sorting descending gives $120 \to 60 \to 10$, exactly as in Question 14, so the allocation is
+mathematically identical.
+
+\begin{tabularx}{\textwidth}{@{}lccll@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Requested size} & \textbf{Order} & \textbf{Prefix} & \textbf{Network address} & \textbf{Range} \\
+\midrule
+120 & 1st (largest) & \texttt{/25} & \texttt{14.24.74.0} & \texttt{14.24.74.0}--\texttt{14.24.74.127} \\
+60 & 2nd & \texttt{/26} & \texttt{14.24.74.128} & \texttt{14.24.74.128}--\texttt{14.24.74.191} \\
+10 & 3rd (smallest) & \texttt{/28} & \texttt{14.24.74.192} & \texttt{14.24.74.192}--\texttt{14.24.74.207} \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 16}
+
+An ISP is granted the block \texttt{190.100.0.0/16} and must serve 64 customers requiring 256
+addresses each, 128 customers requiring 128 addresses each, and 128 customers requiring 64
+addresses each. Determine the prefix for each group, the address ranges allocated, the total
+addresses used and the addresses remaining. (This case is worked in full as the ISP example
+earlier in this section; the table below restates the result.)
+
+\begin{tabularx}{\textwidth}{@{}lcccX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Group} & \textbf{Customers} & \textbf{Addr./customer} & \textbf{Prefix} & \textbf{Range} \\
+\midrule
+A & 64 & 256 & \texttt{/24} & \texttt{190.100.0.0}--\texttt{190.100.63.255} (16{,}384 addr.) \\
+B & 128 & 128 & \texttt{/25} & \texttt{190.100.64.0}--\texttt{190.100.127.255} (16{,}384 addr.) \\
+C & 128 & 64 & \texttt{/26} & \texttt{190.100.128.0}--\texttt{190.100.159.255} (8{,}192 addr.) \\
+\bottomrule
+\end{tabularx}
+
+The block holds 65,536 addresses; 40,960 are allocated, leaving 24,576 addresses free in the
+range \texttt{190.100.160.0}--\texttt{190.100.255.255}.
+
+\subsection*{Question 17}
+
+An ISP is granted the block \texttt{16.12.64.0/20} and must allocate addresses to 8
+organisations, each requiring 256 addresses. Find the number and range of addresses in the
+ISP block, the range allocated to each organisation, the unallocated range and a distribution
+outline.
+
+With $32 - 20 = 12$ host bits, the block holds $2^{12} = 4096$ addresses. \texttt{/20} is
+\texttt{255.255.240.0}, giving a third-octet block size of $256 - 240 = 16$, so the ISP block
+spans \texttt{16.12.64.0}--\texttt{16.12.79.255}. Since $256 = 2^{8}$, each organisation gets a
+\texttt{/24}.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Organisation} & \textbf{Range} \\
+\midrule
+Org 1 & \texttt{16.12.64.0/24} (\texttt{16.12.64.0}--\texttt{16.12.64.255}) \\
+Org 2 & \texttt{16.12.65.0/24} (\texttt{16.12.65.0}--\texttt{16.12.65.255}) \\
+Org 3 & \texttt{16.12.66.0/24} (\texttt{16.12.66.0}--\texttt{16.12.66.255}) \\
+Org 4 & \texttt{16.12.67.0/24} (\texttt{16.12.67.0}--\texttt{16.12.67.255}) \\
+Org 5 & \texttt{16.12.68.0/24} (\texttt{16.12.68.0}--\texttt{16.12.68.255}) \\
+Org 6 & \texttt{16.12.69.0/24} (\texttt{16.12.69.0}--\texttt{16.12.69.255}) \\
+Org 7 & \texttt{16.12.70.0/24} (\texttt{16.12.70.0}--\texttt{16.12.70.255}) \\
+Org 8 & \texttt{16.12.71.0/24} (\texttt{16.12.71.0}--\texttt{16.12.71.255}) \\
+\bottomrule
+\end{tabularx}
+
+The 8 organisations use $8 \times 256 = 2048$ addresses, leaving $4096 - 2048 = 2048$
+unallocated in \texttt{16.12.72.0}--\texttt{16.12.79.255}.
+
+\subsection*{Question 18}
+
+An ISP is granted the block \texttt{80.70.56.0/21} and must allocate addresses to two
+organisations requiring 500 addresses each, two requiring 250 each and three requiring 50
+each. Find the number and range of addresses in the ISP block, the allocation for each
+organisation, the unallocated range and a distribution outline.
+
+With $32 - 21 = 11$ host bits, the block holds $2^{11} = 2048$ addresses. \texttt{/21} is
+\texttt{255.255.248.0}, so the third-octet block size is $256 - 248 = 8$; since 56 is already
+a multiple of 8, the ISP block spans \texttt{80.70.56.0}--\texttt{80.70.63.255}. The smallest
+power-of-two prefix for 500 is $512 = 2^{9}$ (\texttt{/23}); for 250 it is $256 = 2^{8}$
+(\texttt{/24}); for 50 it is $64 = 2^{6}$ (\texttt{/26}). Allocating largest first:
+
+\begin{tabularx}{\textwidth}{@{}lccX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Organisation} & \textbf{Addresses needed} & \textbf{Prefix} & \textbf{Range} \\
+\midrule
+A1 & 500 & \texttt{/23} & \texttt{80.70.56.0}--\texttt{80.70.57.255} \\
+A2 & 500 & \texttt{/23} & \texttt{80.70.58.0}--\texttt{80.70.59.255} \\
+B1 & 250 & \texttt{/24} & \texttt{80.70.60.0}--\texttt{80.70.60.255} \\
+B2 & 250 & \texttt{/24} & \texttt{80.70.61.0}--\texttt{80.70.61.255} \\
+C1 & 50 & \texttt{/26} & \texttt{80.70.62.0}--\texttt{80.70.62.63} \\
+C2 & 50 & \texttt{/26} & \texttt{80.70.62.64}--\texttt{80.70.62.127} \\
+C3 & 50 & \texttt{/26} & \texttt{80.70.62.128}--\texttt{80.70.62.191} \\
+\bottomrule
+\end{tabularx}
+
+The allocation uses $(2 \times 512) + (2 \times 256) + (3 \times 64) = 1728$ addresses, leaving
+$2048 - 1728 = 320$ unallocated in \texttt{80.70.62.192}--\texttt{80.70.63.255}.
+
+\subsection*{Question 19}
+
+A supernet has first address \texttt{205.16.32.0} and mask \texttt{255.255.248.0}. A router
+receives packets for \texttt{205.16.37.44}, \texttt{205.16.42.56} and \texttt{205.17.33.76}.
+Determine which packets belong to the supernet.
+
+The mask has 21 ones, so the prefix is \texttt{/21}. The third-octet block size is
+$256 - 248 = 8$, giving the supernet range \texttt{205.16.32.0}--\texttt{205.16.39.255} (third octet
+32--39).
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Destination} & \textbf{Belongs to supernet?} \\
+\midrule
+\texttt{205.16.37.44} & Yes -- third octet 37 lies in 32--39 \\
+\texttt{205.16.42.56} & No -- third octet 42 is outside 32--39 \\
+\texttt{205.17.33.76} & No -- second octet 17 does not match 16 \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 20}
+
+A supernet has first address \texttt{205.16.32.0} and mask \texttt{255.255.248.0}. Find the
+prefix length, the number of class C blocks aggregated, the first address, the last address
+and the total number of addresses.
+
+The mask has 21 ones, so the prefix is \texttt{/21}. Each class C block is a \texttt{/24}, so
+the difference $24 - 21 = 3$ gives $2^{3} = 8$ blocks aggregated. The first address is given
+directly; the third-octet block size, $256 - 248 = 8$, gives a range of 32--39, so the
+last address is \texttt{205.16.39.255}. With $32 - 21 = 11$ host bits, the total is
+$2^{11} = 2048$ addresses, matching $8 \times 256$.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Term} & \textbf{Value} \\
+\midrule
+Prefix length & \texttt{/21} \\
+Class C blocks aggregated & 8 \\
+First address & \texttt{205.16.32.0} \\
+Last address & \texttt{205.16.39.255} \\
+Total addresses & 2048 \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Question 21}
+
+A company needs approximately 600 addresses. For each of the following sets of class C
+blocks, determine whether a valid supernet can be formed and explain why. A set is valid only
+if the number of blocks is a power of 2, the blocks are contiguous, and the first block's
+network number is an exact multiple of the block count.
+
+\begin{tabularx}{\textwidth}{@{}lcccX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Set} & \textbf{Blocks} & \textbf{Power of 2?} & \textbf{Contiguous?} & \textbf{Result} \\
+\midrule
+(a) \texttt{198.47.32/33/34.0} & 3 & No & Yes & \textbf{Invalid} -- 3 is not a power of 2 \\
+(b) \texttt{198.47.32/42/52/62.0} & 4 & Yes & No & \textbf{Invalid} -- gaps of 10 between blocks \\
+(c) \texttt{198.47.31/32/33/52.0} & 4 & Yes & No & \textbf{Invalid} -- block 52 is not contiguous with the rest \\
+(d) \texttt{198.47.32/33/34/35.0} & 4 & Yes & Yes & \textbf{Valid} \\
+\bottomrule
+\end{tabularx}
+
+For (d), the starting third octet, 32, divides evenly by the block count 4, so the alignment
+rule also holds. The combined range is \texttt{198.47.32.0}--\texttt{198.47.35.255}, giving
+$4 \times 256 = 1024$ addresses under the mask \texttt{/22} (\texttt{255.255.252.0}) -- enough
+to cover the company's requirement of about 600 addresses.
+
+\subsection*{Question 22}
+
+Determine the supernet mask required to aggregate 16 contiguous class C networks. Show the
+binary calculation, the prefix length and the decimal mask.
+
+Since $2^{4} = 16$, four bits must be reclaimed from the network portion of the default
+\texttt{/24} mask, giving a new prefix of $24 - 4 = 20$.
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Line} & \textbf{Binary} \\
+\midrule
+Mask (\texttt{/20}) & \texttt{11111111 11111111 11110000 00000000} \\
+\bottomrule
+\end{tabularx}
+
+Converting each octet gives the \textbf{supernet mask \texttt{255.255.240.0}}. With
+$32 - 20 = 12$ host bits, the total is $2^{12} = 4096$ addresses, matching
+$16 \times 256 = 4096$.
 
 \unitpart{Cloud Computing Fundamentals}
 
