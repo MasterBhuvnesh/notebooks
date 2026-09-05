@@ -1488,25 +1488,68 @@ are still available.
 subnetting, classless (CIDR) blocks, VLSM and supernetting, in the style of the examples
 above. Each question is followed immediately by its full solution.}
 
-\subsection*{Question 1}
 
+\subsection*{Question 1}
+ 
 Find the network address of the host with IP address \texttt{168.14.32.12}, assuming the
 default classful mask.
-
-The first octet is 168, and $128 \le 168 \le 191$, so the address is class B. The default
-class B mask is \texttt{255.255.0.0}, or \texttt{/16}.
-
+ 
+\subsubsection*{Given}
+ 
+\begin{tabularx}{\textwidth}{@{}X@{}}
+\texttt{IP Address = 168.14.32.12} \\
+\end{tabularx}
+ 
+\subsubsection*{Step 1: Identify the Class}
+ 
+The first octet is \textbf{168}.
+ 
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Class} & \textbf{Range} \\
+\midrule
+A & 0--127 \\
+B & 128--191 \\
+C & 192--223 \\
+\bottomrule
+\end{tabularx}
+ 
+Since $128 \le 168 \le 191$, this is a \textbf{class B} address.
+ 
+\subsubsection*{Step 2: Default Classful Mask}
+ 
+The class B default mask is:
+ 
+\begin{tabularx}{\textwidth}{@{}X@{}}
+\texttt{255.255.0.0} $\rightarrow$ \texttt{/16} \\
+\end{tabularx}
+ 
+This means the \textbf{first two octets} identify the network, and the \textbf{last two
+octets} identify the host.
+ 
+\subsubsection*{Step 3: Apply the Mask (Binary AND)}
+ 
 \begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \rowcolor{tablehead}\textbf{Line} & \textbf{Binary} \\
 \midrule
-Address & \texttt{10101000 00001110 00100000 00001100} \\
-Mask & \texttt{11111111 11111111 00000000 00000000} \\
-Result & \texttt{10101000 00001110 00000000 00000000} \\
+IP (\texttt{168.14.32.12}) & \texttt{10101000 00001110 00100000 00001100} \\
+Mask (\texttt{255.255.0.0}) & \texttt{11111111 11111111 00000000 00000000} \\
+AND (\texttt{168.14.0.0}) & \texttt{10101000 00001110 00000000 00000000} \\
 \bottomrule
 \end{tabularx}
-
-The \textbf{network address is \texttt{168.14.0.0}}.
+ 
+\subsubsection*{Final Answer}
+ 
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Term} & \textbf{Value} \\
+\midrule
+Class & B \\
+Default mask & \texttt{255.255.0.0} (\texttt{/16}) \\
+\textbf{Network address} & \textbf{\texttt{168.14.0.0}} \\
+\bottomrule
+\end{tabularx}
 
 \subsection*{Question 2}
 
