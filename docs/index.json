@@ -1,13 +1,13 @@
 {
   "books": 6,
-  "pages": 249,
+  "pages": 250,
   "generated": "2026-09-05",
   "documents": [
     {
       "slug": "cloud-computing",
       "title": "Cloud Computing",
-      "pages": 89,
-      "bytes": 2450314,
+      "pages": 90,
+      "bytes": 2297571,
       "diagrams": 27,
       "created": "2026-08-20",
       "updated": "2026-09-05",
