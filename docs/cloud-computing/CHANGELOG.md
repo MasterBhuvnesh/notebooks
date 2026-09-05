@@ -6,6 +6,7 @@
 
 | Date | Commit | Change | Author |
 |---|---|---|---|
+| 2026-09-05 | `d3a3217` | feat(cloud-computing): expand Q2-Q22 practice solutions to Q1 detail level | bhuvii |
 | 2026-09-05 | `8c4c046` | feat(cloud computing): solutions | bhuvii |
 | 2026-09-05 | `d7f9864` | feat(cloud-computing) : question with solutions | bhuvii |
 | 2026-09-04 | `735d993` | feat(cloud-computing): added unit 3 - Cloud Computing Fundamentals | bhuvii |
