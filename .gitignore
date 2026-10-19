@@ -12,3 +12,6 @@
 
 node_modules/
 __pycache__/
+
+# WIP -- incomplete, will be finished last
+docs/bda/
