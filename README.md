@@ -19,8 +19,7 @@ LaTeX for the page, mermaid for the diagrams, one shared style, built by CI.
 
 | Book | Created | Updated | PDF |
 | :---: | :---: | :---: | :---: |
-| Big Data Analytics | 2026-09-08 | 2026-09-08 | [pdf](docs/bda/main.pdf) |
-| Cloud Computing | 2026-08-20 | 2026-09-05 | [pdf](docs/cloud-computing/main.pdf) |
+| Cloud Computing | 2026-08-20 | 2026-10-31 | [pdf](docs/cloud-computing/main.pdf) |
 | DevOps Cheat Sheet | 2026-08-15 | 2026-08-15 | [pdf](docs/devops-cheatsheet/main.pdf) |
 | Exploratory Data Analysis | 2026-08-27 | 2026-08-27 | [pdf](docs/eda-preprocessing/main.pdf) |
 | Linux Commands | 2026-08-17 | 2026-08-17 | [pdf](docs/linux-commands/main.pdf) |

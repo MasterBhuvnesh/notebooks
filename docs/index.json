@@ -1,36 +1,16 @@
 {
-  "books": 9,
-  "pages": 314,
-  "generated": "2026-09-30",
+  "books": 6,
+  "pages": 302,
+  "generated": "2026-10-31",
   "documents": [
-    {
-      "slug": "bda",
-      "title": "Big Data Analytics",
-      "pages": 34,
-      "bytes": 749095,
-      "diagrams": 8,
-      "created": "2026-09-08",
-      "updated": "2026-09-08",
-      "pdf": "docs/bda/main.pdf"
-    },
-    {
-      "slug": "cat7005-ta1-robotics-intelligent-systems",
-      "title": "CAT7005 Robotics and Intelligent Systems",
-      "pages": 22,
-      "bytes": 964050,
-      "diagrams": 15,
-      "created": "2026-09-28",
-      "updated": "2026-09-28",
-      "pdf": "docs/cat7005-ta1-robotics-intelligent-systems/main.pdf"
-    },
     {
       "slug": "cloud-computing",
       "title": "Cloud Computing",
-      "pages": 90,
-      "bytes": 2297571,
-      "diagrams": 27,
+      "pages": 142,
+      "bytes": 6599765,
+      "diagrams": 58,
       "created": "2026-08-20",
-      "updated": "2026-09-05",
+      "updated": "2026-10-31",
       "pdf": "docs/cloud-computing/main.pdf"
     },
     {
@@ -82,16 +62,6 @@
       "created": "2026-08-15",
       "updated": "2026-08-15",
       "pdf": "docs/rabbitmq/main.pdf"
-    },
-    {
-      "slug": "solid-principles",
-      "title": "SOLID Principles",
-      "pages": 8,
-      "bytes": 439471,
-      "diagrams": 2,
-      "created": "2026-09-30",
-      "updated": "2026-09-30",
-      "pdf": "docs/solid-principles/main.pdf"
     }
   ]
 }

@@ -6,6 +6,7 @@
 
 | Date | Commit | Change | Author |
 |---|---|---|---|
+| 2026-10-31 | `b2d27b1` | feat(cloud-computing): add Unit 3 TCO, Unit 4 AWS and Unit 5 Azure | Bhuvnesh Verma |
 | 2026-09-05 | `5e0d370` | fix(cloud-computing) | bhuvii |
 | 2026-09-05 | `d3a3217` | feat(cloud-computing): expand Q2-Q22 practice solutions to Q1 detail level | bhuvii |
 | 2026-09-05 | `8c4c046` | feat(cloud computing): solutions | bhuvii |
