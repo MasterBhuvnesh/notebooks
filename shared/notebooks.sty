@@ -217,18 +217,22 @@
 % The optional argument renames the divider: \unitpart[Part]{...} for a book
 % whose author calls them Parts. The divider also lands in the table of
 % contents, so a long book's contents page groups instead of running flat.
+% titlesec's \part* writes that entry (and its link anchor) itself; adding
+% \addcontentsline here as well listed every unit twice.
+% Sections restart per unit, so hyperref's anchors (section.1, ...) would
+% repeat and every unit's links would land in Unit 1; key them by unit too.
 \newcommand{\unitpart}[2][Unit]{%
   \renewcommand{\thesection}{\theunit.\arabic{section}}%
+  \renewcommand{\theHsection}{\theunit.\arabic{section}}%
   \stepcounter{unit}\setcounter{section}{0}%
-  \part*{#1 \theunit: #2}%
-  \addcontentsline{toc}{part}{#1 \theunit: #2}}
+  \part*{#1 \theunit: #2}}
 
 % \appendixpart{A}{Cheat Sheets} -- same divider, but lettered and outside the
 % unit sequence, so its sections number A.1, A.2, ...
 \newcommand{\appendixpart}[2]{%
   \renewcommand{\theunit}{#1}\setcounter{section}{0}%
-  \part*{Appendix #1: #2}%
-  \addcontentsline{toc}{part}{Appendix #1: #2}}
+  \renewcommand{\theHsection}{\theunit.\arabic{section}}%
+  \part*{Appendix #1: #2}}
 \titleformat{\section}{\huge\color{accent}}{\thesection.}{0.5em}{}
             [{\color{rulecol}\titlerule[1pt]}]
 \titleformat{\subsection}{\Large\color{accent}}{\thesubsection}{0.5em}{}

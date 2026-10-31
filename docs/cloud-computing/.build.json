@@ -1,7 +1,7 @@
 {
-  "built_at": "2026-10-31 12:28 UTC",
-  "bytes": 6599765,
-  "commit": "8853174",
+  "built_at": "2026-10-31 13:26 UTC",
+  "bytes": 6615999,
+  "commit": "78070bf",
   "diagram_count": 58,
   "diagrams": {
     "01-virtualization-layers.mmd": "b8c999b97fca3c7a582212e8db9e78dc0990bb70de8f495530c305c897c38fda",
@@ -64,7 +64,7 @@
     "58-horizontal-vs-vertical.mmd": "e4381985ac10d572615bd91efec09947f39c31ca3cc7f597e5a123509c641f7e"
   },
   "pages": 142,
-  "sty": "386c0a82a2416ba0e585baa5e74d48da9776d56d557a307a8f174e113bdf9dcd",
+  "sty": "70c71883d118ca2e9e8c9fa4194c15ca9144799de0c508faddbb8e0ff72e8b79",
   "tex": "3f807b1ef2c33d34fd294786b0022aea9e55a485741743a8a1bd63e6110e275a",
   "title": "Cloud Computing"
 }
