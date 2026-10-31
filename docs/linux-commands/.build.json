@@ -1,11 +1,11 @@
 {
-  "built_at": "2026-09-04 07:33 UTC",
+  "built_at": "2026-10-31 14:13 UTC",
   "bytes": 264548,
-  "commit": "735d993",
+  "commit": "d195c4f",
   "diagram_count": 0,
   "diagrams": {},
   "pages": 9,
-  "sty": "386c0a82a2416ba0e585baa5e74d48da9776d56d557a307a8f174e113bdf9dcd",
+  "sty": "70c71883d118ca2e9e8c9fa4194c15ca9144799de0c508faddbb8e0ff72e8b79",
   "tex": "4eb099ffce4bba8e99b3a51481c2279786321f703031f8975e066b5a6d55c229",
   "title": "Linux Commands"
 }
