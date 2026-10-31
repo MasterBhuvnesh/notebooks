@@ -1,0 +1,15 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+flowchart TD
+    E[S3 data protection] --> T[In transit<br/>SSL / TLS]
+    E --> R[At rest<br/>AES-256]
+    R --> S1[SSE-S3<br/>AWS manages the keys]
+    R --> S2[SSE-KMS<br/>keys in AWS KMS,<br/>central control and audit]
+    R --> S3[SSE-C<br/>customer supplies keys,<br/>AWS encrypts and decrypts]
+    R --> S4[Client-side<br/>customer encrypts before upload<br/>and manages the keys]

@@ -1,0 +1,26 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+flowchart LR
+    subgraph TOOLS[Ways to create resources]
+        direction TB
+        P[Azure Portal<br/>web GUI]
+        CS[Cloud Shell<br/>Azure CLI / PowerShell]
+        T[ARM template<br/>declarative JSON]
+        SDK[SDKs and REST API]
+    end
+    ARM[Azure Resource Manager<br/>authentication, RBAC,<br/>Azure Policy, resource groups]
+    P --> ARM
+    CS --> ARM
+    T --> ARM
+    SDK --> ARM
+    ARM --> RP[Resource providers]
+    RP --> VM[Virtual machines]
+    RP --> STG[Storage accounts]
+    RP --> DB[(Databases)]
+    CL[Classic model<br/>legacy Service Management API] -. older, no resource groups .-> RP

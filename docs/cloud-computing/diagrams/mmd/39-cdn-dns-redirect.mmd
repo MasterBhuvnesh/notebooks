@@ -1,0 +1,27 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+sequenceDiagram
+    autonumber
+    participant C as Client browser
+    participant L as Local DNS resolver
+    participant D as CDN authoritative DNS
+    participant E as Nearest edge server
+    participant O as Origin server
+    C->>L: resolve images.example.com
+    L->>D: query (CNAME points to the CDN)
+    D-->>L: IP of the replica closest to the resolver
+    L-->>C: edge server IP
+    C->>E: GET /images/logo.png
+    alt cached at the edge
+        E-->>C: object from cache
+    else cache miss
+        E->>O: fetch object
+        O-->>E: object
+        E-->>C: object, now cached
+    end

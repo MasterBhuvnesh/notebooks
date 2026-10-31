@@ -1,0 +1,20 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+sequenceDiagram
+    autonumber
+    participant U as RDP client (mstsc) on the laptop
+    participant V as Windows VM in Azure / AWS
+    U->>V: connect to public IP or hostname, TCP 3389
+    V-->>U: request credentials
+    U->>V: username and password
+    V-->>U: desktop session starts
+    loop while the session is open
+        U->>V: keyboard and mouse input
+        V-->>U: screen and display updates
+    end

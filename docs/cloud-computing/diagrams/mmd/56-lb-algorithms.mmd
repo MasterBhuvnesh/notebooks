@@ -1,0 +1,21 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+flowchart LR
+    subgraph WRR[Weighted round robin]
+        direction LR
+        LB((LB)) -- weight 3: 75% --> BIG[Server X<br/>8 vCPU]
+        LB -- weight 1: 25% --> SMALL[Server Y<br/>2 vCPU]
+    end
+    subgraph RR[Round robin]
+        direction LR
+        R1[Request 1] --> SA[Server A]
+        R2[Request 2] --> SB[Server B]
+        R3[Request 3] --> SC[Server C]
+        R4[Request 4] --> SA
+    end

@@ -1,0 +1,28 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+flowchart TD
+    INT((Internet))
+    subgraph VNET[Azure VNet 10.0.0.0/16]
+        subgraph APP[App subnet 10.0.1.0/24]
+            NSG1{{NSG: allow 443 inbound}}
+            VM1[Web VM 1]
+            VM2[Web VM 2]
+        end
+        subgraph DBS[Database subnet 10.0.2.0/24]
+            NSG2{{NSG: allow 1433 from app subnet only}}
+            DB[(Azure SQL / DB VM)]
+        end
+        GW[VPN Gateway<br/>GatewaySubnet]
+    end
+    ONP[On-premises college network]
+    INT --> NSG1 --> VM1
+    NSG1 --> VM2
+    VM1 --> NSG2 --> DB
+    VM2 --> NSG2
+    GW <-- encrypted IPsec tunnel --> ONP

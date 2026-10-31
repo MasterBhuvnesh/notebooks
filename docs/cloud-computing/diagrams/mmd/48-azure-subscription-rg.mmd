@@ -1,0 +1,18 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+flowchart TD
+    ACC[Azure account / Microsoft Entra tenant] --> S1[Subscription: College-Subscription<br/>billing, RBAC, policy boundary]
+    ACC --> S2[Subscription: AI-Research<br/>separate budget and access]
+    S1 --> RG[Resource group: College-App-RG]
+    S2 --> RG2[Resource group: Research-RG]
+    RG --> VM[Virtual Machine<br/>application hosting]
+    RG --> SQL[(SQL Database<br/>student records)]
+    RG --> ST[Storage Account<br/>documents and files]
+    RG --> VN[Virtual Network<br/>network connectivity]
+    RG2 --> ML[Azure Machine Learning<br/>workspace]

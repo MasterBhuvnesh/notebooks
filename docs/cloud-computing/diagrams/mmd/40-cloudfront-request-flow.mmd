@@ -1,0 +1,22 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+sequenceDiagram
+    autonumber
+    participant V as Viewer
+    participant E as CloudFront edge location
+    participant O as Origin (S3 bucket / EC2)
+    V->>E: GET d111.cloudfront.net/images/image.jpg
+    alt file cached and within its expiration period
+        E-->>V: served from the edge cache
+    else not cached or expired (default check after 24 h)
+        E->>O: fetch over a persistent connection
+        Note over E,O: simultaneous requests for the same file<br/>are collapsed into one origin request
+        O-->>E: image.jpg + Cache-Control header
+        E-->>V: image.jpg, cached for later viewers
+    end

@@ -1,0 +1,21 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+sequenceDiagram
+    autonumber
+    participant C as SSH client (laptop)
+    participant S as SSH server (Linux VM, port 22)
+    C->>S: initiate connection
+    S-->>C: negotiate algorithms, set up an encrypted channel
+    S-->>C: host key
+    C->>C: verify host key (known_hosts)
+    C->>S: authenticate with password or SSH key pair
+    S-->>C: access granted, shell opened
+    C->>S: commands, SCP / SFTP file transfer
+    S-->>C: output
+    C->>S: exit

@@ -1,0 +1,21 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+sequenceDiagram
+    autonumber
+    participant B as Browser
+    participant R as Resolving DNS server (ISP)
+    participant T as .com TLD server
+    participant Z as Route 53 hosted zone
+    B->>R: where is www.zekelabs.com?
+    R->>T: query
+    T-->>R: NS records: ask Route 53 name servers
+    R->>Z: query www.zekelabs.com
+    Z-->>R: A record 123.10.10.80, TTL 300 s
+    R-->>B: 123.10.10.80 (cached for the TTL)
+    B->>B: connect to 123.10.10.80

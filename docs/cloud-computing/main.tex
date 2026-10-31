@@ -1,9 +1,11 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{notebooks}
+\usepackage{amsmath} % \text and \dfrac in the TCO and scaling numericals
 
 \notebooktitle{Cloud Computing}
 \notebooksubtitle{CAT7002 Course Notes}
-\notebooktagline{Servers, virtualization, data centres and the addressing that connects them.}
+\notebooktagline{Servers, virtualization, data centres, cloud fundamentals, AWS storage and
+  delivery, and Microsoft Azure.}
 \notebookauthor{by Bhuvnesh Verma}
 \notebooksource{CAT7002 Cloud Computing, RBU Nagpur}
 
@@ -3779,5 +3781,1977 @@ skills in complex queries and data processing.}
   \item \textbf{Sync frameworks} -- Microsoft Azure offers flexible frameworks supporting
         varied data and file sync patterns.
 \end{itemize}
+
+\section{Fundamentals of Pricing: Total Cost of Ownership}
+
+\field{Short description:}{Total Cost of Ownership (TCO) is the total cost incurred to
+acquire, operate, maintain and eventually replace a technology or IT infrastructure over a
+specific period.}
+
+\field{The question it answers:}{``How much will it \emph{really} cost to run this workload
+on-premises, compared with running it in the cloud?''}
+
+\field{Simple idea:}{}
+
+\[
+\text{TCO} = \text{Initial cost} + \text{Operating cost} + \text{Maintenance cost} +
+\text{Other associated costs}
+\]
+
+\subsection{Overview diagram}
+\mmd[0.45]{28-tco-breakdown.png}
+
+\subsection{Need for TCO}
+
+\field{Example:}{A company wants to run an application for 3 years. It can either
+\textbf{purchase and maintain its own servers} (on-premises) or \textbf{rent computing
+resources from a cloud provider} (cloud).}
+
+\field{A common myth:}{``Cloud is always cheaper than on-premises.'' This is not necessarily
+true. The actual cost depends on:}
+
+\begin{tabularx}{\textwidth}{@{}XXX@{}}
+\textbullet\ Number of users & \textbullet\ Network traffic & \textbullet\ Number of years \\
+\textbullet\ Workload & \textbullet\ Availability requirements & \textbullet\ Cloud pricing
+  model \\
+\textbullet\ CPU and memory requirements & \textbullet\ Security requirements &
+  \textbullet\ Existing infrastructure \\
+\textbullet\ Storage requirements & & \\
+\end{tabularx}
+
+\field{Why TCO:}{TCO gives a complete cost comparison, rather than comparing only server
+prices. When calculating TCO, consider \emph{all} costs associated with the infrastructure.}
+
+\field{Major cost categories:}{Hardware, software, data centre, networking, power and
+cooling, IT staff, and maintenance.}
+
+\section{On-Premises TCO}
+
+\field{Short description:}{In an on-premises environment, the organisation owns and manages
+the infrastructure itself, so it pays for everything below.}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Category} & \textbf{What the organisation pays for} \\
+\midrule
+Hardware & Servers, storage, network devices, backup devices \\
+\addlinespace
+Software & Operating systems, database licences, virtualization software, security software \\
+\addlinespace
+Facility & Data centre space, electricity, cooling, UPS, physical security \\
+\addlinespace
+Operations & IT administrators, network administrators, system administrators, maintenance \\
+\bottomrule
+\end{tabularx}
+
+\subsection{CAPEX and OPEX}
+
+\[
+\text{On-premises TCO} = \text{CAPEX} + \text{OPEX}
+\]
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{CAPEX -- Capital Expenditure} & \textbf{OPEX -- Operational
+  Expenditure} \\
+\midrule
+The initial, one-time investment: & The recurring costs: \\
+\addlinespace
+1. Servers & 1. Electricity \\
+2. Storage & 2. Cooling \\
+3. Network equipment & 3. Maintenance \\
+4. Data centre infrastructure & 4. IT staff \\
+5. Software licences & 5. Internet connectivity \\
+ & 6. Software support \\
+\bottomrule
+\end{tabularx}
+
+\section{Cloud TCO}
+
+\field{Short description:}{In a cloud environment the organisation generally does not
+purchase physical servers. Instead, it pays for the cloud resources and services it uses.}
+
+\field{Major cloud costs:}{Compute, storage, database, network and data transfer.}
+
+\field{Simplified formula:}{}
+
+\[
+\text{Cloud TCO} = \text{Cloud usage cost} + \text{Management} + \text{Migration} +
+\text{Other costs}
+\]
+
+\subsection{Components of cloud TCO}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Component} & \textbf{Includes} \\
+\midrule
+1. Compute cost & Virtual machines, containers, serverless functions \\
+\addlinespace
+2. Storage cost & Object storage, block storage, file storage \\
+\addlinespace
+3. Database cost & Managed SQL databases, NoSQL databases \\
+\addlinespace
+4. Network cost & Data transfer, load balancers, VPN, CDN \\
+\bottomrule
+\end{tabularx}
+
+\section{Basic TCO Formulas}
+
+\field{On-premises TCO:}{}
+\[
+\text{TCO} = \text{Hardware} + \text{Software} + \text{Data centre} +
+\text{Power/Cooling} + \text{Networking} + \text{IT staff} + \text{Maintenance}
+\]
+
+\field{Cloud TCO:}{}
+\[
+\text{TCO} = \text{Compute} + \text{Storage} + \text{Data transfer} +
+\text{Managed services} + \text{Support}
+\]
+
+\field{Percentage difference}{(on-premises cost as the base):}
+\[
+\text{Percentage difference} = \frac{\text{Cloud TCO} - \text{On-premises TCO}}
+{\text{On-premises TCO}} \times 100
+\]
+
+\section{On-Premises versus Cloud TCO}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Cost factor} & \textbf{On-premises} & \textbf{Cloud-based} \\
+\midrule
+Servers & High initial cost & Usage-based \\
+Storage & Purchase hardware & Pay for storage \\
+Data centre & Required & Provider managed \\
+Power & Organisation pays & Mostly included in service cost \\
+Cooling & Organisation pays & Provider managed \\
+IT staff & Required & Reduced infrastructure management \\
+Maintenance & Organisation & Provider manages infrastructure \\
+Scalability & Requires planning & Usually easier \\
+Initial investment & High & Lower \\
+Billing & Less variable & Usage dependent \\
+\bottomrule
+\end{tabularx}
+
+\section{TCO Numericals}
+
+All amounts are in rupees (Rs.). One year = 12 months, so 3 years = 36 months and 4 years =
+48 months.
+
+% ---------------------------------------------------------------------------
+\subsection*{Problem 1: Three-year cloud TCO}
+
+A company wants to run an application for 3 years. Calculate the compute cost and the total
+cloud TCO.
+
+\subsubsection*{Given}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Virtual machines & 4, each at Rs.\ 8/hour \\
+Hours per month & 720 \\
+Storage & Rs.\ 5,000/month \\
+Network & Rs.\ 3,000/month \\
+Other services & Rs.\ 4,000/month \\
+Migration (one-time) & Rs.\ 50,000 \\
+\end{tabularx}
+
+\subsubsection*{Step 1: Compute cost}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Four VMs per hour & $4 \times 8 = \text{Rs. } 32/\text{hour}$ \\
+Monthly & $32 \times 720 = \text{Rs. } 23{,}040/\text{month}$ \\
+Annual & $23{,}040 \times 12 = \text{Rs. } 2{,}76{,}480$ \\
+Three years & $2{,}76{,}480 \times 3 = \textbf{Rs. 8,29,440}$ \\
+\end{tabularx}
+
+\subsubsection*{Step 2: Other costs over 36 months}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Storage & $5{,}000 \times 36 = \text{Rs. } 1{,}80{,}000$ \\
+Network & $3{,}000 \times 36 = \text{Rs. } 1{,}08{,}000$ \\
+Other services & $4{,}000 \times 36 = \text{Rs. } 1{,}44{,}000$ \\
+Migration & Rs.\ 50,000 (one-time) \\
+\end{tabularx}
+
+\subsubsection*{Final Answer}
+
+\begin{tabularx}{\textwidth}{@{}Xr@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Component} & \textbf{3-year cost (Rs.)} \\
+\midrule
+Compute & 8,29,440 \\
+Storage & 1,80,000 \\
+Network & 1,08,000 \\
+Other services & 1,44,000 \\
+Migration & 50,000 \\
+\midrule
+\textbf{Total cloud TCO} & \textbf{13,11,440} \\
+\bottomrule
+\end{tabularx}
+
+% ---------------------------------------------------------------------------
+\subsection*{Problem 2: On-premises versus cloud for 5 servers}
+
+A company needs 5 servers for 3 years. Calculate the 3-year on-premises TCO, the 3-year
+cloud TCO, and the percentage cost difference between the two.
+
+\subsubsection*{Given}
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{On-premises costs} & \textbf{Cloud costs} \\
+\midrule
+Cost of one server = Rs.\ 2,00,000 & Virtual machine = Rs.\ 12,000/month/server \\
+Software/licence per server per year = Rs.\ 30,000 & Storage = Rs.\ 8,000/month \\
+Maintenance per server per year = Rs.\ 20,000 & Data transfer = Rs.\ 5,000/month \\
+Power and cooling per server per year = Rs.\ 25,000 & \\
+Initial networking = Rs.\ 1,00,000 & \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection*{Step 1: On-premises TCO for 3 years}
+
+\begin{tabularx}{\textwidth}{@{}lXr@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Cost component} & \textbf{Calculation} & \textbf{3-year cost} \\
+\midrule
+Server cost & $5 \times 2{,}00{,}000$ & 10,00,000 \\
+Software/licence & $5 \times 30{,}000 \times 3$ & 4,50,000 \\
+Maintenance & $5 \times 20{,}000 \times 3$ & 3,00,000 \\
+Power and cooling & $5 \times 25{,}000 \times 3$ & 3,75,000 \\
+Initial networking & One-time & 1,00,000 \\
+\midrule
+\textbf{Total on-premises TCO} & & \textbf{22,25,000} \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection*{Step 2: Cloud TCO for 3 years (36 months)}
+
+\begin{tabularx}{\textwidth}{@{}lXr@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Cost component} & \textbf{Calculation} & \textbf{3-year cost} \\
+\midrule
+Virtual machines & $12{,}000 \times 5 \times 36$ & 21,60,000 \\
+Storage & $8{,}000 \times 36$ & 2,88,000 \\
+Data transfer & $5{,}000 \times 36$ & 1,80,000 \\
+\midrule
+\textbf{Total cloud TCO} & & \textbf{26,28,000} \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection*{Step 3: Percentage cost difference}
+
+\[
+\text{Difference} = 26{,}28{,}000 - 22{,}25{,}000 = \text{Rs. } 4{,}03{,}000
+\]
+\[
+\text{Percentage difference} = \frac{4{,}03{,}000}{22{,}25{,}000} \times 100 = 18.11\%
+\]
+
+\subsubsection*{Final Answer}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Term} & \textbf{Value} \\
+\midrule
+On-premises TCO & Rs.\ 22,25,000 (22.25 lakh) \\
+Cloud TCO & Rs.\ 26,28,000 (26.28 lakh) \\
+\textbf{Result} & \textbf{Cloud costs 18.11\% more than on-premises for this workload} \\
+\bottomrule
+\end{tabularx}
+
+% ---------------------------------------------------------------------------
+\subsection*{Problem 3: College student management system}
+
+A college is evaluating whether to maintain its own server or migrate its student management
+system to the cloud. Calculate the 3-year TCO for both alternatives and recommend the
+financially preferable option.
+
+\subsubsection*{Given}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+On-premises server cost & Rs.\ 5,00,000 \\
+Maintenance and electricity & Rs.\ 1,00,000/year \\
+Cloud service cost & Rs.\ 1,80,000/year \\
+Evaluation period & 3 years \\
+\end{tabularx}
+
+\subsubsection*{Step 1: On-premises TCO}
+
+\[
+\text{On-premises TCO} = 5{,}00{,}000 + (1{,}00{,}000 \times 3) = 5{,}00{,}000 + 3{,}00{,}000
+= \text{Rs. } 8{,}00{,}000
+\]
+
+\subsubsection*{Step 2: Cloud TCO}
+
+\[
+\text{Cloud TCO} = 1{,}80{,}000 \times 3 = \text{Rs. } 5{,}40{,}000
+\]
+
+\subsubsection*{Final Answer}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Term} & \textbf{Value} \\
+\midrule
+On-premises TCO & Rs.\ 8,00,000 \\
+Cloud TCO & Rs.\ 5,40,000 \\
+Saving with cloud & Rs.\ 2,60,000 (32.5\% of the on-premises cost) \\
+\textbf{Recommendation} & \textbf{Migrate to the cloud} -- it avoids the Rs.\ 5,00,000
+  upfront purchase and is cheaper over the 3-year period. \\
+\bottomrule
+\end{tabularx}
+
+% ---------------------------------------------------------------------------
+\subsection*{Problem 4: Monthly cloud bill with a discount}
+
+A startup uses a cloud server with the pricing below and receives a 10\% discount on the total
+monthly bill. Calculate the monthly cloud cost after the discount.
+
+\subsubsection*{Given}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+VM & Rs.\ 8/hour, 600 hours/month \\
+Storage & Rs.\ 4/GB/month, 250 GB \\
+Data transfer & Rs.\ 0.50/GB, 800 GB/month \\
+Discount & 10\% of the total monthly bill \\
+\end{tabularx}
+
+\subsubsection*{Step 1: Each component}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+VM & $600 \times 8 = \text{Rs. } 4{,}800$ \\
+Storage & $250 \times 4 = \text{Rs. } 1{,}000$ \\
+Data transfer & $800 \times 0.50 = \text{Rs. } 400$ \\
+Total before discount & $4{,}800 + 1{,}000 + 400 = \text{Rs. } 6{,}200$ \\
+\end{tabularx}
+
+\subsubsection*{Step 2: Apply the discount}
+
+\[
+\text{Discount} = 10\% \times 6{,}200 = \text{Rs. } 620 \qquad
+\text{Monthly cost} = 6{,}200 - 620 = \textbf{Rs. 5,580}
+\]
+
+% ---------------------------------------------------------------------------
+\subsection*{Problem 5: Four-year TCO for a university}
+
+A university is comparing two alternatives for a 4-year application. Calculate the 4-year TCO
+of both options.
+
+\subsubsection*{Given}
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Option A: On-premises} & \textbf{Option B: Cloud} \\
+\midrule
+Server = Rs.\ 8,00,000 & Migration = Rs.\ 60,000 \\
+Installation = Rs.\ 70,000 & Monthly cloud cost = Rs.\ 38,000 \\
+Annual maintenance = Rs.\ 1,20,000 & Annual backup cost = Rs.\ 50,000 \\
+Annual electricity = Rs.\ 80,000 & \\
+Hardware replacement after 3 years = Rs.\ 2,00,000 & \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection*{Step 1: Option A, on-premises}
+
+\begin{tabularx}{\textwidth}{@{}lXr@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Cost component} & \textbf{Calculation} & \textbf{4-year cost} \\
+\midrule
+Server & One-time & 8,00,000 \\
+Installation & One-time & 70,000 \\
+Maintenance & $1{,}20{,}000 \times 4$ & 4,80,000 \\
+Electricity & $80{,}000 \times 4$ & 3,20,000 \\
+Hardware replacement & Once, after year 3 & 2,00,000 \\
+\midrule
+\textbf{Total} & & \textbf{18,70,000} \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection*{Step 2: Option B, cloud}
+
+\begin{tabularx}{\textwidth}{@{}lXr@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Cost component} & \textbf{Calculation} & \textbf{4-year cost} \\
+\midrule
+Migration & One-time & 60,000 \\
+Cloud usage & $38{,}000 \times 48$ & 18,24,000 \\
+Backup & $50{,}000 \times 4$ & 2,00,000 \\
+\midrule
+\textbf{Total} & & \textbf{20,84,000} \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection*{Final Answer}
+
+On-premises TCO = \textbf{Rs.\ 18,70,000}; cloud TCO = \textbf{Rs.\ 20,84,000}. Over 4 years
+the on-premises option is cheaper by Rs.\ 2,14,000, so on cost alone Option A is preferable.
+
+% ---------------------------------------------------------------------------
+\subsection*{Problem 6: Pay-as-you-go versus a reserved plan}
+
+A company normally runs a cloud VM for 730 hours/month at Rs.\ 12/hour. It is considering a
+reserved plan costing Rs.\ 65,000 for 6 months instead. Storage costs Rs.\ 5/GB/month and the
+company uses 400 GB. Calculate the monthly cost under each model and the monthly saving with
+the reserved plan.
+
+\subsubsection*{Step 1: Pay-as-you-go}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+VM & $730 \times 12 = \text{Rs. } 8{,}760$ \\
+Storage & $400 \times 5 = \text{Rs. } 2{,}000$ \\
+Total & \textbf{Rs.\ 10,760/month} \\
+\end{tabularx}
+
+\subsubsection*{Step 2: Reserved plan}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+VM & $65{,}000 \div 6 = \text{Rs. } 10{,}833.33/\text{month}$ \\
+Storage & Rs.\ 2,000 \\
+Total & \textbf{Rs.\ 12,833.33/month} \\
+\end{tabularx}
+
+\subsubsection*{Step 3: Monthly saving}
+
+\[
+10{,}760 - 12{,}833.33 = -\text{Rs. } 2{,}073.33
+\]
+
+\subsubsection*{Final Answer}
+
+The ``saving'' is negative: the reserved plan costs \textbf{Rs.\ 2,073.33 more per month}, so
+the company should stay on pay-as-you-go. A reserved plan only pays off when its effective
+hourly rate is below the on-demand rate.
+
+\newpage
+\unitpart{Amazon Web Services (AWS)}
+
+\section{The AWS Storage Portfolio}
+
+\field{Why AWS:}{``AWS makes it ever easier to experiment with technology and try new
+solutions that would be prohibitively costly or outright impossible for most companies to
+even consider.'' Many services can be tried on the AWS Free Tier
+(\url{https://aws.amazon.com/free/}).}
+
+\mmd[0.11]{29-aws-storage-portfolio.png}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Service} & \textbf{How data is presented and accessed} \\
+\midrule
+Amazon S3 & Object storage: data presented as buckets of objects; accessed via APIs over the
+  Internet. \\
+\addlinespace
+Amazon EBS & Block storage (analogous to a SAN): data presented as disk volumes;
+  lowest-latency access from a single EC2 instance. \\
+\addlinespace
+Amazon Glacier & Archival storage: data presented as vaults of archives; lowest-cost storage
+  with infrequent access via APIs over the Internet. \\
+\addlinespace
+Amazon EFS & File storage (analogous to a NAS): data presented as a file system; shared
+  low-latency access from multiple EC2 instances. \\
+\bottomrule
+\end{tabularx}
+
+% ===========================================================================
+\section{Amazon S3: Simple Storage Service}
+
+\field{Short description:}{Amazon S3 is a fully managed \textbf{object storage} service that
+stores data as objects inside buckets, and is accessed over the web.}
+
+\subsection{Overview}
+
+\field{Object storage:}{S3 is object storage, not traditional file or block storage. It
+provides a file-system-like structure, but data is actually stored and managed as objects.}
+
+\field{Introduced in 2006:}{S3 was one of the earliest services launched by AWS.}
+
+\field{Fully managed:}{AWS handles the underlying storage infrastructure, maintenance and
+scalability.}
+
+\field{Highly durable and scalable:}{Designed for high durability, security and scalability,
+protecting data against the loss of multiple facilities through redundant storage.}
+
+\field{Pay-as-you-go pricing:}{No upfront infrastructure costs or minimum commitments; you pay
+based on actual usage, such as storage and data transfer.}
+
+\field{Integration with AWS services:}{Integrates easily with EC2 for computing, CloudFront for
+content delivery and RDS for database applications.}
+
+\subsection{Access methods}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Method} & \textbf{Description} \\
+\midrule
+Management Console & Web-based GUI for managing S3 resources. \\
+AWS CLI & Command-line access on Windows, macOS, Linux and PowerShell. \\
+API & Programmatic access using the REST API over HTTP/HTTPS. \\
+AWS SDK & Integrate S3 into applications using Java, .NET, Python, Node.js, PHP, Ruby, Go,
+  C++ and others. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Fundamental constructs}
+
+\field{Buckets and objects:}{S3 stores data as \textbf{objects} within \textbf{buckets}. An
+object consists of a file and, optionally, any metadata that describes that file.}
+
+\mmd[0.45]{30-s3-bucket-object.png}
+
+\subsubsection{Buckets}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Containers for objects} -- a bucket stores and organises objects.
+  \item \textbf{Namespace organisation} -- buckets provide a unique namespace for objects.
+  \item \textbf{Globally unique names} -- each bucket name must be unique across all of S3.
+  \item \textbf{Naming length} -- a bucket name must contain 3 to 63 characters.
+  \item \textbf{DNS-compatible naming} -- bucket names must follow DNS naming conventions.
+  \item \textbf{Bucket limit} -- an account has a default service limit on the number of
+        buckets, which can be increased when required.
+\end{itemize}
+
+\subsubsection{Objects}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Data and metadata} -- an object is the actual data (file) plus metadata that
+        describes it.
+  \item \textbf{Unique identification} -- each object is identified by its \textbf{key}
+        (name) and, when versioning is enabled, a \textbf{version ID}.
+  \item \textbf{Number of objects} -- no fixed limit on objects per bucket.
+  \item \textbf{Object size} -- an individual object can be larger than 5 TB.
+  \item \textbf{Different storage classes} -- objects in the same bucket can belong to
+        different storage classes.
+  \item \textbf{Storage Inventory} -- produces a flat-file listing of objects and their
+        metadata, in formats such as CSV or JSON.
+\end{itemize}
+
+\subsubsection{Keys}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Unique identifier} -- the object key identifies an object within a bucket.
+  \item \textbf{Maximum length} -- up to 1,024 bytes, including any path prefix such as
+        \texttt{images/2026/}.
+\end{itemize}
+
+\field{Structure of an S3 URL:}{\texttt{https://\textit{bucket-name}.s3.amazonaws.com/%
+\textit{key}}, for example \texttt{https://college-notes-2026.s3.amazonaws.com/images/logo.png}.}
+
+\subsection{Storage classes}
+
+\subsubsection{S3 Standard}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Frequently accessed (``hot'') data} -- dynamic websites, content distribution,
+        mobile and gaming applications, big-data analytics.
+  \item \textbf{Low latency and high throughput.}
+  \item \textbf{Durability} -- 99.999999999\% (11 nines); expected annual loss of about
+        0.000000001\% of objects.
+  \item \textbf{Availability} -- 99.99\%.
+  \item \textbf{No minimum storage duration.}
+\end{itemize}
+
+\subsubsection{S3 Standard-IA (Infrequent Access)}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Infrequently accessed data that still needs high performance} -- long-term
+        storage, backups, disaster-recovery data.
+  \item \textbf{Low latency and high throughput} when the data is needed.
+  \item \textbf{Durability} -- 11 nines. \textbf{Availability} -- 99.9\%.
+  \item \textbf{Lower storage cost} than Standard, but a \textbf{retrieval fee} is charged.
+  \item \textbf{Minimum storage duration} -- 30 days.
+\end{itemize}
+
+\subsubsection{S3 RRS (Reduced Redundancy Storage)}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Non-critical, reproducible data} already stored safely elsewhere.
+  \item \textbf{Protection against facility loss} -- withstands the loss of data in a single
+        facility.
+  \item \textbf{Durability} -- 99.99\% (about 0.01\% expected annual loss).
+        \textbf{Availability} -- 99.99\%.
+\end{itemize}
+
+\subsubsection{Amazon Glacier}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Cold storage} -- long-term archiving of rarely accessed data.
+  \item \textbf{Archives and vaults} -- data is stored as archives, organised in vaults.
+  \item \textbf{Durability} -- 11 nines. \textbf{Availability} -- 99.99\%.
+  \item \textbf{Retrieval options} -- Expedited (about 1--5 minutes), Standard (about 3--5
+        hours), Bulk (about 5--12 hours).
+  \item \textbf{Vault Lock} -- stores data as immutable objects for compliance, preventing
+        unauthorised change or deletion.
+  \item \textbf{Minimum storage duration} -- 90 days.
+\end{itemize}
+
+\subsubsection{Comparison}
+
+\begin{tabularx}{\textwidth}{@{}lXXXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Property} & \textbf{Standard} & \textbf{Standard-IA} &
+  \textbf{RRS} & \textbf{Glacier} \\
+\midrule
+Access pattern & Frequent (hot) & Infrequent (warm) & Non-critical & Rare (cold) \\
+Durability & 11 nines & 11 nines & 99.99\% & 11 nines \\
+Availability & 99.99\% & 99.9\% & 99.99\% & 99.99\% \\
+Minimum duration & None & 30 days & -- & 90 days \\
+Retrieval & Immediate & Immediate + fee & Immediate & Minutes to hours \\
+Use it for & Reliable, durable primary storage & Backups, DR & Secondary backups at lower
+  cost & Lowest-cost archival \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Lifecycle policies}
+
+\begin{itemize}\itemsep2pt
+  \item Automatically \textbf{transition} objects between storage classes based on their
+        access pattern -- for example Hot (Standard) $\rightarrow$ Warm (IA) $\rightarrow$
+        Cold (Glacier).
+  \item Automatically \textbf{expire} (delete) objects after a specified number of days.
+  \item Multiple actions can be combined or staged -- for example, archive first and delete
+        later. Separate rules can be defined for current and previous object versions.
+  \item Rules apply to an entire bucket or to objects with a given prefix, such as
+        \texttt{logs-}.
+\end{itemize}
+
+\mmd[0.10]{31-s3-lifecycle.png}
+
+\subsection{Data ingress and egress}
+
+\mmd[0.45]{32-s3-ingress-egress.png}
+
+\field{Ingress (getting data in):}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Internet upload} -- buckets can accept uploads over the Internet, either
+        anonymously or with time-limited authentication.
+  \item \textbf{VPC endpoints} -- private transfer between a VPC and S3 without crossing the
+        public Internet.
+  \item \textbf{AWS Direct Connect} -- a dedicated network connection between an
+        organisation's network and AWS.
+  \item \textbf{AWS Storage Gateway} -- connects on-premises storage to AWS cloud storage.
+\end{itemize}
+
+\field{Egress (serving data out):}{}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Static website hosting} -- HTML, CSS, JavaScript, images and videos.
+  \item \textbf{Origin for CDNs} -- a durable origin for CloudFront and other CDNs.
+  \item \textbf{Transfer to CloudFront} -- no charge for data transfer from S3 to CloudFront.
+  \item \textbf{Transfer to EC2} -- generally free between S3 and EC2 in the same Region.
+\end{itemize}
+
+\subsection{Security}
+
+\mmd[0.20]{33-s3-encryption.png}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Mechanism} & \textbf{Who encrypts, who holds the keys} \\
+\midrule
+Encryption in transit & SSL/TLS protects data travelling to and from S3. \\
+\addlinespace
+Encryption at rest & Stored data encrypted with AES-256 and other supported mechanisms. \\
+\addlinespace
+SSE-S3 & Server-side encryption; AWS manages the keys. \\
+\addlinespace
+SSE-KMS & Server-side encryption with AWS Key Management Service: centralised control over
+  keys and access permissions. \\
+\addlinespace
+SSE-C & Server-side encryption with customer-provided keys; AWS performs the encryption and
+  decryption. \\
+\addlinespace
+Client-side encryption & The customer encrypts data before uploading and manages the process
+  and keys. \\
+\bottomrule
+\end{tabularx}
+
+% ===========================================================================
+\section{Amazon EBS: Elastic Block Store}
+
+\field{Short description:}{Amazon EBS is a cloud-based \textbf{block storage} system that
+provides durable, persistent block-level volumes for use with EC2 instances.}
+
+\subsection{Introduction}
+
+\begin{itemize}\itemsep2pt
+  \item Best used for storing \textbf{persistent data}.
+  \item Volumes are created and attached through an API, and used like hard drives.
+  \item \textbf{Availability Zone specific} -- a volume lives in one AZ.
+  \item Offers consistent, low-latency performance.
+  \item Stored data is automatically \textbf{replicated within its Availability Zone}.
+\end{itemize}
+
+\subsection{EBS lifecycle}
+
+\mmd[0.34]{34-ebs-lifecycle.png}
+
+\begin{enumerate}\itemsep2pt
+  \item \textbf{Create} -- call \texttt{CreateVolume} (1 GiB to 16 TiB) out of the vast pool
+        of unused space.
+  \item \textbf{Attach} -- call \texttt{AttachVolume} to associate it with one EC2 instance.
+  \item \textbf{Attached and in use} -- format it from the EC2 instance's OS and mount the
+        formatted drive.
+  \item \textbf{CreateSnapshot} -- take a snapshot to Amazon S3.
+  \item \textbf{Detach} -- call \texttt{DetachVolume}; the volume can be re-attached later.
+  \item \textbf{Deleted} -- call \texttt{DeleteVolume}.
+\end{enumerate}
+
+\subsection{Volume types}
+
+\begin{tabularx}{\textwidth}{@{}p{2.7cm}lp{2.1cm}Xp{2.3cm}@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Type} & \textbf{API} & \textbf{Size} & \textbf{Use cases} &
+  \textbf{IOPS} \\
+\midrule
+General Purpose SSD & \texttt{gp2} & 1 GB -- 16 TB & Boot volumes, low-latency interactive
+  apps; balances price and performance & 100 -- 16,000 \\
+\addlinespace
+Provisioned IOPS SSD & \texttt{io1} & 4 GB -- 16 TB & Relational databases, I/O-intensive
+  NoSQL; highest-performance SSD & 100 -- 64,000 \\
+\addlinespace
+Throughput Optimized HDD & \texttt{st1} & 500 GB -- 16 TB & Big data, data warehouses, log
+  processing; low cost, throughput intensive & max 500 \\
+\addlinespace
+Cold HDD & \texttt{sc1} & 500 GB -- 16 TB & Colder data with fewer scans per day; lowest cost;
+  cannot be a boot volume & max 250 \\
+\addlinespace
+Magnetic (Standard) & \texttt{standard} & 1 GB -- 1 TB & Previous generation; infrequently
+  accessed data & $\approx$100, bursts to hundreds \\
+\bottomrule
+\end{tabularx}
+
+\subsection{EBS snapshots}
+
+\begin{itemize}\itemsep2pt
+  \item A snapshot is an \textbf{incremental} copy of data -- ``block-level incremental''.
+  \item A \textbf{point-in-time backup} of the modified volume blocks.
+  \item Stored in S3, and accessed via the EBS APIs from the EC2 dashboard.
+  \item Can be shared with specific AWS accounts or made public.
+  \item The \textbf{first} snapshot is a full clone; \textbf{subsequent} snapshots are
+        incremental.
+  \item Deleting a snapshot removes only the data exclusive to that snapshot.
+\end{itemize}
+
+\mmd[0.33]{35-ebs-snapshots.png}
+
+\subsection{Features and benefits}
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Features} & \textbf{Benefits} \\
+\midrule
+Persistent storage & Reliable and secure storage \\
+Volumes behave like raw, unformatted block devices & Optimised performance \\
+High-performance file system, high reliability & Data backup and restore \\
+Flexible volume size & Quickly scale up, easily scale down \\
+Private to your instances & Consistent, low-latency performance \\
+Replicated within an Availability Zone & Flexible to detach and attach \\
+Snapshots for point-in-time restore & \\
+\bottomrule
+\end{tabularx}
+
+% ===========================================================================
+\section{Amazon EFS: Elastic File System}
+
+\field{Short description:}{Amazon EFS is a fully managed \textbf{file storage} service: a file
+system that many EC2 instances can mount and share at the same time over NFS v4.}
+
+\subsection{Simple, elastic, scalable}
+
+\begin{tabularx}{\textwidth}{@{}XXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{1. Simple} & \textbf{2. Elastic} & \textbf{3. Scalable} \\
+\midrule
+Fully managed: no hardware, network or file layer to run; a file system in seconds. &
+Grows and shrinks automatically as files are added and removed. &
+Grows to petabyte scale. \\
+\addlinespace
+Works with existing tools and apps: NFS v4, standard file-system semantics and OS file APIs. &
+No need to provision storage capacity or performance. &
+Throughput and IOPS scale automatically with the file system. \\
+\addlinespace
+Simple pricing, so simple forecasting. &
+Pay only for the storage used, with no minimum fee. &
+Consistent low latency at any size; thousands of concurrent NFS connections. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{File systems and mounting}
+
+\field{File system:}{The primary resource in EFS -- where files and directories are stored.}
+
+\field{Mounting:}{You \emph{mount} a file system on an EC2 instance with a standard command;
+it then appears as a local set of directories and files. An NFS v4 client is standard on
+Linux distributions.}
+
+\begin{sh}
+sudo mount -t nfs4 fs-12345678.efs.ap-south-1.amazonaws.com:/ /mnt/efs
+\end{sh}
+
+\field{Mount target:}{To reach the file system from instances in a VPC, you create
+\textbf{mount targets} in the VPC. A mount target is an NFS v4 endpoint with an IP address
+and a DNS name, used in the mount command -- one per Availability Zone.}
+
+\subsection{How it fits together}
+\mmd[0.45]{36-efs-mount-targets.png}
+
+\field{Ways to set up and manage a file system:}{AWS Management Console, AWS Command Line
+Interface (CLI), AWS Software Development Kit (SDK).}
+
+\subsection{Securing a file system}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{VPC only} -- only EC2 instances in the VPC you specify can access the file
+        system.
+  \item \textbf{Security groups} -- control which instances in the VPC can connect to the
+        mount targets.
+  \item \textbf{File permissions} -- user-level read-write-execute permissions for users and
+        groups on files and directories.
+  \item \textbf{IAM integration} -- IAM policies control who may use the administrative APIs
+        to create, manage and delete file systems, with action-level and resource-level
+        permissions.
+\end{itemize}
+
+\mmd[0.20]{37-efs-security-groups.png}
+
+\subsection{Availability and consistency}
+
+\begin{itemize}\itemsep2pt
+  \item Every file-system object (directory, file and link) is \textbf{stored redundantly
+        across multiple AZs} in a Region, for high availability and durability.
+  \item EC2 instances can connect from \textbf{any AZ} in the Region.
+  \item All reads and writes are \textbf{fully consistent across AZs}: a read in one AZ is
+        guaranteed to see the latest data, even if it is being written in another AZ.
+\end{itemize}
+
+% ===========================================================================
+\section{Content Delivery Networks (CDN)}
+
+\field{Short description:}{A CDN is a network of servers placed at the edge of the Internet
+that keeps copies of content close to end users, so pages and media load faster and the
+origin server carries less load.}
+
+\subsection{Why a CDN is needed}
+
+\field{Simple on the outside:}{From outside, the web looks simple: content providers on one
+side, end users on the other, with ``the Internet'' between them.}
+
+\field{Problematic on the inside:}{In reality a request crosses many network providers (UUNet,
+Qwest, AOL and others) joined at peering points (NAPs). Each hop adds delay and risk.}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Issue} & \textbf{What the user sees} \\
+\midrule
+Latency & The browser takes a long time to load pages. \\
+Packet loss & The browser hangs; the user needs to hit refresh. \\
+Jitter & Streams are jerky. \\
+Server load & The browser connects but does not fully load the page. \\
+Bandwidth aggregation & Many users share congested links. \\
+Broken or missing content & Parts of the page fail to appear. \\
+\bottomrule
+\end{tabularx}
+
+\field{The solution:}{Place servers at the network edge, close to end users, and serve
+content from them.}
+
+\mmd[0.39]{38-cdn-conventional-vs-cdn.png}
+
+\subsection{Passive and active CDNs}
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Passive} & \textbf{Active} \\
+\midrule
+Works through browser caches and proxies. & Replicates content on a distribution network. \\
+Little investment needed if content is static. & Uses HTTP redirects or DNS-based
+  redirection. \\
+A significant fraction of HTTP objects is not cacheable. & The provider has control and
+  customisation. \\
+The provider lacks control and customisation. & Low investment from the content provider. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{CDN challenges}
+
+\begin{itemize}\itemsep2pt
+  \item How to replicate content?
+  \item Where to replicate content?
+  \item How to find replicated content?
+  \item How to choose among known replicas?
+  \item How to direct clients towards a replica?
+\end{itemize}
+
+\subsection{Directing clients to a replica}
+
+\field{HTTP redirects (application based):}{The origin server rewrites its pages so that
+embedded content (images, scripts) is fetched from CDN URLs instead of its own.}
+
+\field{DNS based (naming based):}{The content's hostname points to the CDN, whose DNS answers
+with the address of a nearby replica.}
+
+\mmd[0.36]{39-cdn-dns-redirect.png}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Option} & \textbf{Pros} & \textbf{Cons} \\
+\midrule
+HTTP redirects & Application-level, fine-grained control & Additional load and high RTTs;
+  hard to cache \\
+\addlinespace
+DNS selection & Well suited to caching; reduces RTTs & The request comes from the resolver,
+  not the client; it is for a domain, not a URL; the resolver's user population hides the
+  real load \\
+\bottomrule
+\end{tabularx}
+
+% ===========================================================================
+\section{Amazon CloudFront}
+
+\field{Short description:}{Amazon CloudFront is AWS's web service for content delivery. It
+integrates with other AWS services to give developers and businesses an easy way to
+distribute content to end users with low latency, high data-transfer speeds and no
+commitments.}
+
+\subsection{How CloudFront gives higher performance}
+
+\begin{itemize}\itemsep2pt
+  \item A network of \textbf{edge locations} caches copies of popular files close to viewers.
+  \item Each request is served by the \textbf{closest edge location}, so it travels a shorter
+        distance.
+  \item For files not cached at the edge, CloudFront keeps \textbf{persistent connections}
+        with the origin, so they are fetched as quickly as possible.
+  \item Further optimisations, such as a wider TCP initial congestion window.
+  \item \textbf{Request collapsing} -- simultaneous viewer requests for the same file at an
+        edge are merged into one origin request, reducing origin load and cost.
+\end{itemize}
+
+\mmd[0.42]{40-cloudfront-request-flow.png}
+
+\subsection{Pricing}
+
+Charges are based on actual usage in three areas:
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Charge} & \textbf{Basis} \\
+\midrule
+Data transfer & Volume of data transferred out of the edge locations, measured in GB. \\
+HTTP/HTTPS requests & Number of requests made to CloudFront for your content. \\
+Invalidation requests & Up to 1,000 files per month free; beyond that, a per-file charge for
+  each file listed in invalidation requests. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Edge locations}
+
+The original edge locations (the number in brackets is the count at that city):
+
+\begin{tabularx}{\textwidth}{@{}XXXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{United States} & \textbf{Europe} & \textbf{Asia} &
+  \textbf{South America} \\
+\midrule
+Ashburn, VA (2); Dallas/Fort Worth, TX (2); Jacksonville, FL; Los Angeles, CA (2); Miami, FL;
+New York, NY (2); Newark, NJ; Palo Alto, CA; San Jose, CA; Seattle, WA; South Bend, IN;
+St.\ Louis, MO &
+Amsterdam; Dublin; Frankfurt (2); London (2); Milan; Paris (2); Stockholm &
+Hong Kong; Osaka; Singapore (2); Sydney; Tokyo &
+S\~ao Paulo \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Speeding up an entire website}
+
+\begin{itemize}\itemsep2pt
+  \item CloudFront uses the standard \textbf{cache-control headers} you set on your files to
+        tell static content from dynamic content.
+  \item With AWS origins you also gain route tracking, health monitoring and fast response to
+        issues.
+  \item Different origins can serve different content on one site -- S3 for static objects,
+        EC2 for dynamic content, custom origins for third-party content -- paying only for
+        what you use.
+\end{itemize}
+
+\subsection{How long files stay at the edge}
+
+\begin{itemize}\itemsep2pt
+  \item With no cache-control header, an edge location re-checks the origin for a newer
+        version when it gets a request more than \textbf{24 hours} after its last check.
+        This is the \textbf{expiration period}.
+  \item The expiration period can be set anywhere from 0 seconds upward with cache-control
+        headers on the origin's files.
+  \item At 0 seconds, CloudFront revalidates every request with the origin.
+  \item For files that rarely change, set a long expiration period and use a
+        \textbf{versioning} scheme in file names to roll out updates.
+\end{itemize}
+
+\subsection{Distributions}
+
+\field{Distribution:}{After storing objects on an origin server, you create a
+\textbf{distribution}, which tells CloudFront where the objects are.}
+
+\field{Example:}{For an S3 bucket \texttt{myawsbucket} holding \texttt{images/image.jpg}:}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Directly from S3 & \texttt{http://myawsbucket.s3.amazonaws.com/images/image.jpg} \\
+Through CloudFront & \texttt{http://myawsbucket.cloudfront.net/images/image.jpg} \\
+With a CNAME & \texttt{http://example.com/images/image.jpg} \\
+\end{tabularx}
+
+\field{Alternate domain names:}{Up to 10 alternate domain names (CNAMEs), such as
+\texttt{example.com}, can be attached to a distribution.}
+
+\field{Types:}{A \textbf{download distribution} delivers files over HTTP/HTTPS. A
+\textbf{streaming distribution} delivered media over RTMP (Adobe Flash Media Server); AWS
+has since retired RTMP distributions, so streaming now uses ordinary web distributions.}
+
+\mmd[0.44]{41-cloudfront-distribution.png}
+
+% ===========================================================================
+\section{AWS Snowball and Snowmobile}
+
+\subsection{The problem: moving large data sets}
+
+Cloud computing lets organisations store and process data in S3, EC2 and analytics services,
+but moving a large amount of existing data into the cloud can be difficult. Consider a
+university with \textbf{500 TB} of research data -- medical images, videos, student project
+datasets and simulation results. Uploading it over a normal Internet connection may take
+weeks or months. The main challenges:
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Limited bandwidth} -- the connection may not support high-speed uploads.
+  \item \textbf{Long transfer time} -- large datasets take substantial time to upload.
+  \item \textbf{Network costs} -- data transfer and dedicated connectivity can be expensive.
+  \item \textbf{Reliability} -- network interruptions can delay the migration.
+  \item \textbf{Security} -- sensitive data must be protected during transfer.
+\end{itemize}
+
+\subsection{AWS Snowball and Snowball Edge}
+
+\field{Snowball:}{A secure, ruggedised physical device used to transfer large amounts of data
+between an organisation's site and AWS, and for supported edge-computing workloads. Suitable
+for terabytes to hundreds of terabytes, depending on device capacity and configuration.}
+
+\field{Snowball Edge:}{A physical device with both \textbf{storage and computing}
+capabilities. It moves data to or from AWS without depending entirely on an Internet
+connection. The device is connected to the local network, data is copied onto it, and it is
+shipped to AWS, which imports the data into the specified S3 destination.}
+
+\subsection{How Snowball works}
+\mmd[0.37]{42-snowball-workflow.png}
+
+\begin{enumerate}\itemsep2pt
+  \item \textbf{Create a migration job} -- define data volume, destination, device
+        configuration and job type in the AWS Snow Family management interface.
+  \item \textbf{Receive the device} -- AWS prepares and ships the configured device.
+  \item \textbf{Connect the device} -- the IT team connects it to the local network and
+        authenticates with the job's security credentials.
+  \item \textbf{Copy the data} -- through a supported interface such as NFS or the S3
+        adapter.
+  \item \textbf{Return the device} -- ship it back to AWS.
+  \item \textbf{Import into AWS} -- AWS imports the data into the specified S3 bucket.
+  \item \textbf{Verify the migration} -- check the job completion report and success/failure
+        logs before removing the original copies.
+\end{enumerate}
+
+\subsection{Types of Snowball jobs}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Job type} & \textbf{Purpose} & \textbf{Example} \\
+\midrule
+Import job & Transfer local data into AWS & Upload university research files to S3 \\
+\addlinespace
+Export job & Transfer data from AWS to a local site & Bring archived datasets from S3 to a data
+  centre \\
+\addlinespace
+Local compute and storage & Process or store data locally on supported devices & Process
+  sensor data at a remote site \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Features, advantages and limitations}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Feature} & \textbf{Description} \\
+\midrule
+Offline data transfer & Reduces dependence on Internet upload speed. \\
+Large storage capacity & Configurations with about 39.5 TB or 210 TB of usable storage,
+  depending on device type. \\
+Security & Data is encrypted; completed jobs include device erasure following NIST SP 800-88. \\
+Edge computing & Supported configurations run workloads locally. \\
+Scalability & Multiple devices and jobs can be coordinated for larger migrations. \\
+S3 integration & Files and datasets migrate into cloud object storage. \\
+\bottomrule
+\end{tabularx}
+
+\medskip
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Advantages} & \textbf{Limitations} \\
+\midrule
+Suits large datasets and slow or unreliable Internet connections. & Shipping and physical
+  handling add time. \\
+Secure physical transport. & Device capacity and number of jobs must be planned. \\
+Less time spent uploading over a constrained network. & Data must be copied, tracked and
+  verified carefully. \\
+Local processing in suitable configurations. & Not meant for continuously syncing small,
+  frequently changing datasets. \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Problem: upload time for 400 TB}
+
+A university needs to migrate 400 TB of research data with an upload speed of 100 Mbps.
+Estimate the minimum upload time over the Internet (decimal units, constant speed, no
+network overhead).
+
+\subsubsection*{Solution}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Step 1: data in bits & $400 \text{ TB} \times 8 = 3{,}200 \text{ terabits}$ \\
+Step 2: divide by speed & $\dfrac{3{,}200 \text{ Tb}}{0.1 \text{ Gbps}} =
+  \dfrac{3{,}200 \times 10^{12}}{10^{8}} = 32{,}000{,}000 \text{ s}$ \\[8pt]
+Step 3: seconds to days & $\dfrac{32{,}000{,}000}{86{,}400} \approx \textbf{370.4 days}$ \\
+\end{tabularx}
+
+\field{Conclusion:}{More than a year of continuous uploading -- a strong case for Snowball.}
+
+\subsection{AWS Snowmobile}
+
+\field{Short description:}{Snowmobile was a large-scale data-migration solution: a secure,
+shipping-container-sized unit transported by truck, designed for petabyte-scale migrations
+where Internet transfer or many smaller devices would be impractical. AWS historically
+described it as carrying up to \textbf{100 PB per unit}. This is a historical specification,
+not a guarantee of current availability.}
+
+\mmd[0.32]{43-snowmobile-workflow.png}
+
+\begin{enumerate}\itemsep2pt
+  \item \textbf{Assess the data volume} -- total data, storage systems, network requirements
+        and timeline.
+  \item \textbf{Plan the migration infrastructure} -- connection between the data centre and
+        the unit, security and transport.
+  \item \textbf{Connect the source systems} -- high-speed networking from the customer's
+        storage into the unit.
+  \item \textbf{Transfer and secure the data} -- copy using the agreed technical and security
+        procedures.
+  \item \textbf{Transport the unit} -- to the designated AWS facility.
+  \item \textbf{Import into AWS} -- ingest into the target storage, then validate the
+        migration.
+\end{enumerate}
+
+\field{Important characteristics:}{Extremely high capacity (up to 100 PB per unit); physical
+bulk transfer that avoids the public Internet; enterprise-scale data-centre migration;
+specialised security and logistics; useful for moving historical archives and large
+enterprise datasets.}
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Advantages} & \textbf{Limitations} \\
+\midrule
+Suits exceptionally large data volumes. & Needs specialised transport and planning. \\
+Avoids relying on Internet bandwidth alone. & Transport, setup and ingestion still take
+  time. \\
+Cuts migrations that would otherwise take months or years. & Security, access, logistics and
+  validation are more complex. \\
+Supports major data-centre migrations. & Not for small datasets or continuous sync; its
+  historical availability must not be confused with current offerings. \\
+\bottomrule
+\end{tabularx}
+
+\field{Benefits of the Snow family:}{High speed, extremely scalable, tamper resistant and
+secure, simple and compatible, low cost, easy data retrieval.}
+
+\subsection*{Problem: transfer time for 50 PB}
+
+An organisation has 50 PB of data and 10 Gbps of upload bandwidth. Estimate the transfer time
+under ideal conditions (decimal units, always-on connection, no protocol overhead).
+
+\subsubsection*{Solution}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Step 1: data in bits & $50 \text{ PB} \times 8 = 400 \text{ petabits} = 4 \times 10^{17}
+  \text{ bits}$ \\
+Step 2: divide by speed & $\dfrac{4 \times 10^{17}}{10 \times 10^{9}} = 4 \times 10^{7}
+  \text{ s}$ \\[8pt]
+Step 3: seconds to days & $\dfrac{40{,}000{,}000}{86{,}400} \approx 463 \text{ days} \approx
+  \textbf{1.27 years}$ \\
+\end{tabularx}
+
+% ===========================================================================
+\section{Amazon Route 53: DNS Service}
+
+\field{Short description:}{Route 53 is AWS's Domain Name System (DNS) service. It translates
+domain names into IP addresses and decides, through routing policies, which resource answers
+each request.}
+
+\subsection{DNS background}
+
+\field{IPv4 versus IPv6:}{IPv4 is a 32-bit field with over 4 billion addresses
+($256^4 = 4{,}294{,}967{,}296$, from \texttt{0.0.0.0} to \texttt{255.255.255.255}, divided
+into classes A, B and C). IPv6 was created to solve the depletion of this space and uses
+128-bit addresses.}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Record} & \textbf{Meaning} \\
+\midrule
+NS record & \textbf{Name Server} record. Used by top-level-domain servers to direct traffic
+  to the content DNS server holding the authoritative records. \\
+\addlinespace
+A record & \textbf{Address} record, the fundamental type. Translates a domain name to an IP
+  address, e.g.\ \texttt{www.zekelabs.com} $\rightarrow$ \texttt{123.10.10.80}. \\
+\addlinespace
+TTL & \textbf{Time To Live}, in seconds: how long a record is cached on the resolving server
+  or the user's PC. A lower TTL makes record changes propagate faster. \\
+\addlinespace
+CNAME record & \textbf{Canonical Name}: resolves one domain name to another, e.g.\
+  \texttt{mobile.google.com} $\rightarrow$ \texttt{m.google.com}. \\
+\addlinespace
+Alias record & Maps a record set to an ELB, a CloudFront distribution or an S3 website
+  bucket. Works like a CNAME, but can be used at the \textbf{zone apex} (naked domain such
+  as \texttt{example.com}), which a CNAME cannot. \\
+\bottomrule
+\end{tabularx}
+
+\field{Why alias records save time:}{Route 53 automatically tracks changes in the resource an
+alias points to. If an alias for \texttt{zekelabs.com} points to the load balancer
+\texttt{elb1-1234.us-east.elb.amazonaws.com} and the balancer's IP address changes, Route 53
+reflects the change in its DNS answers without any edit to the hosted zone.}
+
+\subsection{How a name is resolved}
+\mmd[0.31]{44-route53-dns-resolution.png}
+
+\subsection{Routing policies}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Policy} & \textbf{How it routes} \\
+\midrule
+Simple & The default. One resource performs the function for the domain, e.g.\ one web
+  server serving \texttt{zekelabs.com}. \\
+\addlinespace
+Weighted & Splits traffic by assigned weights, e.g.\ 10\% to one AZ and 90\% to another,
+  over the course of the day. \\
+\addlinespace
+Failover & Active--passive high availability: one ELB is primary, the other secondary.
+  Health checks (one on the ELB, one on the whole site) trigger an automatic switch. \\
+\addlinespace
+Latency & Sends each user to the Region with the lowest network latency. You create a latency
+  record set for the EC2/ELB resource in each Region; Route 53 answers with the
+  lowest-latency one. \\
+\addlinespace
+Geolocation & Routes by the location the DNS request comes from, configured with record
+  sets. \\
+\bottomrule
+\end{tabularx}
+
+\subsubsection{Simple and weighted}
+\mmd[0.45]{45-route53-simple-weighted.png}
+
+\subsubsection{Failover}
+\mmd[0.25]{46-route53-failover.png}
+
+\subsubsection{Latency and geolocation}
+\mmd[0.45]{47-route53-latency-geo.png}
+
+\newpage
+\unitpart{Introduction to Microsoft Azure}
+
+\section{Introduction to Microsoft Azure}
+
+\field{Short description:}{Microsoft Azure is Microsoft's cloud computing platform. It
+provides computing power, storage, networking, databases, analytics, artificial intelligence
+and other services over the Internet.}
+
+\field{The idea:}{Instead of purchasing and maintaining physical servers, organisations rent
+computing resources from Azure and pay according to their usage and pricing arrangement.}
+
+\subsection{Why we need Azure}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Need} & \textbf{What Azure provides} \\
+\midrule
+Scalability & Increase or decrease resources according to demand. \\
+Cost efficiency & Avoid large upfront investment in physical infrastructure. \\
+Availability & Keep applications reachable with suitable redundancy and recovery
+  configurations. \\
+Security & Identity management, access controls, encryption and security monitoring. \\
+Global reach & Deploy applications in Azure regions around the world. \\
+Flexibility & Choose services to fit the application's requirements. \\
+\bottomrule
+\end{tabularx}
+
+\section{Cloud Service Models in Azure}
+
+\begin{tabularx}{\textwidth}{@{}lXlX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Model} & \textbf{What it provides} & \textbf{Example} &
+  \textbf{Use case} \\
+\midrule
+IaaS & Virtual machines, networking and storage; the customer manages the OS and
+  applications. & Azure Virtual Machines & Hosting a custom web server \\
+\addlinespace
+PaaS & A managed platform to build and deploy applications without managing servers. & Azure
+  App Service & Deploying a student attendance web app \\
+\addlinespace
+SaaS & Ready-to-use software over the Internet; users do not manage the infrastructure. &
+  Microsoft 365 & Online email, documents and collaboration \\
+\bottomrule
+\end{tabularx}
+
+\section{Major Azure Services}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Category} & \textbf{Purpose} & \textbf{Examples} \\
+\midrule
+Compute & Run workloads on VMs, containers or serverless platforms & Azure Virtual Machines,
+  Azure Functions, Azure Kubernetes Service (AKS) \\
+\addlinespace
+Storage & Store images, videos, documents, backups and application data & Azure Blob Storage \\
+\addlinespace
+Database & Store and retrieve structured and other application data & Azure SQL Database,
+  Azure Cosmos DB \\
+\addlinespace
+Networking & Connect cloud resources and control traffic & Azure Virtual Network, Azure Load
+  Balancer, Azure VPN Gateway \\
+\addlinespace
+AI and analytics & Build intelligent applications and analyse data & Azure Machine Learning,
+  Microsoft Foundry, Azure Databricks \\
+\bottomrule
+\end{tabularx}
+
+\section{Azure Subscription}
+
+\field{Short description:}{An Azure subscription is a logical boundary used to organise Azure
+resources, manage billing and control access to cloud services. Resources such as virtual
+machines, databases, storage accounts and networks are created inside a subscription.}
+
+\subsection{Key functions}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Billing} -- tracks the costs of resources in the subscription.
+  \item \textbf{Resource management} -- provides a scope for managing resources.
+  \item \textbf{Access control} -- supports role-based access control (RBAC).
+  \item \textbf{Governance} -- policies, quotas and management rules can be applied.
+  \item \textbf{Organisation} -- separates resources for departments, projects or
+        environments.
+\end{itemize}
+
+\field{Example:}{A college uses Azure for a Student Management System and for an Artificial
+Intelligence Research Project. It may create a separate subscription for each, to manage
+their budgets, access permissions and resources independently.}
+
+\section{Azure Resource Group}
+
+\field{Short description:}{A resource group is a logical container that holds related Azure
+resources so that they can be managed together. An online college application might need a
+VM or App Service, a database, a storage account and networking -- all placed in one
+resource group.}
+
+\subsection{Key functions}
+
+\begin{itemize}\itemsep2pt
+  \item Groups related resources for a project or application.
+  \item Helps organise and manage resources.
+  \item Supports access control and Azure Policy at the resource-group scope.
+  \item Lets resources be deployed and managed together.
+  \item Simplifies clean-up when a project ends -- but deleting a resource group also deletes
+        its resources.
+\end{itemize}
+
+\subsection{Example: college management system}
+\mmd[0.26]{48-azure-subscription-rg.png}
+
+\subsection{Important points}
+
+\begin{itemize}\itemsep2pt
+  \item Every Azure resource that supports resource groups belongs to exactly one resource
+        group.
+  \item A resource group belongs to one subscription.
+  \item Resources in a resource group can be located in different Azure regions.
+  \item Deleting a resource group normally deletes everything in it, so do it carefully.
+  \item Resources can depend on other resources; check dependencies before moving or
+        deleting one.
+\end{itemize}
+
+\section{Azure Resource Deployment Models}
+
+\field{Two meanings:}{In Azure, ``deployment model'' can mean the \textbf{resource management
+model} (Azure Resource Manager versus Classic) or the general \textbf{cloud deployment model}
+(public, private, hybrid). Both are covered here.}
+
+\subsection{Azure Resource Manager (ARM)}
+
+\field{Short description:}{ARM is Azure's modern management and deployment model. Resources
+are deployed, organised into resource groups and managed through one consistent control
+plane.}
+
+\begin{itemize}\itemsep2pt
+  \item Supports resource groups.
+  \item Supports declarative deployments with ARM templates and other infrastructure-as-code
+        tools.
+  \item Provides role-based access control and policy integration.
+  \item Supports coordinated deployment of related resources.
+\end{itemize}
+
+\subsection{Classic deployment model}
+
+\field{Short description:}{The older Azure management model. It used the older Service
+Management API and did not use the ARM resource-group structure.}
+
+\begin{itemize}\itemsep2pt
+  \item Uses legacy management mechanisms.
+  \item Has fewer integrated management capabilities than ARM.
+  \item Is associated with older Azure resources and deployments.
+\end{itemize}
+
+\mmd[0.39]{49-azure-arm.png}
+
+\subsection{ARM versus Classic}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Aspect} & \textbf{Azure Resource Manager} & \textbf{Classic} \\
+\midrule
+Status & Modern, current model & Older, legacy model \\
+API & ARM control plane & Service Management API \\
+Resource groups & Yes & No \\
+Templates / IaC & ARM templates, Bicep & Limited \\
+Access control & RBAC and Azure Policy & Fewer integrated capabilities \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Cloud deployment models with Azure examples}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Model} & \textbf{Meaning} & \textbf{Example} \\
+\midrule
+Public cloud & Infrastructure provided by a cloud provider and accessed over a network &
+  Hosting a college website on Azure \\
+\addlinespace
+Private cloud & Infrastructure dedicated to a single organisation & A university's dedicated
+  private cloud for sensitive research \\
+\addlinespace
+Hybrid cloud & On-premises or private infrastructure combined with public cloud services & A
+  college keeps certain records on-premises and hosts its student portal on Azure \\
+\bottomrule
+\end{tabularx}
+
+\section{Methods of Creating Resources in Azure}
+
+\field{Resource:}{An individual cloud service you create and manage, such as a virtual
+machine, storage account, database or virtual network.}
+
+\field{Methods covered:}{The Azure Portal, Azure Cloud Shell and ARM templates. All three go
+through Azure Resource Manager to deploy and manage resources.}
+
+\subsection{Method 1: Azure Portal}
+
+\field{Short description:}{A web-based graphical user interface for creating, configuring,
+monitoring and deleting Azure resources.}
+
+\field{Steps -- creating a storage account:}{}
+
+\begin{enumerate}\itemsep2pt
+  \item Open the Azure Portal and sign in.
+  \item Search for \textbf{Storage accounts} in the search bar.
+  \item Click \textbf{Create}.
+  \item Select the subscription, and an existing resource group or create a new one.
+  \item Enter the storage account name and choose the region and configuration.
+  \item Review the configuration and click \textbf{Create}.
+  \item When deployment completes, open the resource to explore its settings.
+\end{enumerate}
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Advantages} & \textbf{Limitations} \\
+\midrule
+Easy for beginners; no programming needed. & Repeating a deployment by hand is
+  time-consuming. \\
+Visual configuration options. & Manual configuration can introduce inconsistencies. \\
+Shows deployment status and resource properties. & Less convenient for large-scale
+  automation. \\
+Useful for demonstrations and small deployments. & \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Method 2: Azure Cloud Shell}
+
+\field{Short description:}{A browser-based command-line environment for managing Azure with
+the Azure CLI (Bash) or Azure PowerShell, without installing either tool locally.}
+
+\field{Example:}{The storage account above, created from Cloud Shell with the Azure CLI:}
+
+\begin{sh}
+az group create --name College-App-RG --location centralindia
+az storage account create --name collegestore2026 \
+    --resource-group College-App-RG --location centralindia --sku Standard_LRS
+\end{sh}
+
+\subsection{Method 3: ARM templates}
+
+\field{Short description:}{An ARM template is a JSON file that defines the Azure resources to
+deploy and their configuration.}
+
+\field{Declarative approach:}{You state \emph{what} resources you want, not every step needed
+to create them. This makes templates suited to repeatable, automated deployments.}
+
+\begin{js}[basicstyle=\ttfamily\scriptsize]
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-01-01",
+      "name": "collegestore2026",
+      "location": "centralindia",
+      "sku": { "name": "Standard_LRS" },
+      "kind": "StorageV2"
+    }
+  ]
+}
+\end{js}
+
+\section{Virtual Networking in the Cloud}
+
+\field{Short description:}{Virtual networking is creating and managing software-defined
+networks that connect cloud resources such as VMs, databases and applications. In Azure the
+main component is the \textbf{Azure Virtual Network (VNet)} -- an isolated private network
+for Azure resources, similar to an organisation's own network.}
+
+\field{Why it is required:}{}
+
+\begin{itemize}\itemsep2pt
+  \item To let cloud resources communicate with each other.
+  \item To isolate workloads from other networks.
+  \item To control inbound and outbound traffic.
+  \item To connect cloud resources to on-premises networks.
+  \item To support secure, scalable cloud applications.
+\end{itemize}
+
+\subsection{Main components}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Component} & \textbf{Description} \\
+\midrule
+Virtual Network (VNet) & An isolated private network that defines the address space for
+  connected resources, e.g.\ \texttt{10.0.0.0/16}. \\
+\addlinespace
+Subnet & A subdivision of a VNet that organises resources by function or security boundary,
+  e.g.\ an application subnet and a database subnet. \\
+\addlinespace
+Network Security Group (NSG) & Rules that allow or deny inbound and outbound traffic for
+  network interfaces and subnets. \\
+\addlinespace
+VPN Gateway & Encrypted VPN connections between Azure VNets and remote or on-premises
+  networks. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Architecture diagram}
+\mmd[0.45]{50-azure-vnet.png}
+
+\section{Compute Services in AWS and Azure}
+
+\field{Short description:}{Compute services provide the processing power to run
+applications, websites, databases and other software without owning physical servers. AWS
+and Azure both offer virtual machines: \textbf{Amazon EC2} and \textbf{Azure Virtual
+Machines}.}
+
+\subsection{Amazon EC2 (Elastic Compute Cloud)}
+
+\field{Short description:}{An AWS service for launching and managing virtual servers called
+\textbf{instances}. The user chooses the operating system, instance type, storage and
+networking.}
+
+\mmd[0.21]{51-ec2-components.png}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Component} & \textbf{Role} \\
+\midrule
+Amazon Machine Image (AMI) & Template holding the OS and pre-installed software used to
+  launch the instance. \\
+Instance type & The hardware profile: number of vCPUs, memory and network performance
+  (e.g.\ \texttt{t3.micro}). \\
+Key pair & Public/private key used to log in securely (SSH for Linux, password decryption
+  for Windows RDP). \\
+Security group & A virtual firewall of allow rules for inbound and outbound traffic. \\
+Amazon EBS & Block-storage volumes used as the instance's root and data disks. \\
+VPC & The isolated virtual network and subnet the instance is launched into. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Creating a Linux VM in Azure}
+
+Azure Virtual Machines provide on-demand Windows or Linux computing. Through the Azure
+Portal:
+
+\begin{enumerate}\itemsep2pt
+  \item Sign in to the Azure Portal and choose \textbf{Virtual machines} $\rightarrow$
+        \textbf{Create} $\rightarrow$ \textbf{Azure virtual machine}.
+  \item \textbf{Basics:} choose the subscription and resource group, enter the VM name, and
+        pick the region and an image such as Ubuntu Server.
+  \item Choose a \textbf{size} (vCPUs and memory).
+  \item \textbf{Administrator account:} choose SSH public key authentication and a username.
+  \item \textbf{Inbound ports:} allow SSH (22) so you can connect.
+  \item \textbf{Disks} and \textbf{Networking:} keep the defaults (managed OS disk, a new
+        VNet, subnet and public IP) or adjust them.
+  \item \textbf{Review + create}, then \textbf{Create}; download the private key when
+        prompted.
+  \item When deployment finishes, copy the public IP and connect with
+        \texttt{ssh -i key.pem azureuser@<public-ip>}.
+\end{enumerate}
+
+\subsection{AWS EC2 versus Azure Virtual Machines}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Feature} & \textbf{AWS EC2} & \textbf{Azure Virtual Machines} \\
+\midrule
+Cloud provider & Amazon Web Services & Microsoft Azure \\
+Virtual server & EC2 instance & Azure VM \\
+Machine image & Amazon Machine Image (AMI) & Azure VM image \\
+Networking & Amazon VPC and subnets & Azure Virtual Network and subnets \\
+Firewall rules & Security groups & Network Security Groups \\
+Virtual disk & Amazon EBS & Azure Managed Disks \\
+Resource organisation & AWS resources, tags and account structure & Subscription and resource
+  group \\
+Management interface & AWS Management Console & Azure Portal \\
+Automation & AWS CLI, SDKs, CloudFormation & Azure CLI, SDKs, ARM templates and Bicep \\
+\bottomrule
+\end{tabularx}
+
+\section{Remote Desktop Protocol (RDP)}
+
+\field{Short description:}{RDP is a Microsoft network protocol that lets a user remotely
+access and control another computer over a network or the Internet -- seeing its desktop,
+opening applications and managing files as if sitting in front of it. It is commonly used to
+manage virtual machines on Azure and AWS.}
+
+\subsection{How RDP works}
+
+RDP follows a \textbf{client--server} architecture.
+
+\mmd[0.45]{52-rdp-working.png}
+
+\begin{enumerate}\itemsep2pt
+  \item The user opens an RDP client on the local computer.
+  \item The client connects to the remote computer by IP address or hostname.
+  \item The user authenticates with valid credentials.
+  \item The remote computer provides a desktop session.
+  \item The user sends keyboard and mouse input.
+  \item The remote computer executes it and sends display updates back.
+\end{enumerate}
+
+\field{RDP in cloud computing:}{Especially useful for Windows VMs: an Azure administrator can
+create a Windows VM and connect to it remotely over RDP, without physical access to the
+server.}
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Advantages} & \textbf{Limitations} \\
+\midrule
+Remote access from different locations. & Requires network connectivity. \\
+Centralised management of cloud servers. & Performance depends on network speed and
+  latency. \\
+Use applications and resources hosted elsewhere. & Wrong security settings can expose systems
+  to attack. \\
+No physical presence needed. & Mainly for Windows graphical access, though clients exist for
+  other platforms. \\
+Cost-efficient remote administration of cloud VMs. & Some advanced features need extra
+  configuration or licensing. \\
+\bottomrule
+\end{tabularx}
+
+\section{Secure Shell (SSH)}
+
+\field{Short description:}{SSH is a cryptographic network protocol for securely accessing and
+managing remote computers over an unsecured network such as the Internet. It is used to run
+commands, transfer files, configure servers and manage cloud resources, especially
+Linux VMs on AWS, Azure and Google Cloud.}
+
+\subsection{How SSH works}
+
+The SSH \textbf{client} runs on the user's computer; the SSH \textbf{server} runs on the
+remote machine.
+
+\mmd[0.45]{53-ssh-working.png}
+
+\begin{enumerate}\itemsep2pt
+  \item \textbf{Initiate connection} -- the user runs an SSH client.
+  \item \textbf{Establish secure communication} -- client and server negotiate algorithms and
+        set up an encrypted connection.
+  \item \textbf{Verify server identity} -- the client checks the server's host key to prevent
+        impersonation.
+  \item \textbf{Authenticate the user} -- with a password or an SSH key pair.
+  \item \textbf{Execute commands} on the remote system.
+  \item \textbf{Terminate} -- type \texttt{exit} to close the session.
+\end{enumerate}
+
+\begin{sh}
+ssh -i college-key.pem azureuser@20.193.45.10    # log in with a key pair
+scp -i college-key.pem report.pdf azureuser@20.193.45.10:~/   # copy a file
+\end{sh}
+
+\subsection{Important features}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Feature} & \textbf{Description} \\
+\midrule
+Encryption & Protects data between client and server. \\
+Authentication & Verifies the server's identity and the user's credentials. \\
+Data integrity & Detects unauthorised modification of transmitted data. \\
+Remote command execution & Manage remote systems from the command line. \\
+Secure file transfer & SCP and SFTP. \\
+Port forwarding & Securely tunnels other network connections. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{RDP versus SSH}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Aspect} & \textbf{RDP} & \textbf{SSH} \\
+\midrule
+Interface & Graphical desktop & Command line \\
+Typical OS & Windows VMs & Linux VMs \\
+Default port & 3389 & 22 \\
+Authentication & Username and password & Password or key pair \\
+File transfer & Clipboard / drive redirection & SCP, SFTP \\
+\bottomrule
+\end{tabularx}
+
+\section{Load Balancer}
+
+\field{Short description:}{A load balancer distributes incoming network traffic across
+multiple servers or VMs to improve performance, availability, scalability and reliability.
+If every request went to a single server it would become overloaded; the load balancer
+spreads the requests.}
+
+\field{Example:}{During a major sale, thousands of customers browse and order at the same
+time on a shopping website. A load balancer spreads their requests across several application
+servers so no single server carries all the traffic.}
+
+\mmd[0.28]{54-load-balancer.png}
+
+\subsection{How a request is handled}
+
+\begin{enumerate}\itemsep2pt
+  \item A user sends a request to the website or application.
+  \item The request reaches the load balancer.
+  \item The load balancer checks its routing rules and server health.
+  \item It selects a suitable healthy server.
+  \item The selected server processes the request.
+  \item The response is returned to the user.
+\end{enumerate}
+
+\subsection{Objectives}
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{Scalability} -- distributes traffic as the number of users grows.
+  \item \textbf{High availability} -- keeps routing to healthy servers when one fails.
+  \item \textbf{Performance} -- no single server becomes a bottleneck.
+  \item \textbf{Fault tolerance} -- reduces the impact of individual server failures.
+  \item \textbf{Efficient resource utilisation} -- spreads work across available servers.
+  \item \textbf{Maintenance support} -- servers can be taken out of service for maintenance.
+\end{itemize}
+
+\subsection{Types of load balancers}
+
+\field{By deployment:}{}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Type} & \textbf{Description} \\
+\midrule
+Hardware & A physical appliance in a data centre; common where dedicated network equipment is
+  required. \\
+Software & An application that distributes traffic, running on VMs or containers, e.g.\
+  HAProxy and NGINX. \\
+Cloud & A managed cloud service that distributes traffic without the user managing any
+  load-balancing hardware. \\
+\bottomrule
+\end{tabularx}
+
+\field{By network layer:}{}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Layer} & \textbf{Decides using} & \textbf{Example and typical
+  use} \\
+\midrule
+Layer 4 (transport) & TCP/UDP connection information: IP addresses and port numbers & Send TCP
+  traffic on port 443 to a backend server; high-performance traffic distribution \\
+\addlinespace
+Layer 7 (application) & HTTP headers, hostnames, URL paths and cookies & Route
+  \texttt{/products} to product servers and \texttt{/payments} to payment servers; websites,
+  APIs and microservices \\
+\bottomrule
+\end{tabularx}
+
+\mmd[0.44]{55-l4-vs-l7.png}
+
+\subsection{Load-balancing algorithms}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Algorithm} & \textbf{How it works} & \textbf{Advantage} \\
+\midrule
+Round robin & Requests go to servers in turn: 1 $\rightarrow$ A, 2 $\rightarrow$ B,
+  3 $\rightarrow$ C, then repeat & Simple and easy to understand \\
+\addlinespace
+Least connections & A new request goes to the eligible server with the fewest active
+  connections & Good when requests take different times to process \\
+\addlinespace
+Weighted round robin & Servers get traffic in proportion to assigned weights; bigger servers
+  get more & Handles servers of different capacity \\
+\addlinespace
+IP hash & A hash of the client IP selects the backend server & Consistent routing for a
+  client, depending on configuration \\
+\bottomrule
+\end{tabularx}
+
+\mmd[0.34]{56-lb-algorithms.png}
+
+\subsection{Health checks}
+
+\field{Short description:}{A health check tests whether a backend server is working
+correctly.}
+
+\begin{itemize}\itemsep2pt
+  \item The load balancer periodically sends a request, for example HTTP \texttt{GET /health}.
+  \item If Server A responds successfully, it stays eligible for traffic.
+  \item If Server B fails the configured check, it receives no new requests.
+  \item When Server B is healthy again, it is returned to service.
+  \item Health checks improve availability but do not prove that every function of the
+        application works -- the health endpoint must be designed carefully.
+\end{itemize}
+
+\section{Auto Scaling}
+
+\field{Short description:}{Auto Scaling automatically increases or decreases the computing
+resources allocated to an application according to its workload, keeping performance up while
+controlling cost.}
+
+\field{Example:}{A shopping website has 2,000 users on a normal day and 50,000 during a major
+sale. Auto Scaling adds VM instances to handle the extra traffic and removes them when demand
+falls.}
+
+\mmd[0.30]{57-auto-scaling.png}
+
+\subsection{Why we need it}
+
+Without Auto Scaling, administrators must add or remove resources by hand, risking poor
+performance or wasted spending. Its objectives:
+
+\begin{itemize}\itemsep2pt
+  \item \textbf{High availability} -- keeps applications running as demand changes.
+  \item \textbf{Better performance} -- adds resources when the workload rises.
+  \item \textbf{Cost optimisation} -- removes unneeded resources when demand falls.
+  \item \textbf{Automatic resource management} -- less manual intervention.
+  \item \textbf{Elasticity} -- resources adapt to workload changes.
+  \item \textbf{Fault tolerance} -- can replace unhealthy instances.
+\end{itemize}
+
+\subsection{Types of scaling}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Type} & \textbf{What changes} & \textbf{Example} \\
+\midrule
+Horizontal & Adds or removes VMs / instances & A web app grows from 2 to 6 EC2 instances \\
+\addlinespace
+Vertical & Resources of an existing machine & Upgrade a VM from 2 vCPU / 4 GB to 8 vCPU / 16
+  GB \\
+\addlinespace
+Scheduled & Capacity on a predefined schedule & Add capacity before online examination
+  hours \\
+\addlinespace
+Dynamic & Capacity in response to real-time metrics & Add instances while CPU stays above
+  70\% \\
+\bottomrule
+\end{tabularx}
+
+\mmd[0.24]{58-horizontal-vs-vertical.png}
+
+\subsection{Load balancing and Auto Scaling together}
+
+\begin{tabularx}{\textwidth}{@{}XX@{}}
+\toprule
+\rowcolor{tablehead}\textbf{Load balancing} & \textbf{Auto Scaling} \\
+\midrule
+Distributes incoming traffic & Adds or removes computing instances \\
+Selects eligible backend servers & Changes the size of the server fleet \\
+Responds to traffic-distribution needs & Responds to configured scaling policies \\
+Helps avoid overloaded servers & Helps match capacity to demand \\
+\bottomrule
+\end{tabularx}
+
+\section{Load Balancing and Auto Scaling Numericals}
+
+\subsection*{Problem 1: Can four servers handle the load?}
+
+An e-commerce website receives 12,000 requests per minute. A load balancer distributes them
+equally among 4 web servers; each server can handle 3,500 requests per minute. Find the
+requests per server, the total capacity, and whether the servers can cope.
+
+\subsubsection*{Solution}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Requests per server & $\dfrac{12{,}000}{4} = 3{,}000$ per minute \\[8pt]
+Total capacity & $4 \times 3{,}500 = 14{,}000$ per minute \\
+Can they cope? & Yes: capacity 14,000 $>$ traffic 12,000 \\
+Unused capacity & $14{,}000 - 12{,}000 = \textbf{2,000 requests/minute}$ \\
+\end{tabularx}
+
+\subsection*{Problem 2: Instances needed at peak}
+
+An application runs on 3 VM instances, each handling 2,000 requests per minute. At peak,
+traffic rises to 15,000 requests per minute and Auto Scaling adds instances as required. Find
+the initial capacity, the minimum instances for peak traffic, and the instances Auto Scaling
+must add.
+
+\subsubsection*{Solution}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Initial capacity & $3 \times 2{,}000 = 6{,}000$ per minute \\
+Minimum instances & $\dfrac{15{,}000}{2{,}000} = 7.5$, rounded \textbf{up} to \textbf{8}
+  instances (instances are whole numbers) \\[8pt]
+Additional instances & $8 - 3 = \textbf{5 instances}$ \\
+\end{tabularx}
+
+\subsection*{Problem 3: Load balancer plus Auto Scaling}
+
+An application receives 24,000 requests per minute. Initially 4 servers are available, each
+handling 4,000 requests per minute. The load balancer distributes requests equally, and Auto
+Scaling adds servers of the same capacity when needed. Find the requests per server before
+scaling, the initial capacity, the minimum total servers, and the additional servers.
+
+\subsubsection*{Solution}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+Requests per server before scaling & $\dfrac{24{,}000}{4} = 6{,}000$ per minute (over the
+  4,000 limit) \\[8pt]
+Initial capacity & $4 \times 4{,}000 = 16{,}000$ per minute \\
+Minimum total servers & $\dfrac{24{,}000}{4{,}000} = \textbf{6}$ \\[8pt]
+Additional servers & $6 - 4 = \textbf{2 servers}$ \\
+\end{tabularx}
 
 \end{document}

@@ -1,0 +1,17 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+flowchart LR
+    subgraph V[Vertical scaling: bigger machine]
+        direction LR
+        V1[2 vCPU, 4 GB RAM] --> V2[8 vCPU, 16 GB RAM]
+    end
+    subgraph H[Horizontal scaling: add machines]
+        direction LR
+        H1[2 instances] --> H2[6 instances]
+    end

@@ -1,0 +1,16 @@
+---
+config:
+  look: classic
+  theme: default
+  flowchart:
+    curve: basis
+    wrappingWidth: 260
+---
+flowchart LR
+    T[Total Cost of<br/>Ownership] --> OP[On-premises TCO<br/>= CAPEX + OPEX]
+    T --> CL[Cloud TCO<br/>= Usage + Management<br/>+ Migration + Other]
+    OP --> CAPEX[CAPEX: one-time<br/>servers, storage, network equipment,<br/>data-centre build, software licences]
+    OP --> OPEX[OPEX: recurring<br/>electricity, cooling, maintenance,<br/>IT staff, connectivity, support]
+    CL --> USE[Usage cost<br/>compute, storage, database,<br/>network, data transfer]
+    CL --> MIG[Migration cost<br/>one-time move to the cloud]
+    CL --> MGT[Management and other<br/>support plans, managed services]
